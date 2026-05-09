@@ -1,0 +1,13 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Trackly.Api/Trackly.Api.csproj" />
+    <Project Path="src/Trackly.Application/Trackly.Application.csproj" />
+    <Project Path="src/Trackly.Domain/Trackly.Domain.csproj" />
+    <Project Path="src/Trackly.Infrastructure/Trackly.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Trackly.Api.IntegrationTests/Trackly.Api.IntegrationTests.csproj" />
+    <Project Path="tests/Trackly.Application.UnitTests/Trackly.Application.UnitTests.csproj" />
+    <Project Path="tests/Trackly.Domain.UnitTests/Trackly.Domain.UnitTests.csproj" />
+  </Folder>
+</Solution>
