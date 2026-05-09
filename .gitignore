@@ -1,0 +1,96 @@
+# =========================================
+# .NET / C#
+# =========================================
+**/bin/
+**/obj/
+**/out/
+**/.vs/
+**/[Tt]est[Rr]esult*/
+*.user
+*.suo
+*.userprefs
+*.dbmdl
+*.jfm
+*.pfx
+*.publishsettings
+project.lock.json
+project.fragment.lock.json
+artifacts/
+**/Properties/launchSettings.json
+
+# Roslyn cache
+*.cache
+
+# NuGet
+*.nupkg
+*.snupkg
+**/packages/
+!**/packages/build/
+*.nuget.props
+*.nuget.targets
+
+# .NET Core CLI tools
+.dotnet/
+
+# User secrets — handled by `dotnet user-secrets`, never on disk in repo
+secrets.json
+
+# =========================================
+# Node / React / Vite / Frontend
+# =========================================
+node_modules/
+.pnp.*
+.yarn/
+.pnpm-store/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Build outputs
+dist/
+build/
+.next/
+.turbo/
+.vite/
+
+# Test outputs
+coverage/
+
+# Storybook
+storybook-static/
+
+# =========================================
+# Environment / secrets
+# =========================================
+.env
+.env.*
+!.env.example
+
+# =========================================
+# IDEs & Editors
+# =========================================
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+*.swp
+*.swo
+*~
+
+# =========================================
+# OS
+# =========================================
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# =========================================
+# Misc
+# =========================================
+*.log
+*.tmp
+.cache/
