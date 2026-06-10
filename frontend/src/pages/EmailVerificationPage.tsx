@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { MailCheck, ArrowLeft } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import AuthCard from './components/AuthCard'
+import AuthCard from '@/components/auth/AuthCard'
 
 export default function EmailVerificationPage() {
   return (
