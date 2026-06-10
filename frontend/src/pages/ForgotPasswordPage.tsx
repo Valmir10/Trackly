@@ -3,7 +3,7 @@ import { ArrowLeft } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import AuthCard from '@/components/auth/AuthCard'
+import AuthCard from '@/components/AuthCard'
 
 export default function ForgotPasswordPage() {
   const navigate = useNavigate()
@@ -16,7 +16,7 @@ export default function ForgotPasswordPage() {
           <Input id="email" type="email" placeholder="you@company.com" required />
         </div>
 
-        <Button type="submit" className="mt-1 w-full bg-violet-600 hover:bg-violet-700 text-white">
+        <Button type="submit" className="mt-1 w-full bg-rose-600 hover:bg-rose-700 text-white">
           Send reset link
         </Button>
 

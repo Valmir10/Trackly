@@ -1,10 +1,10 @@
-import NavBar from '@/components/landing/NavBar'
-import HeroSection from '@/components/landing/HeroSection'
-import FeaturesSection from '@/components/landing/FeaturesSection'
-import AiSection from '@/components/landing/AiSection'
-import PricingSection from '@/components/landing/PricingSection'
-import CtaSection from '@/components/landing/CtaSection'
-import FooterSection from '@/components/landing/FooterSection'
+import NavBar from '@/components/NavBar'
+import HeroSection from '@/components/HeroSection'
+import FeaturesSection from '@/components/FeaturesSection'
+import AiSection from '@/components/AiSection'
+import PricingSection from '@/components/PricingSection'
+import CtaSection from '@/components/CtaSection'
+import FooterSection from '@/components/FooterSection'
 
 export default function LandingPage() {
   return (

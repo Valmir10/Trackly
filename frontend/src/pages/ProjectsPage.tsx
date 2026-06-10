@@ -1,21 +1,21 @@
 import { Plus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import AppSidebar from '@/components/dashboard/AppSidebar'
-import AppTopBar from '@/components/dashboard/AppTopBar'
-import ProjectCard from '@/components/projects/ProjectCard'
+import AppSidebar from '@/components/AppSidebar'
+import AppTopBar from '@/components/AppTopBar'
+import ProjectCard from '@/components/ProjectCard'
 
 const projects = [
   {
     id: '1',
     name: 'Frontend redesign',
     description: 'Complete overhaul of the user interface with new design system, improved accessibility and performance.',
-    color: 'bg-violet-500',
+    color: 'bg-rose-500',
     memberCount: 4,
     taskCount: 18,
     completedCount: 11,
     status: 'Active' as const,
     members: [
-      { initials: 'VZ', color: 'bg-violet-500/15 text-violet-400' },
+      { initials: 'VZ', color: 'bg-rose-500/15 text-rose-400' },
       { initials: 'SK', color: 'bg-blue-500/15 text-blue-400' },
       { initials: 'JS', color: 'bg-green-500/15 text-green-400' },
       { initials: 'AM', color: 'bg-orange-500/15 text-orange-400' },
@@ -31,7 +31,7 @@ const projects = [
     completedCount: 9,
     status: 'Active' as const,
     members: [
-      { initials: 'VZ', color: 'bg-violet-500/15 text-violet-400' },
+      { initials: 'VZ', color: 'bg-rose-500/15 text-rose-400' },
       { initials: 'JS', color: 'bg-green-500/15 text-green-400' },
       { initials: 'LK', color: 'bg-pink-500/15 text-pink-400' },
     ],
@@ -60,7 +60,7 @@ const projects = [
     completedCount: 12,
     status: 'Completed' as const,
     members: [
-      { initials: 'VZ', color: 'bg-violet-500/15 text-violet-400' },
+      { initials: 'VZ', color: 'bg-rose-500/15 text-rose-400' },
       { initials: 'LK', color: 'bg-pink-500/15 text-pink-400' },
     ],
   },
@@ -82,7 +82,7 @@ export default function ProjectsPage() {
                 <h1 className="text-xl font-semibold text-foreground">Projects</h1>
                 <p className="mt-0.5 text-sm text-muted-foreground">{projects.length} projects in your workspace</p>
               </div>
-              <Button className="gap-2 bg-violet-600 hover:bg-violet-700 text-white">
+              <Button className="gap-2 bg-rose-600 hover:bg-rose-700 text-white">
                 <Plus size={15} />
                 New project
               </Button>
@@ -94,7 +94,7 @@ export default function ProjectsPage() {
                   key={tab}
                   className={`px-4 py-2 text-sm transition-colors ${
                     i === 0
-                      ? 'border-b-2 border-violet-500 font-medium text-foreground'
+                      ? 'border-b-2 border-rose-500 font-medium text-foreground'
                       : 'text-muted-foreground hover:text-foreground'
                   }`}
                 >
