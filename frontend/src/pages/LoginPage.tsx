@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
-import AuthCard from '@/components/auth/AuthCard'
+import AuthCard from '@/components/AuthCard'
 
 export default function LoginPage() {
   const navigate = useNavigate()
@@ -26,7 +26,7 @@ export default function LoginPage() {
           <Input id="password" type="password" placeholder="••••••••••" required />
         </div>
 
-        <Button type="submit" className="mt-1 w-full bg-violet-600 hover:bg-violet-700 text-white">
+        <Button type="submit" className="mt-1 w-full bg-rose-600 hover:bg-rose-700 text-white">
           Sign in
         </Button>
 
@@ -34,7 +34,7 @@ export default function LoginPage() {
 
         <p className="text-center text-sm text-muted-foreground">
           No account?{' '}
-          <Link to="/register" className="font-medium text-foreground hover:text-violet-400 transition-colors">
+          <Link to="/register" className="font-medium text-foreground hover:text-rose-400 transition-colors">
             Create one
           </Link>
         </p>

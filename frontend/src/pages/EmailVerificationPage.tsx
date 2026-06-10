@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { MailCheck, ArrowLeft } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import AuthCard from '@/components/auth/AuthCard'
+import AuthCard from '@/components/AuthCard'
 
 export default function EmailVerificationPage() {
   return (
@@ -10,8 +10,8 @@ export default function EmailVerificationPage() {
       subtitle="We sent a verification link to your inbox"
     >
       <div className="flex flex-col items-center gap-6">
-        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-violet-500/10">
-          <MailCheck size={28} className="text-violet-400" />
+        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-rose-500/10">
+          <MailCheck size={28} className="text-rose-400" />
         </div>
 
         <div className="w-full rounded-lg border border-border/60 bg-muted/30 px-4 py-3 text-center">

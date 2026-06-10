@@ -2,11 +2,11 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import StepIndicator from '@/components/onboarding/StepIndicator'
-import WorkspaceStep from '@/components/onboarding/WorkspaceStep'
-import InviteStep from '@/components/onboarding/InviteStep'
-import ProjectStep from '@/components/onboarding/ProjectStep'
-import WelcomeStep from '@/components/onboarding/WelcomeStep'
+import StepIndicator from '@/components/StepIndicator'
+import WorkspaceStep from '@/components/WorkspaceStep'
+import InviteStep from '@/components/InviteStep'
+import ProjectStep from '@/components/ProjectStep'
+import WelcomeStep from '@/components/WelcomeStep'
 
 const steps = [
   { label: 'Workspace' },
@@ -26,11 +26,11 @@ export default function OnboardingPage() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-background px-4 py-12">
       <div className="absolute inset-0 -z-10">
-        <div className="absolute left-1/2 top-1/3 h-[400px] w-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-violet-600/8 blur-3xl" />
+        <div className="absolute left-1/2 top-1/3 h-[400px] w-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-rose-600/8 blur-3xl" />
       </div>
 
       <Link to="/" className="mb-10 flex items-center gap-2.5">
-        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-violet-600">
+        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-rose-600">
           <span className="text-sm font-bold text-white">T</span>
         </div>
         <span className="text-base font-semibold text-foreground tracking-tight">Trackly</span>
@@ -71,7 +71,7 @@ export default function OnboardingPage() {
               <Button
                 size="sm"
                 onClick={() => setCurrentStep(s => s + 1)}
-                className="bg-violet-600 hover:bg-violet-700 text-white gap-1.5"
+                className="bg-rose-600 hover:bg-rose-700 text-white gap-1.5"
               >
                 {currentStep === steps.length - 2 ? 'Finish setup' : 'Continue'}
                 <ArrowRight size={14} />

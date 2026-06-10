@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import AppSidebar from '@/components/dashboard/AppSidebar'
-import AppTopBar from '@/components/dashboard/AppTopBar'
-import SettingsSidebar from '@/components/settings/SettingsSidebar'
-import WorkspaceSettings from '@/components/settings/WorkspaceSettings'
-import TeamSettings from '@/components/settings/TeamSettings'
+import AppSidebar from '@/components/AppSidebar'
+import AppTopBar from '@/components/AppTopBar'
+import SettingsSidebar from '@/components/SettingsSidebar'
+import WorkspaceSettings from '@/components/WorkspaceSettings'
+import TeamSettings from '@/components/TeamSettings'
 
 function SettingsContent({ active }: { active: string }) {
   if (active === 'Team members') return <TeamSettings />
