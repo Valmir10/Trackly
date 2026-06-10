@@ -25,11 +25,11 @@ export default function InvitationPage() {
         <div className="grid grid-cols-2 gap-3">
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="firstName">First name</Label>
-            <Input id="firstName" placeholder="Valmir" required />
+            <Input id="firstName" placeholder="First name" required />
           </div>
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="lastName">Last name</Label>
-            <Input id="lastName" placeholder="Zogaj" required />
+            <Input id="lastName" placeholder="Last name" required />
           </div>
         </div>
 
