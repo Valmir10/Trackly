@@ -9,6 +9,8 @@ import OnboardingPage from '@/pages/OnboardingPage'
 import DashboardPage from '@/pages/DashboardPage'
 import ProjectsPage from '@/pages/ProjectsPage'
 import ProjectPage from '@/pages/ProjectPage'
+import MyTasksPage from '@/pages/MyTasksPage'
+import AnalyticsPage from '@/pages/AnalyticsPage'
 import SettingsPage from '@/pages/SettingsPage'
 import NotFoundPage from '@/pages/NotFoundPage'
 
@@ -26,6 +28,8 @@ export default function App() {
         <Route path="/:slug/dashboard" element={<DashboardPage />} />
         <Route path="/:slug/projects" element={<ProjectsPage />} />
         <Route path="/:slug/projects/:projectId" element={<ProjectPage />} />
+        <Route path="/:slug/tasks" element={<MyTasksPage />} />
+        <Route path="/:slug/analytics" element={<AnalyticsPage />} />
         <Route path="/:slug/settings" element={<SettingsPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
