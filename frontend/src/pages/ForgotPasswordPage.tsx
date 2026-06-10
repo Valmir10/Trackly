@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -6,18 +6,17 @@ import { Label } from '@/components/ui/label'
 import AuthCard from '@/components/auth/AuthCard'
 
 export default function ForgotPasswordPage() {
+  const navigate = useNavigate()
+
   return (
-    <AuthCard
-      title="Reset your password"
-      subtitle="Enter your email and we'll send you a reset link"
-    >
-      <div className="flex flex-col gap-4">
+    <AuthCard title="Reset your password" subtitle="Enter your email and we'll send you a reset link">
+      <form onSubmit={(e) => { e.preventDefault(); navigate('/verify-email') }} className="flex flex-col gap-4">
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="email">Email</Label>
-          <Input id="email" type="email" placeholder="you@company.com" />
+          <Input id="email" type="email" placeholder="you@company.com" required />
         </div>
 
-        <Button className="mt-1 w-full bg-violet-600 hover:bg-violet-700 text-white">
+        <Button type="submit" className="mt-1 w-full bg-violet-600 hover:bg-violet-700 text-white">
           Send reset link
         </Button>
 
@@ -28,7 +27,7 @@ export default function ForgotPasswordPage() {
           <ArrowLeft size={14} />
           Back to sign in
         </Link>
-      </div>
+      </form>
     </AuthCard>
   )
 }
