@@ -1,9 +1,9 @@
-import AppSidebar from './components/AppSidebar'
-import AppTopBar from './components/AppTopBar'
-import StatsRow from './components/StatsRow'
-import MyTasksCard from './components/MyTasksCard'
-import RecentActivityCard from './components/RecentActivityCard'
-import AiSummaryCard from './components/AiSummaryCard'
+import AppSidebar from '@/components/dashboard/AppSidebar'
+import AppTopBar from '@/components/dashboard/AppTopBar'
+import StatsRow from '@/components/dashboard/StatsRow'
+import MyTasksCard from '@/components/dashboard/MyTasksCard'
+import RecentActivityCard from '@/components/dashboard/RecentActivityCard'
+import AiSummaryCard from '@/components/dashboard/AiSummaryCard'
 
 export default function DashboardPage() {
   return (

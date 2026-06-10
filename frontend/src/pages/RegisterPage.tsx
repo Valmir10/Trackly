@@ -1,28 +1,17 @@
 import { Link } from 'react-router-dom'
-import { Users } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
-import AuthCard from './components/AuthCard'
+import AuthCard from '@/components/auth/AuthCard'
 
-export default function InvitationPage() {
+export default function RegisterPage() {
   return (
     <AuthCard
-      title="You have been invited"
-      subtitle="Join your team on Trackly"
+      title="Create your account"
+      subtitle="Start managing projects with your team"
     >
       <div className="flex flex-col gap-4">
-        <div className="flex items-center gap-3 rounded-lg border border-border/60 bg-muted/30 p-3">
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-violet-500/10">
-            <Users size={16} className="text-violet-400" />
-          </div>
-          <div>
-            <p className="text-sm font-medium text-foreground">Acme Corp</p>
-            <p className="text-xs text-muted-foreground">Invited by John Smith</p>
-          </div>
-        </div>
-
         <div className="grid grid-cols-2 gap-3">
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="firstName">First name</Label>
@@ -35,20 +24,42 @@ export default function InvitationPage() {
         </div>
 
         <div className="flex flex-col gap-1.5">
-          <Label htmlFor="password">Choose a password</Label>
+          <Label htmlFor="company">Company name</Label>
+          <Input id="company" placeholder="Acme Corp" />
+        </div>
+
+        <div className="flex flex-col gap-1.5">
+          <Label htmlFor="email">Work email</Label>
+          <Input id="email" type="email" placeholder="you@company.com" />
+        </div>
+
+        <div className="flex flex-col gap-1.5">
+          <Label htmlFor="password">Password</Label>
           <Input id="password" type="password" placeholder="Min. 10 characters" />
         </div>
 
         <Button className="mt-1 w-full bg-violet-600 hover:bg-violet-700 text-white">
-          Accept invitation
+          Create account
         </Button>
+
+        <p className="text-center text-xs text-muted-foreground leading-relaxed">
+          By creating an account you agree to our{' '}
+          <a href="#" className="underline underline-offset-2 hover:text-foreground transition-colors">
+            Terms of Service
+          </a>{' '}
+          and{' '}
+          <a href="#" className="underline underline-offset-2 hover:text-foreground transition-colors">
+            Privacy Policy
+          </a>
+          .
+        </p>
 
         <Separator />
 
         <p className="text-center text-sm text-muted-foreground">
           Already have an account?{' '}
           <Link to="/login" className="font-medium text-foreground hover:text-violet-400 transition-colors">
-            Sign in instead
+            Sign in
           </Link>
         </p>
       </div>

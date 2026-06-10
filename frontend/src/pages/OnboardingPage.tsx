@@ -2,11 +2,11 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import StepIndicator from './components/StepIndicator'
-import WorkspaceStep from './components/WorkspaceStep'
-import InviteStep from './components/InviteStep'
-import ProjectStep from './components/ProjectStep'
-import WelcomeStep from './components/WelcomeStep'
+import StepIndicator from '@/components/onboarding/StepIndicator'
+import WorkspaceStep from '@/components/onboarding/WorkspaceStep'
+import InviteStep from '@/components/onboarding/InviteStep'
+import ProjectStep from '@/components/onboarding/ProjectStep'
+import WelcomeStep from '@/components/onboarding/WelcomeStep'
 
 const steps = [
   { label: 'Workspace' },
