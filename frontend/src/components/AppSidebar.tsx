@@ -15,8 +15,8 @@ const slug = 'acme-corp'
 const navItems = [
   { label: 'Dashboard', icon: LayoutDashboard, to: `/${slug}/dashboard` },
   { label: 'Projects', icon: FolderKanban, to: `/${slug}/projects` },
-  { label: 'My Tasks', icon: CheckSquare, to: `/${slug}/projects` },
-  { label: 'Analytics', icon: BarChart2, to: `/${slug}/projects` },
+  { label: 'My Tasks', icon: CheckSquare, to: `/${slug}/tasks` },
+  { label: 'Analytics', icon: BarChart2, to: `/${slug}/analytics` },
 ]
 
 const projects = [
