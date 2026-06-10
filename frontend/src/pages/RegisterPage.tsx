@@ -10,7 +10,7 @@ export default function RegisterPage() {
 
   return (
     <AuthCard title="Create your account" subtitle="Start managing projects with your team">
-      <form onSubmit={(e) => { e.preventDefault(); navigate('/onboarding') }} className="flex flex-col gap-4">
+      <form onSubmit={(e) => { e.preventDefault(); navigate('/acme-corp/dashboard') }} className="flex flex-col gap-4">
         <div className="grid grid-cols-2 gap-3">
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="firstName">First name</Label>
