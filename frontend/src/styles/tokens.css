@@ -9,6 +9,7 @@
   --tp-bg: oklch(1 0 0);
   --tp-surface: oklch(0.98 0 0);
   --tp-surface-2: oklch(0.955 0 0);
+  --tp-surface-3: oklch(1 0 0);
   --tp-border: oklch(0 0 0 / 8%);
   --tp-border-strong: oklch(0 0 0 / 14%);
 
@@ -64,6 +65,11 @@
   --tp-duration-slow: 450ms;
   --tp-duration-entrance: 700ms;
 
+  --tp-glow-sm: 0 0 12px -2px var(--tp-accent-wash);
+  --tp-glow-md: 0 0 28px -6px var(--tp-accent-wash);
+  --tp-shadow-floating: 0 16px 40px -20px oklch(0 0 0 / 45%);
+  --tp-shadow-floating-lg: 0 24px 64px -32px oklch(0 0 0 / 45%);
+
   --tp-z-dropdown: 100;
   --tp-z-sticky: 200;
   --tp-z-modal-backdrop: 300;
@@ -73,9 +79,10 @@
 }
 
 .dark .tp-shell {
-  --tp-bg: oklch(0.09 0 0);
-  --tp-surface: oklch(0.14 0 0);
-  --tp-surface-2: oklch(0.19 0 0);
+  --tp-bg: oklch(0.08 0.006 110);
+  --tp-surface: oklch(0.135 0.008 110);
+  --tp-surface-2: oklch(0.185 0.01 110);
+  --tp-surface-3: oklch(0.235 0.012 110);
   --tp-border: oklch(1 0 0 / 10%);
   --tp-border-strong: oklch(1 0 0 / 18%);
 

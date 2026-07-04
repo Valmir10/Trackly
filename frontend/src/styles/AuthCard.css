@@ -70,7 +70,7 @@
   background: var(--tp-surface);
   border: 1px solid var(--tp-border);
   border-radius: var(--tp-radius-lg);
-  box-shadow: 0 24px 64px -32px oklch(0 0 0 / 45%);
+  box-shadow: var(--tp-shadow-floating-lg);
 }
 
 .tp-auth__header {

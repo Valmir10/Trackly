@@ -5,6 +5,7 @@ colors:
   bg-light: "oklch(1 0 0)"
   surface-light: "oklch(0.98 0 0)"
   surface-2-light: "oklch(0.955 0 0)"
+  surface-3-light: "oklch(1 0 0)"
   border-light: "oklch(0 0 0 / 8%)"
   border-strong-light: "oklch(0 0 0 / 14%)"
   text-light: "oklch(0.17 0 0)"
@@ -13,9 +14,10 @@ colors:
   accent-light: "oklch(0.42 0.1 110)"
   accent-strong-light: "oklch(0.36 0.11 110)"
   on-accent-light: "oklch(0.99 0 0)"
-  bg-dark: "oklch(0.09 0 0)"
-  surface-dark: "oklch(0.14 0 0)"
-  surface-2-dark: "oklch(0.19 0 0)"
+  bg-dark: "oklch(0.08 0.006 110)"
+  surface-dark: "oklch(0.135 0.008 110)"
+  surface-2-dark: "oklch(0.185 0.01 110)"
+  surface-3-dark: "oklch(0.235 0.012 110)"
   border-dark: "oklch(1 0 0 / 10%)"
   border-strong-dark: "oklch(1 0 0 / 18%)"
   text-dark: "oklch(0.96 0 0)"
@@ -26,6 +28,10 @@ colors:
   on-accent-dark: "oklch(0.14 0 0)"
   danger-light: "oklch(0.52 0.16 25)"
   danger-dark: "oklch(0.68 0.17 25)"
+  success-light: "oklch(0.5 0.13 145)"
+  success-dark: "oklch(0.68 0.15 145)"
+  warning-light: "oklch(0.5 0.15 55)"
+  warning-dark: "oklch(0.72 0.14 55)"
 typography:
   display:
     fontFamily: "Geist Sans, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif"
@@ -104,8 +110,9 @@ Trackly reads as a single, calibrated instrument for running a project — not f
 This system explicitly rejects: cream/sand SaaS-template backgrounds, gradient-text headlines, tiny uppercase eyebrows, identical icon-card grids, and the cluttered, dense-panel chaos of old Jira/Azure DevOps. It also rejects the reflexive blue-and-purple SaaS accent — Trackly's identity color is Cured Olive, a desaturated yellow-green (hue 110°), used rarely and deliberately.
 
 **Key Characteristics:**
-- Near-black, dark-first surfaces (continuing the app's existing dark-mode-by-default convention), with a true off-white light mode as the alternate, toggled via the same `.dark` class convention the app already uses.
+- Near-black, dark-first surfaces (continuing the app's existing dark-mode-by-default convention), with a true off-white light mode as the alternate, toggled via the same `.dark` class convention the app already uses. Dark surfaces are retinted (revised — see below), not pure achromatic: pure black read as flat and eye-straining for an all-day tool, so `bg`/`surface`/`surface-2`/`surface-3` all carry a whisper of the accent hue.
 - A single, rare accent color (Cured Olive) rather than a multi-color palette — restraint is the brand. It flips lightness by theme: bright olive on dark surfaces, deep olive on light surfaces, always the same hue.
+- Dimensionality comes from two deliberate devices, not shadow: a **shell-wide micro dot-grid** (near-invisible, visible only in empty gaps between cards) and **glow borders** on genuinely interactive moments (active nav, hovered card, primary-button hover) — a soft accent-tinted blur alongside the border/background change, not just a flat color swap.
 - Geist Sans for UI and headings, Geist Mono for ticket IDs, timestamps, unlock figures, and other data — reinforcing technical precision on the densest surfaces.
 - Motion is Responsive in the product; the landing page (brand register) earns a one-time staggered entrance choreography (700ms, ease-out-expo) that product screens don't get.
 - Vanilla CSS custom properties scoped under a `.tp-shell` root class, coexisting with legacy Tailwind/shadcn on pages not yet migrated.
@@ -118,15 +125,16 @@ The palette is a **Restrained** strategy on dark (and light) surfaces: near-achr
 - **Cured Olive** — dark surfaces: `oklch(0.8 0.13 110)` (#dbdd82-ish bright yellow-green); light surfaces: `oklch(0.42 0.1 110)` (deep moss). Used for primary buttons, active/selected states, focus rings, and small indicators — never a large fill.
 
 ### Neutral
-- **Dark surfaces**: bg `oklch(0.09 0 0)`, surface `oklch(0.14 0 0)`, surface-2 `oklch(0.19 0 0)` — pure achromatic (chroma 0), depth built from lightness steps, not hue.
-- **Light surfaces**: bg `oklch(1 0 0)` (pure white), surface `oklch(0.98 0 0)`, surface-2 `oklch(0.955 0 0)`.
+- **Dark surfaces** (revised — obsidian retint, Move 0): bg `oklch(0.08 0.006 110)`, surface `oklch(0.135 0.008 110)`, surface-2 `oklch(0.185 0.01 110)`, surface-3 `oklch(0.235 0.012 110)` — each carries a small chroma toward the brand hue (110°), not pure achromatic. Superseded the original pure-black values (`oklch(0.09/0.14/0.19 0 0)`), which read as flat and eye-straining for a tool used all day. Depth is still built from lightness steps, just no longer chroma-0.
+- **Light surfaces**: bg `oklch(1 0 0)` (pure white), surface `oklch(0.98 0 0)`, surface-2 `oklch(0.955 0 0)`, surface-3 `oklch(1 0 0)` (pure white — light-mode depth comes from shadow, not a lightness step, so surface-3 doesn't need to out-lighten an already-near-white surface-2).
+- **Surface-3** (new, Move 0): reserved for floating content only — dropdown panels today, future modals/command palette. Never used for in-flow cards; that distinction (floats above other content vs. is the content) is what surface-3 vs. surface encodes.
 - **Borders**: low-opacity white-on-dark (`oklch(1 0 0 / 10%)`) and black-on-light (`oklch(0 0 0 / 8%)`) hairlines rather than a separate gray token family.
 - **Text**: dark-mode body text is intentionally lighter-weight (400, not bumped) since Geist Sans reads heavier on dark already; muted text sits at `oklch(0.61 0 0)` dark / `oklch(0.52 0 0)` light — both tuned to clear 4.5:1 against their surface, not just the page bg.
 
 ### Named Rules
 **The One Accent Rule.** Cured Olive appears on ≤10% of any given screen — buttons, active states, focus rings, and small indicators only. It never fills a card, a section background, or a large surface.
 
-**The No-Default-Blue Rule.** No SaaS blue/purple/indigo accent, gradient, or glow anywhere in the system, including hover states, links, or charts.
+**The No-Default-Blue Rule.** No SaaS blue/purple/indigo accent anywhere in the system, including hover states, links, or charts. (Revised, Move 0: this used to also ban glow outright; it no longer does — see The Glow-Is-Earned Rule under Elevation. The point was never "no glow," it was "no reflexive blue/purple.")
 
 **The Theme-Flip Rule.** The accent's hue and chroma never change between themes — only lightness flips (bright on dark, deep on light) to hold contrast without changing identity.
 
@@ -151,14 +159,25 @@ The palette is a **Restrained** strategy on dark (and light) surfaces: near-achr
 
 ## 4. Elevation
 
-Flat-by-default, dev-tool posture: depth comes from a 1px hairline border and lightness steps between surface/surface-2, not drop shadows. The one exception is the hero product-preview mock, which uses a single soft shadow (`0 24px 64px -32px oklch(0 0 0 / 45%)`) to read as a floating screenshot.
+Flat-by-default, dev-tool posture: depth comes from a 1px hairline border and lightness steps between surface/surface-2/surface-3, not drop shadows. Two exceptions carry a real shadow because they're genuinely floating: the hero product-preview mock and dropdown panels.
 
 ### Shadow Vocabulary
 - **Hairline** (`border: 1px solid var(--tp-border)`): the default way surfaces separate. Primary elevation tool.
-- **Floating** (`box-shadow: 0 24px 64px -32px oklch(0 0 0 / 45%)`): reserved for the hero preview and any future modal/popover.
+- **Floating, small** (`box-shadow: var(--tp-shadow-floating)` = `0 16px 40px -20px oklch(0 0 0 / 45%)`): dropdown panels, small popovers.
+- **Floating, large** (`box-shadow: var(--tp-shadow-floating-lg)` = `0 24px 64px -32px oklch(0 0 0 / 45%)`): the hero preview, the auth card — bigger, further-off-the-page floating moments.
+- **Glow** (`box-shadow: var(--tp-glow-sm)` = `0 0 12px -2px var(--tp-accent-wash)`, or `--tp-glow-md` for a larger radius): a soft accent-tinted blur, layered *alongside* a border/background change, not replacing it. Reserved for genuinely interactive moments — the active sidebar nav item, a hovered pillar/card, primary-button hover. Not applied blanket to every hover state; list-row hovers (task rows, activity rows) stay a plain background change, since glow on every row in a dense list would be noise, not signal.
+
+### Micro dot-grid
+A near-invisible dot pattern (`background-image: radial-gradient(circle, var(--tp-border[-strong]) 1px, transparent 1px)`), two variants:
+- **Vignette** (`.tp-dot-grid`, landing/auth): masked into a ring that fades out both near the focal card and at the far viewport edges. Used where there's one clear focal point on an otherwise-empty page.
+- **Shell** (`.tp-dot-grid.tp-dot-grid--shell`, app shell): uniform, no mask, fainter (`--tp-border` not `--tp-border-strong`), wider spacing (32px not 28px). Used where there's no single focal point — a persistent working surface, not a single card floating on emptiness. Sits at `z-index: -1` inside `.tp-shell`'s `isolation: isolate` context; only shows through the gaps between opaque cards/sidebar/topbar.
 
 ### Named Rules
 **The Flat-By-Default Rule.** Cards and panels sit flush with the background, separated by hairline borders, not shadow.
+
+**The Glow-Is-Earned Rule.** Glow marks "you are looking at or touching this right now" — active nav, hover, focus-adjacent. It is never decorative and never permanent on a resting element. If an element has glow with no interaction happening, that's a bug, not a style choice.
+
+**The Isolation Gotcha.** Any element using a negative `z-index` (glow layers, dot-grids) needs `isolation: isolate` on an ancestor, or it silently renders behind the page's own background instead of just behind its intended siblings. Caught once already on the Auth Card; `.tp-shell` now sets `isolation: isolate` globally so this can't recur.
 
 ## 5. Components
 

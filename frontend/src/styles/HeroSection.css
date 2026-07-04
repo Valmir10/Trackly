@@ -128,7 +128,7 @@
   background: var(--tp-bg);
   border: 1px solid var(--tp-border);
   border-radius: 0 0 var(--tp-radius-lg) var(--tp-radius-lg);
-  box-shadow: 0 24px 64px -32px oklch(0 0 0 / 45%);
+  box-shadow: var(--tp-shadow-floating-lg);
   overflow-x: auto;
 }
 

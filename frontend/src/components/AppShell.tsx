@@ -15,6 +15,7 @@ export default function AppShell({ children }: AppShellProps) {
 
   return (
     <div className="tp-shell tp-app">
+      <div className="tp-dot-grid tp-dot-grid--shell" aria-hidden="true" />
       <AppSidebar mobileOpen={mobileNavOpen} onCloseMobile={() => setMobileNavOpen(false)} />
 
       <div className="tp-app__main">

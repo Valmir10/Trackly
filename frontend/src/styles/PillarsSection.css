@@ -46,6 +46,7 @@
 .tp-pillar:hover {
   border-color: var(--tp-border-strong);
   transform: translateY(-2px);
+  box-shadow: var(--tp-glow-sm);
 }
 
 .tp-pillar--tasks { grid-area: tasks; }
