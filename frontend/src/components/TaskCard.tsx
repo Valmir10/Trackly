@@ -1,62 +1,61 @@
 import { Calendar, MessageSquare, Paperclip } from 'lucide-react'
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import '@/styles/TaskCard.css'
 
-interface TaskCardProps {
+export interface Task {
+  id: string
   title: string
   tag: string
-  tagColor: string
-  priority: 'High' | 'Medium' | 'Low'
-  assignee: { initials: string; color: string }
+  priority: 'high' | 'medium' | 'low'
+  assignee: { initials: string }
   dueDate: string
   dueSoon?: boolean
   commentCount?: number
   attachmentCount?: number
+  description?: string
 }
 
-const priorityStyles = {
-  High: 'bg-red-500',
-  Medium: 'bg-yellow-500',
-  Low: 'bg-green-500',
+interface TaskCardProps {
+  task: Task
+  onOpen: (taskId: string) => void
 }
 
-export default function TaskCard({ title, tag, tagColor, priority, assignee, dueDate, dueSoon, commentCount, attachmentCount }: TaskCardProps) {
+const priorityLabel = { high: 'High', medium: 'Medium', low: 'Low' }
+
+export default function TaskCard({ task, onOpen }: TaskCardProps) {
   return (
-    <div className="group rounded-lg border border-border/60 bg-background p-3 hover:border-border hover:shadow-sm transition-all duration-150 cursor-pointer">
-      <div className="mb-2 flex items-start justify-between gap-2">
-        <p className="text-xs font-medium text-foreground leading-snug">{title}</p>
-        <div className={`mt-0.5 h-1.5 w-1.5 shrink-0 rounded-full ${priorityStyles[priority]}`} />
+    <button type="button" className="tp-task-card" onClick={() => onOpen(task.id)}>
+      <div className="tp-task-card__head">
+        <p className="tp-task-card__title">{task.title}</p>
+        <span
+          className={`tp-task-card__priority-dot tp-priority--${task.priority}`}
+          aria-label={`${priorityLabel[task.priority]} priority`}
+        />
       </div>
 
-      <div className="mb-3 flex flex-wrap gap-1.5">
-        <span className={`rounded px-1.5 py-0.5 text-[10px] font-medium ${tagColor}`}>{tag}</span>
-      </div>
+      <span className="tp-task-card__tag">{task.tag}</span>
 
-      <div className="flex items-center justify-between">
-        <Avatar className="h-5 w-5">
-          <AvatarFallback className={`text-[9px] font-semibold ${assignee.color}`}>
-            {assignee.initials}
-          </AvatarFallback>
-        </Avatar>
+      <div className="tp-task-card__footer">
+        <span className="tp-avatar tp-avatar--sm">{task.assignee.initials}</span>
 
-        <div className="flex items-center gap-2.5">
-          {commentCount ? (
-            <div className="flex items-center gap-0.5 text-[10px] text-muted-foreground">
+        <div className="tp-task-card__meta">
+          {!!task.commentCount && (
+            <span className="tp-task-card__meta-item">
               <MessageSquare size={10} />
-              <span>{commentCount}</span>
-            </div>
-          ) : null}
-          {attachmentCount ? (
-            <div className="flex items-center gap-0.5 text-[10px] text-muted-foreground">
+              {task.commentCount}
+            </span>
+          )}
+          {!!task.attachmentCount && (
+            <span className="tp-task-card__meta-item">
               <Paperclip size={10} />
-              <span>{attachmentCount}</span>
-            </div>
-          ) : null}
-          <div className={`flex items-center gap-0.5 text-[10px] ${dueSoon ? 'text-red-400' : 'text-muted-foreground'}`}>
+              {task.attachmentCount}
+            </span>
+          )}
+          <span className={`tp-task-card__meta-item${task.dueSoon ? ' tp-task-card__meta-item--due' : ''}`}>
             <Calendar size={10} />
-            <span>{dueDate}</span>
-          </div>
+            {task.dueDate}
+          </span>
         </div>
       </div>
-    </div>
+    </button>
   )
 }

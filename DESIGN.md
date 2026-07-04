@@ -203,6 +203,9 @@ A near-invisible dot pattern (`background-image: radial-gradient(circle, var(--t
 - **Labels:** `label` type scale (0.8125rem, 500 weight), `text-secondary`, sit directly above their input with `space-3xs` gap.
 - **Dividers** (`.tp-divider`): a plain 1px `border` hairline, used to separate a form's primary action from a secondary link, not a visible `<hr>` rule style.
 
+### Segmented Control (`tp-segmented`)
+A `surface-2` track with 2px of padding; the active segment sits on `surface` with `--tp-shadow-floating`, reading as a physically raised tab rather than a color swap. Used for the Board/List toggle on the project header. Not every segmented control needs to be functional the moment it's styled — Board/List ships with only Board wired; List stays visually present but inert until it's actually built, which is a scoped decision, not an oversight.
+
 ### Nav (brand register)
 - Fixed, `color-mix` translucent background + `backdrop-filter: blur(12px)`, hairline bottom border. Collapses to a hamburger + slide-down panel under 768px; full inline links + sign-in above it.
 
@@ -231,6 +234,17 @@ A near-invisible dot pattern (`background-image: radial-gradient(circle, var(--t
 - **List cards (Tasks, Activity):** header row with hairline bottom border, hairline-separated rows (no dividers *and* borders), `surface-2` row hover. Rows use the shared `tp-avatar` (initials, `accent-wash` background/`accent` text, Geist Mono) and `tp-priority` (colored dot + label, never color-only) primitives so task/activity surfaces stay visually identical wherever they appear next (Kanban cards, My Tasks page, Analytics).
 - **Priority color mapping:** high → `danger`, medium → `warning` (muted orange, theme-split independently of the `--tp-cat-*` decorative dot palette since priority labels are text and need the stricter 4.5:1 text-contrast bar, not the lighter bar decorative dots get), low → `text-muted`.
 - **Empty state:** icon + one-line title + one-line supporting text, centered, generous vertical padding — same shape for "no tasks" as the landing/auth empty states, not a bespoke treatment per card.
+
+### Kanban Board (Move 1)
+- **Column:** `surface` background, hairline border, 16px radius — a column is a card, not a bare list. Header: colored dot (decorative `--tp-cat-*`, matches the project's sidebar dot) + title + a mono count pill on `surface-2`. Cards scroll independently per column (`max-height: calc(100vh - 14rem)`), a dashed "Add task" affordance sits below the last card.
+- **Task card:** a real `<button>`, not a `<div>` with an onClick — keyboard-focusable and semantically a control, since clicking one now does something (opens the Ticket Modal). Hover gets the glow treatment (`--tp-glow-sm`) per the Glow-Is-Earned Rule — this is a genuinely actionable element. Priority renders as a small solid dot (`currentColor`, colored via the `tp-priority--*` text-contrast-safe tokens, not the decorative `--tp-cat-*` palette) rather than the dot+label combo used elsewhere, since the card is small and the tag pill already carries a label.
+
+### Ticket Modal (Move 1)
+- **Trigger:** any task card click, or a deep link via `?ticket=<id>` on the project route — both paths converge on the same state, so the modal is never reachable by one path and not the other.
+- **Shape:** `tp-modal` on `surface-3` (floating content), `--tp-shadow-floating-lg`, dismissed by the close button, the Escape key, or a click on the backdrop (not the modal itself — a click inside is stopped from propagating to the backdrop).
+- **Status control:** a dropdown (`tp-dropdown`/`tp-menu-item`, the same primitive as the workspace switcher and avatar menu), not drag-and-drop — literal drag-and-drop inside a modal is an explicit non-goal per PRODUCT.md. Selecting a status actually moves the card between columns on the board underneath; this is real local-state mutation, not a static field.
+- **Time log:** an honest, unpersisted local form — hours + optional note, appended to a list shown above the form. Explicitly not wired to any backend yet; entries reset when the modal closes. Logged hours render in Geist Mono (a datum).
+- **Comments:** deliberately absent from this pass. `<ChatThread scope={{ ticket }}>` is Move 3's job — a placeholder "coming soon" section here would be worse than leaving it out.
 
 ### Signature: Hero Product Preview
 A "browser chrome" strip (a live-pulse indicator + truncated mono URL, no fake traffic-light dots) above a 3-column kanban mock. One card carries two small accent-wash pill badges (calendar + file icons) linking it to a meeting and a contract, the concrete, in-product proof of "one workspace, not four," rather than a claim in copy alone.
