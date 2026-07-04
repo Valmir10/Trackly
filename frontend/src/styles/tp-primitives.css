@@ -15,6 +15,13 @@
   z-index: -1;
 }
 
+.tp-dot-grid--shell {
+  background-image: radial-gradient(circle, var(--tp-border) 1px, transparent 1px);
+  background-size: 32px 32px;
+  mask-image: none;
+  -webkit-mask-image: none;
+}
+
 .tp-btn {
   display: inline-flex;
   align-items: center;
@@ -53,6 +60,7 @@
 
 .tp-btn--primary:hover {
   background: var(--tp-accent-strong);
+  box-shadow: var(--tp-glow-sm);
 }
 
 .tp-btn--secondary {
@@ -165,10 +173,10 @@
   position: absolute;
   min-width: 12rem;
   padding: var(--tp-space-3xs);
-  background: var(--tp-surface);
+  background: var(--tp-surface-3);
   border: 1px solid var(--tp-border);
   border-radius: var(--tp-radius-md);
-  box-shadow: 0 16px 40px -20px oklch(0 0 0 / 45%);
+  box-shadow: var(--tp-shadow-floating);
   z-index: var(--tp-z-dropdown);
   animation: tp-dropdown-in var(--tp-duration-fast) var(--tp-ease-out-quart);
 }
