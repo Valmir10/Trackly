@@ -1,8 +1,4 @@
 import { Link, useNavigate } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Separator } from '@/components/ui/separator'
 import AuthCard from '@/components/AuthCard'
 
 export default function LoginPage() {
@@ -10,33 +6,28 @@ export default function LoginPage() {
 
   return (
     <AuthCard title="Welcome back" subtitle="Sign in to your Trackly account">
-      <form onSubmit={(e) => { e.preventDefault(); navigate('/acme-corp/dashboard') }} className="flex flex-col gap-4">
-        <div className="flex flex-col gap-1.5">
-          <Label htmlFor="email">Email</Label>
-          <Input id="email" type="email" placeholder="you@company.com" required />
+      <form onSubmit={(e) => { e.preventDefault(); navigate('/acme-corp/dashboard') }} className="tp-auth-form">
+        <div className="tp-field">
+          <label className="tp-label" htmlFor="email">Email</label>
+          <input id="email" type="email" className="tp-input" placeholder="you@company.com" required />
         </div>
 
-        <div className="flex flex-col gap-1.5">
-          <div className="flex items-center justify-between">
-            <Label htmlFor="password">Password</Label>
-            <Link to="/forgot-password" className="text-xs text-muted-foreground hover:text-foreground transition-colors">
-              Forgot password?
-            </Link>
+        <div className="tp-field">
+          <div className="tp-field__row">
+            <label className="tp-label" htmlFor="password">Password</label>
+            <Link to="/forgot-password" className="tp-auth-form__forgot">Forgot password?</Link>
           </div>
-          <Input id="password" type="password" placeholder="••••••••••" required />
+          <input id="password" type="password" className="tp-input" placeholder="••••••••••" required />
         </div>
 
-        <Button type="submit" className="mt-1 w-full bg-rose-600 hover:bg-rose-700 text-white">
+        <button type="submit" className="tp-btn tp-btn--primary tp-auth-form__submit">
           Sign in
-        </Button>
+        </button>
 
-        <Separator />
+        <hr className="tp-divider" />
 
-        <p className="text-center text-sm text-muted-foreground">
-          No account?{' '}
-          <Link to="/register" className="font-medium text-foreground hover:text-rose-400 transition-colors">
-            Create one
-          </Link>
+        <p className="tp-auth-form__footer">
+          No account? <Link to="/register">Create one</Link>
         </p>
       </form>
     </AuthCard>

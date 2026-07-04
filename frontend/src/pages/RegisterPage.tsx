@@ -1,60 +1,51 @@
 import { Link, useNavigate } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Separator } from '@/components/ui/separator'
 import AuthCard from '@/components/AuthCard'
 
 export default function RegisterPage() {
   const navigate = useNavigate()
 
   return (
-    <AuthCard title="Create your account" subtitle="Start managing projects with your team">
-      <form onSubmit={(e) => { e.preventDefault(); navigate('/acme-corp/dashboard') }} className="flex flex-col gap-4">
-        <div className="grid grid-cols-2 gap-3">
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="firstName">First name</Label>
-            <Input id="firstName" placeholder="First name" required />
+    <AuthCard title="Create your account" subtitle="Run your team's work in one place">
+      <form onSubmit={(e) => { e.preventDefault(); navigate('/acme-corp/dashboard') }} className="tp-auth-form">
+        <div className="tp-auth-form__row">
+          <div className="tp-field">
+            <label className="tp-label" htmlFor="firstName">First name</label>
+            <input id="firstName" className="tp-input" placeholder="First name" required />
           </div>
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="lastName">Last name</Label>
-            <Input id="lastName" placeholder="Last name" required />
+          <div className="tp-field">
+            <label className="tp-label" htmlFor="lastName">Last name</label>
+            <input id="lastName" className="tp-input" placeholder="Last name" required />
           </div>
         </div>
 
-        <div className="flex flex-col gap-1.5">
-          <Label htmlFor="company">Company name</Label>
-          <Input id="company" placeholder="Your company" required />
+        <div className="tp-field">
+          <label className="tp-label" htmlFor="company">Company name</label>
+          <input id="company" className="tp-input" placeholder="Your company" required />
         </div>
 
-        <div className="flex flex-col gap-1.5">
-          <Label htmlFor="email">Work email</Label>
-          <Input id="email" type="email" placeholder="you@company.com" required />
+        <div className="tp-field">
+          <label className="tp-label" htmlFor="email">Work email</label>
+          <input id="email" type="email" className="tp-input" placeholder="you@company.com" required />
         </div>
 
-        <div className="flex flex-col gap-1.5">
-          <Label htmlFor="password">Password</Label>
-          <Input id="password" type="password" placeholder="Min. 10 characters" required />
+        <div className="tp-field">
+          <label className="tp-label" htmlFor="password">Password</label>
+          <input id="password" type="password" className="tp-input" placeholder="Min. 10 characters" required />
         </div>
 
-        <Button type="submit" className="mt-1 w-full bg-rose-600 hover:bg-rose-700 text-white">
+        <button type="submit" className="tp-btn tp-btn--primary tp-auth-form__submit">
           Create account
-        </Button>
+        </button>
 
-        <p className="text-center text-xs text-muted-foreground leading-relaxed">
+        <p className="tp-auth-form__terms">
           By creating an account you agree to our{' '}
-          <a href="#" className="underline underline-offset-2 hover:text-foreground transition-colors">Terms of Service</a>
-          {' '}and{' '}
-          <a href="#" className="underline underline-offset-2 hover:text-foreground transition-colors">Privacy Policy</a>.
+          <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
         </p>
 
-        <Separator />
+        <hr className="tp-divider" />
 
-        <p className="text-center text-sm text-muted-foreground">
-          Already have an account?{' '}
-          <Link to="/login" className="font-medium text-foreground hover:text-rose-400 transition-colors">
-            Sign in
-          </Link>
+        <p className="tp-auth-form__footer">
+          Already have an account? <Link to="/login">Sign in</Link>
         </p>
       </form>
     </AuthCard>

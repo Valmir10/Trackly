@@ -175,14 +175,26 @@ Flat-by-default, dev-tool posture: depth comes from a 1px hairline border and li
 - **Hover:** border brightens to `border-strong`, lifts 2px on translateY.
 - **Highlighted variant** (Plans "Next milestone"): border switches to full Cured Olive + background tints to an 8-14% accent wash, never a side-stripe.
 
+### Inputs / Fields
+- **Style:** `surface` background, 1px `border-strong` stroke, 10px radius (`--tp-radius-md`), 0.625rem/0.875rem padding.
+- **Focus:** border switches to Cured Olive + a 3px accent-wash glow ring (`box-shadow`), not a browser default outline.
+- **Placeholder:** `text-muted`.
+- **Error:** border switches to the desaturated red-orange danger color; a matching danger-tinted focus ring on top of it.
+- **Disabled:** 0.6 opacity, `cursor: not-allowed`.
+- **Labels:** `label` type scale (0.8125rem, 500 weight), `text-secondary`, sit directly above their input with `space-3xs` gap.
+- **Dividers** (`.tp-divider`): a plain 1px `border` hairline, used to separate a form's primary action from a secondary link, not a visible `<hr>` rule style.
+
 ### Nav
 - Fixed, `color-mix` translucent background + `backdrop-filter: blur(12px)`, hairline bottom border. Collapses to a hamburger + slide-down panel under 768px; full inline links + sign-in above it.
 
 ### Signature: Hero Product Preview
-A "browser chrome" strip (a live-pulse indicator + truncated mono URL, no fake traffic-light dots) above a 3-column kanban mock. One card carries two small accent-wash pill badges (calendar + file icons) linking it to a meeting and a contract — the concrete, in-product proof of "one workspace, not four," rather than a claim in copy alone.
+A "browser chrome" strip (a live-pulse indicator + truncated mono URL, no fake traffic-light dots) above a 3-column kanban mock. One card carries two small accent-wash pill badges (calendar + file icons) linking it to a meeting and a contract, the concrete, in-product proof of "one workspace, not four," rather than a claim in copy alone.
 
 ### Signature: Connect Diagram
-A small CSS-only diagram (four muted nodes connected by hairline lines converging on a glowing Cured Olive center dot) used once, on the "One workspace, not four" pillar card, as the visual signature for cross-pillar linking. Not reused as generic decoration elsewhere.
+A small CSS-only diagram (four muted nodes connected by hairline lines converging on a glowing Cured Olive center dot) used once, on the Pillars section's "Everything connects" card, as the visual signature for cross-pillar linking. Not reused as generic decoration elsewhere.
+
+### Signature: Auth Card
+A centered card (max-width 24rem) with a soft accent-wash glow behind it, the same brand mark as the nav above it, floating shadow (the one approved use of drop-shadow outside modals/popovers) since it's the sole focal object on an otherwise empty page. A faint dot-grid backdrop (1px dots on a 28px grid, `border-strong` opacity, radial-masked into a ring that fades out both near the card and at the far edges) fills the surrounding empty space without competing with the form. Requires `isolation: isolate` on the page root; the dot grid and glow both use negative z-index and will render behind the page's own background entirely without it. Shared by Login, Register, Forgot Password, Email Verification, and Invitation, all five now vanilla CSS.
 
 ## 6. Do's and Don'ts
 
