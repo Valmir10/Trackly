@@ -1,49 +1,75 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Moon, Sun } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { Moon, Sun, Menu, X } from 'lucide-react'
 import { useTheme } from '@/hooks/useTheme'
+import '@/styles/NavBar.css'
+
+const LINKS = [
+  { href: '#pillars', label: 'Product' },
+  { href: '#plans', label: 'Plans' },
+  { href: '#', label: 'Docs' },
+]
 
 export default function NavBar() {
   const { theme, toggleTheme } = useTheme()
+  const [menuOpen, setMenuOpen] = useState(false)
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 border-b border-border/40 bg-background/80 backdrop-blur-md">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
+    <nav className="tp-nav">
+      <div className="tp-nav__inner">
+        <Link to="/" className="tp-nav__brand" onClick={() => setMenuOpen(false)}>
+          <span className="tp-nav__mark">T</span>
+          <span className="tp-nav__name">Trackly</span>
+        </Link>
 
-          <Link to="/" className="flex items-center gap-2.5">
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-rose-600">
-              <span className="text-xs font-bold text-white">T</span>
-            </div>
-            <span className="text-sm font-semibold text-foreground tracking-tight">Trackly</span>
-          </Link>
+        <div className="tp-nav__links">
+          {LINKS.map((link) => (
+            <a key={link.label} href={link.href} className="tp-nav__link">
+              {link.label}
+            </a>
+          ))}
+        </div>
 
-          <div className="hidden items-center gap-7 md:flex">
-            <a href="#features" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Features</a>
-            <a href="#pricing" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Pricing</a>
-            <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Docs</a>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <button
-              onClick={toggleTheme}
-              className="flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
-              aria-label="Toggle theme"
-            >
-              {theme === 'dark' ? <Sun size={15} /> : <Moon size={15} />}
-            </button>
-            <Link to="/login">
-              <Button variant="ghost" size="sm" className="text-sm">Sign in</Button>
-            </Link>
-            <Link to="/register">
-              <Button size="sm" className="bg-rose-600 hover:bg-rose-700 text-white text-sm">
-                Get started
-              </Button>
-            </Link>
-          </div>
-
+        <div className="tp-nav__actions">
+          <button
+            type="button"
+            onClick={toggleTheme}
+            className="tp-nav__icon-btn"
+            aria-label={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
+          >
+            {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
+          </button>
+          <Link to="/login" className="tp-nav__signin">Sign in</Link>
+          <Link to="/register" className="tp-btn tp-btn--primary tp-btn--sm">Get started</Link>
+          <button
+            type="button"
+            onClick={() => setMenuOpen((open) => !open)}
+            className="tp-nav__icon-btn tp-nav__menu-toggle"
+            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={menuOpen}
+          >
+            {menuOpen ? <X size={18} /> : <Menu size={18} />}
+          </button>
         </div>
       </div>
+
+      {menuOpen && (
+        <div className="tp-nav__mobile">
+          {LINKS.map((link) => (
+            <a
+              key={link.label}
+              href={link.href}
+              className="tp-nav__mobile-link"
+              onClick={() => setMenuOpen(false)}
+            >
+              {link.label}
+            </a>
+          ))}
+          <Link to="/login" className="tp-nav__mobile-link" onClick={() => setMenuOpen(false)}>
+            Sign in
+          </Link>
+        </div>
+      )}
     </nav>
   )
 }

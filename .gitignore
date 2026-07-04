@@ -94,3 +94,6 @@ Desktop.ini
 *.log
 *.tmp
 .cache/
+
+# Design reference repos (cloned locally for inspiration, not part of Trackly)
+design/

@@ -1,20 +1,21 @@
 import NavBar from '@/components/NavBar'
 import HeroSection from '@/components/HeroSection'
-import FeaturesSection from '@/components/FeaturesSection'
-import AiSection from '@/components/AiSection'
-import PricingSection from '@/components/PricingSection'
+import PillarsSection from '@/components/PillarsSection'
+import PlansSection from '@/components/PlansSection'
 import CtaSection from '@/components/CtaSection'
 import FooterSection from '@/components/FooterSection'
+import '@/styles/tokens.css'
+import '@/styles/tp-primitives.css'
+import '@/styles/LandingPage.css'
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="tp-shell">
       <NavBar />
       <main>
         <HeroSection />
-        <FeaturesSection />
-        <AiSection />
-        <PricingSection />
+        <PillarsSection />
+        <PlansSection />
         <CtaSection />
       </main>
       <FooterSection />
