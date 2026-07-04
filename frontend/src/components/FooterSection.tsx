@@ -1,54 +1,45 @@
 import { Link } from 'react-router-dom'
+import '@/styles/FooterSection.css'
 
 const links = {
-  Product: ['Features', 'Pricing', 'Changelog', 'Roadmap'],
-  Company: ['About', 'Blog', 'Careers', 'Press'],
-  Legal: ['Privacy', 'Terms', 'Security', 'Cookies'],
-  Support: ['Documentation', 'Status', 'Contact', 'Community'],
+  Product: ['Tasks', 'Meetings', 'Clients', 'Contracts', 'Plans'],
+  Company: ['About', 'Blog', 'Careers'],
+  Legal: ['Privacy', 'Terms', 'Security'],
+  Support: ['Documentation', 'Status', 'Contact'],
 }
 
 export default function FooterSection() {
   return (
-    <footer className="border-t border-border/40 py-16">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-
-        <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-5">
-
-          <div className="lg:col-span-1">
-            <Link to="/" className="flex items-center gap-2.5">
-              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-rose-600">
-                <span className="text-xs font-bold text-white">T</span>
-              </div>
-              <span className="text-sm font-semibold text-foreground tracking-tight">Trackly</span>
+    <footer className="tp-footer">
+      <div className="tp-container">
+        <div className="tp-footer__grid">
+          <div className="tp-footer__brand">
+            <Link to="/" className="tp-footer__logo">
+              <span className="tp-footer__mark">T</span>
+              <span className="tp-footer__name">Trackly</span>
             </Link>
-            <p className="mt-4 text-xs text-muted-foreground leading-relaxed max-w-[180px]">
-              Project management for modern teams, powered by AI.
+            <p className="tp-footer__tagline">
+              One workspace for tasks, meetings, clients, and contracts.
             </p>
           </div>
 
           {Object.entries(links).map(([category, items]) => (
             <div key={category}>
-              <p className="mb-4 text-xs font-semibold text-foreground uppercase tracking-wider">{category}</p>
-              <ul className="flex flex-col gap-2.5">
+              <p className="tp-footer__category">{category}</p>
+              <ul className="tp-footer__links">
                 {items.map((item) => (
                   <li key={item}>
-                    <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                      {item}
-                    </a>
+                    <a href="#">{item}</a>
                   </li>
                 ))}
               </ul>
             </div>
           ))}
-
         </div>
 
-        <div className="mt-16 flex items-center justify-center border-t border-border/40 pt-8">
-          <p className="text-xs text-muted-foreground">
-            © {new Date().getFullYear()} Trackly. All rights reserved.
-          </p>
+        <div className="tp-footer__bottom">
+          <p>© {new Date().getFullYear()} Trackly. All rights reserved.</p>
         </div>
-
       </div>
     </footer>
   )

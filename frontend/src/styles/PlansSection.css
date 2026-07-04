@@ -1,0 +1,127 @@
+.tp-plans {
+  padding-block: var(--tp-space-3xl);
+  border-top: 1px solid var(--tp-border);
+}
+
+.tp-plans__intro {
+  text-align: center;
+  max-width: 32rem;
+  margin: 0 auto var(--tp-space-xl);
+}
+
+.tp-plans__heading {
+  font-size: var(--tp-text-2xl);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.tp-plans__subheading {
+  margin-top: var(--tp-space-xs);
+  font-size: var(--tp-text-base);
+  color: var(--tp-text-secondary);
+}
+
+.tp-plans__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--tp-space-md);
+  align-items: start;
+}
+
+.tp-plan-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: var(--tp-space-lg);
+  background: var(--tp-surface);
+  border: 1px solid var(--tp-border);
+  border-radius: var(--tp-radius-lg);
+}
+
+.tp-plan-card--highlighted {
+  border-color: var(--tp-accent);
+  background: var(--tp-accent-wash);
+}
+
+.tp-plan-card__badge {
+  position: absolute;
+  top: -0.75rem;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.25rem 0.75rem;
+  background: var(--tp-accent);
+  color: var(--tp-on-accent);
+  border-radius: var(--tp-radius-full);
+  font-size: 0.6875rem;
+  font-weight: 600;
+}
+
+.tp-plan-card__name {
+  font-size: var(--tp-text-sm);
+  font-weight: 600;
+  color: var(--tp-text-secondary);
+}
+
+.tp-plan-card__figure-row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--tp-space-2xs);
+  margin-top: var(--tp-space-sm);
+}
+
+.tp-plan-card__figure {
+  font-size: var(--tp-text-2xl);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--tp-text);
+}
+
+.tp-plan-card__figure--mono {
+  font-family: var(--tp-font-mono);
+  font-weight: 500;
+}
+
+.tp-plan-card__caption {
+  font-size: var(--tp-text-xs);
+  color: var(--tp-text-muted);
+}
+
+.tp-plan-card__description {
+  margin-top: var(--tp-space-xs);
+  font-size: var(--tp-text-sm);
+  color: var(--tp-text-secondary);
+  min-height: 2.6em;
+}
+
+.tp-plan-card__cta {
+  width: 100%;
+  margin-top: var(--tp-space-lg);
+  margin-bottom: var(--tp-space-lg);
+}
+
+.tp-plan-card__features {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tp-space-xs);
+}
+
+.tp-plan-card__features li {
+  display: flex;
+  align-items: center;
+  gap: var(--tp-space-2xs);
+  font-size: var(--tp-text-sm);
+  color: var(--tp-text-secondary);
+}
+
+.tp-plan-card__features svg {
+  flex-shrink: 0;
+  color: var(--tp-accent);
+}
+
+@media (max-width: 900px) {
+  .tp-plans__grid {
+    grid-template-columns: 1fr;
+    max-width: 26rem;
+    margin-inline: auto;
+  }
+}

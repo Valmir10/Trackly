@@ -1,0 +1,108 @@
+@import '@fontsource/geist-sans/400.css';
+@import '@fontsource/geist-sans/500.css';
+@import '@fontsource/geist-sans/600.css';
+@import '@fontsource/geist-sans/700.css';
+@import '@fontsource/geist-mono/400.css';
+@import '@fontsource/geist-mono/500.css';
+
+.tp-shell {
+  --tp-bg: oklch(1 0 0);
+  --tp-surface: oklch(0.98 0 0);
+  --tp-surface-2: oklch(0.955 0 0);
+  --tp-border: oklch(0 0 0 / 8%);
+  --tp-border-strong: oklch(0 0 0 / 14%);
+
+  --tp-text: oklch(0.17 0 0);
+  --tp-text-secondary: oklch(0.38 0 0);
+  --tp-text-muted: oklch(0.52 0 0);
+
+  --tp-accent: oklch(0.42 0.1 110);
+  --tp-accent-strong: oklch(0.36 0.11 110);
+  --tp-accent-wash: oklch(0.42 0.1 110 / 8%);
+  --tp-on-accent: oklch(0.99 0 0);
+
+  --tp-danger: oklch(0.52 0.16 25);
+
+  --tp-font-sans: 'Geist Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --tp-font-mono: 'Geist Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+
+  --tp-text-xs: 0.8125rem;
+  --tp-text-sm: 0.9375rem;
+  --tp-text-base: 1.0625rem;
+  --tp-text-lg: 1.375rem;
+  --tp-text-xl: 1.75rem;
+  --tp-text-2xl: clamp(2rem, 1.4rem + 2.2vw, 3.1rem);
+  --tp-text-display: clamp(2.75rem, 1.6rem + 4.3vw, 4.75rem);
+
+  --tp-space-3xs: 0.25rem;
+  --tp-space-2xs: 0.5rem;
+  --tp-space-xs: 0.75rem;
+  --tp-space-sm: 1rem;
+  --tp-space-md: 1.5rem;
+  --tp-space-lg: 2rem;
+  --tp-space-xl: 3rem;
+  --tp-space-2xl: 4rem;
+  --tp-space-3xl: 6rem;
+
+  --tp-radius-sm: 6px;
+  --tp-radius-md: 10px;
+  --tp-radius-lg: 16px;
+  --tp-radius-full: 999px;
+
+  --tp-ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --tp-ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --tp-duration-fast: 150ms;
+  --tp-duration-base: 250ms;
+  --tp-duration-slow: 450ms;
+  --tp-duration-entrance: 700ms;
+
+  --tp-z-dropdown: 100;
+  --tp-z-sticky: 200;
+  --tp-z-modal-backdrop: 300;
+  --tp-z-modal: 400;
+  --tp-z-toast: 500;
+  --tp-z-tooltip: 600;
+}
+
+.dark .tp-shell {
+  --tp-bg: oklch(0.09 0 0);
+  --tp-surface: oklch(0.14 0 0);
+  --tp-surface-2: oklch(0.19 0 0);
+  --tp-border: oklch(1 0 0 / 10%);
+  --tp-border-strong: oklch(1 0 0 / 18%);
+
+  --tp-text: oklch(0.96 0 0);
+  --tp-text-secondary: oklch(0.72 0 0);
+  --tp-text-muted: oklch(0.61 0 0);
+
+  --tp-accent: oklch(0.8 0.13 110);
+  --tp-accent-strong: oklch(0.87 0.14 110);
+  --tp-accent-wash: oklch(0.8 0.13 110 / 14%);
+  --tp-on-accent: oklch(0.14 0 0);
+
+  --tp-danger: oklch(0.68 0.17 25);
+}
+
+.tp-shell {
+  background: var(--tp-bg);
+  color: var(--tp-text);
+  font-family: var(--tp-font-sans);
+  font-optical-sizing: auto;
+}
+
+.tp-shell :where(h1, h2, h3, h4) {
+  text-wrap: balance;
+}
+
+.tp-shell p {
+  text-wrap: pretty;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tp-shell * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
