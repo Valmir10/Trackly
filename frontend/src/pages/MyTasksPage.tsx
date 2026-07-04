@@ -2,8 +2,7 @@ import { useState } from 'react'
 import { Circle, CheckCircle2 } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-import AppSidebar from '@/components/AppSidebar'
-import AppTopBar from '@/components/AppTopBar'
+import AppShell from '@/components/AppShell'
 
 const statusTabs = ['All', 'To Do', 'In Progress', 'In Review', 'Done']
 
@@ -25,12 +24,9 @@ export default function MyTasksPage() {
   const filtered = activeTab === 'All' ? tasks : tasks.filter(t => t.status === activeTab)
 
   return (
-    <div className="flex h-screen overflow-hidden bg-background">
-      <AppSidebar />
-      <div className="flex flex-1 flex-col overflow-hidden">
-        <AppTopBar />
-        <main className="flex-1 overflow-y-auto p-6">
-          <div className="mx-auto max-w-4xl">
+    <AppShell>
+      <div className="p-6">
+        <div className="mx-auto max-w-4xl">
 
             <div className="mb-6">
               <h1 className="text-xl font-semibold text-foreground">My Tasks</h1>
@@ -88,9 +84,8 @@ export default function MyTasksPage() {
               ))}
             </div>
 
-          </div>
-        </main>
+        </div>
       </div>
-    </div>
+    </AppShell>
   )
 }

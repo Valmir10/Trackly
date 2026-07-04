@@ -1,6 +1,5 @@
 import { useState } from 'react'
-import AppSidebar from '@/components/AppSidebar'
-import AppTopBar from '@/components/AppTopBar'
+import AppShell from '@/components/AppShell'
 import SettingsSidebar from '@/components/SettingsSidebar'
 import WorkspaceSettings from '@/components/WorkspaceSettings'
 import TeamSettings from '@/components/TeamSettings'
@@ -26,17 +25,13 @@ export default function SettingsPage() {
   const [activeSection, setActiveSection] = useState('Workspace')
 
   return (
-    <div className="flex h-screen overflow-hidden bg-background">
-      <AppSidebar />
-      <div className="flex flex-1 flex-col overflow-hidden">
-        <AppTopBar />
-        <div className="flex flex-1 overflow-hidden">
-          <SettingsSidebar active={activeSection} onSelect={setActiveSection} />
-          <main className="flex-1 overflow-y-auto p-8">
-            <SettingsContent active={activeSection} />
-          </main>
+    <AppShell>
+      <div className="flex h-full overflow-hidden">
+        <SettingsSidebar active={activeSection} onSelect={setActiveSection} />
+        <div className="flex-1 overflow-y-auto p-8">
+          <SettingsContent active={activeSection} />
         </div>
       </div>
-    </div>
+    </AppShell>
   )
 }
