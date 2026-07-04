@@ -84,6 +84,8 @@
 }
 
 .tp-shell {
+  position: relative;
+  isolation: isolate;
   background: var(--tp-bg);
   color: var(--tp-text);
   font-family: var(--tp-font-sans);

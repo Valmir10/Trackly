@@ -11,6 +11,7 @@ import '@/styles/LandingPage.css'
 export default function LandingPage() {
   return (
     <div className="tp-shell">
+      <div className="tp-dot-grid" aria-hidden="true" />
       <NavBar />
       <main>
         <HeroSection />

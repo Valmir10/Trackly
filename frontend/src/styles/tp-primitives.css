@@ -4,6 +4,17 @@
   padding-inline: clamp(1.25rem, 4vw, 3rem);
 }
 
+.tp-dot-grid {
+  position: fixed;
+  inset: 0;
+  background-image: radial-gradient(circle, var(--tp-border-strong) 1px, transparent 1px);
+  background-size: 28px 28px;
+  mask-image: linear-gradient(to bottom, transparent, black 12rem, black calc(100% - 16rem), transparent);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, black 12rem, black calc(100% - 16rem), transparent);
+  pointer-events: none;
+  z-index: -1;
+}
+
 .tp-btn {
   display: inline-flex;
   align-items: center;
