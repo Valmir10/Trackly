@@ -1,8 +1,7 @@
 import { useState } from 'react'
 import { Plus, FolderOpen } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import AppSidebar from '@/components/AppSidebar'
-import AppTopBar from '@/components/AppTopBar'
+import AppShell from '@/components/AppShell'
 import ProjectCard from '@/components/ProjectCard'
 import NewProjectModal from '@/components/NewProjectModal'
 
@@ -37,11 +36,9 @@ export default function ProjectsPage() {
   const projects = activeTab === 'All projects' ? allProjects : activeTab === 'My projects' ? myProjects : []
 
   return (
-    <div className="flex h-screen overflow-hidden bg-background">
-      <AppSidebar />
-      <div className="flex flex-1 flex-col overflow-hidden">
-        <AppTopBar />
-        <main className="flex-1 overflow-y-auto p-6">
+    <>
+      <AppShell>
+        <div className="p-6">
           <div className="mx-auto max-w-6xl">
 
             <div className="mb-6 flex items-center justify-between">
@@ -84,10 +81,10 @@ export default function ProjectsPage() {
             )}
 
           </div>
-        </main>
-      </div>
+        </div>
+      </AppShell>
 
       {showModal && <NewProjectModal onClose={() => setShowModal(false)} />}
-    </div>
+    </>
   )
 }

@@ -1,1 +1,130 @@
-/* Styles for AppTopBar */
+.tp-topbar {
+  display: flex;
+  align-items: center;
+  gap: var(--tp-space-sm);
+  height: 3.5rem;
+  flex-shrink: 0;
+  padding-inline: var(--tp-space-md);
+  background: var(--tp-bg);
+  border-bottom: 1px solid var(--tp-border);
+}
+
+.tp-topbar__menu-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  flex-shrink: 0;
+  background: transparent;
+  border: none;
+  border-radius: var(--tp-radius-sm);
+  color: var(--tp-text-secondary);
+  cursor: pointer;
+}
+
+.tp-topbar__menu-toggle:hover {
+  background: var(--tp-surface);
+  color: var(--tp-text);
+}
+
+.tp-topbar__search {
+  display: flex;
+  align-items: center;
+  gap: var(--tp-space-2xs);
+  width: 16rem;
+  padding: 0.4375rem var(--tp-space-xs);
+  background: var(--tp-surface);
+  border: 1px solid var(--tp-border);
+  border-radius: var(--tp-radius-md);
+  font-family: var(--tp-font-sans);
+  font-size: var(--tp-text-sm);
+  color: var(--tp-text-muted);
+  cursor: pointer;
+  transition: border-color var(--tp-duration-fast) var(--tp-ease-out-quart);
+}
+
+.tp-topbar__search:hover {
+  border-color: var(--tp-border-strong);
+}
+
+.tp-topbar__search span {
+  flex: 1;
+  text-align: left;
+}
+
+.tp-topbar__kbd {
+  padding: 0.125rem 0.375rem;
+  background: var(--tp-surface-2);
+  border-radius: var(--tp-radius-sm);
+  font-family: var(--tp-font-mono);
+  font-size: 0.6875rem;
+  color: var(--tp-text-muted);
+}
+
+.tp-topbar__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-left: auto;
+}
+
+.tp-topbar__icon-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  background: transparent;
+  border: none;
+  border-radius: var(--tp-radius-sm);
+  color: var(--tp-text-secondary);
+  cursor: pointer;
+  transition:
+    background-color var(--tp-duration-fast) var(--tp-ease-out-quart),
+    color var(--tp-duration-fast) var(--tp-ease-out-quart);
+}
+
+.tp-topbar__icon-btn:hover {
+  background: var(--tp-surface);
+  color: var(--tp-text);
+}
+
+.tp-topbar__notification-dot {
+  position: absolute;
+  top: 0.3125rem;
+  right: 0.3125rem;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--tp-danger);
+}
+
+.tp-topbar__avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  margin-left: 0.25rem;
+  background: var(--tp-accent-wash);
+  border: none;
+  border-radius: 50%;
+  color: var(--tp-accent);
+  font-family: var(--tp-font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.tp-topbar__menu-panel {
+  top: calc(100% + 0.5rem);
+  right: 0;
+}
+
+@media (min-width: 1024px) {
+  .tp-topbar__menu-toggle {
+    display: none;
+  }
+}

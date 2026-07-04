@@ -184,8 +184,26 @@ Flat-by-default, dev-tool posture: depth comes from a 1px hairline border and li
 - **Labels:** `label` type scale (0.8125rem, 500 weight), `text-secondary`, sit directly above their input with `space-3xs` gap.
 - **Dividers** (`.tp-divider`): a plain 1px `border` hairline, used to separate a form's primary action from a secondary link, not a visible `<hr>` rule style.
 
-### Nav
+### Nav (brand register)
 - Fixed, `color-mix` translucent background + `backdrop-filter: blur(12px)`, hairline bottom border. Collapses to a hamburger + slide-down panel under 768px; full inline links + sign-in above it.
+
+### App Shell: Sidebar (product register)
+- **Structure:** 16rem fixed-width column, `surface` background, hairline right border. Header (workspace switcher), nav, scrollable projects list, footer (Settings + user).
+- **Workspace switcher:** a `tp-dropdown` trigger showing a mark, workspace name, and current unlock tier (Starter/Growth/Scale, never a payment-plan label) with a `ChevronsUpDown` affordance. Panel shows the workspace list (checkmark on active) and a link to workspace settings.
+- **Nav items:** hairline-free; active state is an `accent-wash` background + `accent`-colored text and icon, never a side-stripe. Scoped to what's actually built — no disabled/"coming soon" entries for unbuilt pillars.
+- **Projects list:** each project gets a small solid-color dot from the categorical palette (`--tp-cat-1..5`, muted hues distinct from the brand accent) for at-a-glance differentiation, not brand meaning.
+- **Mobile (<1024px):** the desktop sidebar hides entirely; a hamburger in the topbar opens a fixed slide-in drawer (`tp-sidebar--mobile`) with a scrim backdrop and its own close button, animated via `translateX`.
+
+### App Shell: TopBar (product register)
+- **Structure:** 3.5rem fixed height, `bg` background, hairline bottom border. Search trigger (⌘K hint) on the left, notifications/help/avatar on the right.
+- **Avatar menu:** same `tp-dropdown`/`tp-menu-item` primitives as the workspace switcher, right-aligned panel.
+- **Notification dot:** a small solid `danger`-colored dot, absolutely positioned on the bell icon; presence-only, no count badge yet.
+
+### Dropdowns / Menus (`tp-dropdown`, `tp-menu-item`)
+- **Positioning:** `position: absolute` on a `position: relative` trigger wrapper. Only safe because neither the sidebar header nor the topbar have a clipping `overflow` ancestor between the trigger and the panel — if a future menu trigger sits inside a scrollable region, switch that panel to `position: fixed` with computed coordinates instead (per the live-mode popover rule).
+- **Panel:** `surface` background, hairline border, floating shadow, `tp-dropdown-in` fade + scale entrance (150ms).
+- **Items:** full-width, hairline-free, `surface-2` hover/focus-visible, muted icon that doesn't recolor on hover. An `--active` variant colors text `accent` for the current selection (e.g. current workspace).
+- **Dismissal:** a shared `useClickOutside` hook (`src/hooks/useClickOutside.ts`) closes the panel on outside pointerdown; every dropdown in the app shell uses it rather than a one-off listener.
 
 ### Signature: Hero Product Preview
 A "browser chrome" strip (a live-pulse indicator + truncated mono URL, no fake traffic-light dots) above a 3-column kanban mock. One card carries two small accent-wash pill badges (calendar + file icons) linking it to a meeting and a contract, the concrete, in-product proof of "one workspace, not four," rather than a claim in copy alone.

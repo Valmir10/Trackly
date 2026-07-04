@@ -2,8 +2,7 @@ import {
   LineChart, Line, BarChart, Bar, PieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend,
 } from 'recharts'
-import AppSidebar from '@/components/AppSidebar'
-import AppTopBar from '@/components/AppTopBar'
+import AppShell from '@/components/AppShell'
 
 const weeklyData = [
   { week: 'Apr 14', completed: 3, created: 5 },
@@ -39,12 +38,9 @@ const stats = [
 
 export default function AnalyticsPage() {
   return (
-    <div className="flex h-screen overflow-hidden bg-background">
-      <AppSidebar />
-      <div className="flex flex-1 flex-col overflow-hidden">
-        <AppTopBar />
-        <main className="flex-1 overflow-y-auto p-6">
-          <div className="mx-auto max-w-6xl flex flex-col gap-6">
+    <AppShell>
+      <div className="p-6">
+        <div className="mx-auto max-w-6xl flex flex-col gap-6">
 
             <div>
               <h1 className="text-xl font-semibold text-foreground">Analytics</h1>
@@ -121,9 +117,8 @@ export default function AnalyticsPage() {
               </div>
             </div>
 
-          </div>
-        </main>
+        </div>
       </div>
-    </div>
+    </AppShell>
   )
 }

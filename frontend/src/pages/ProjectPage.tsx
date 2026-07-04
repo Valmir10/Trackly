@@ -1,5 +1,4 @@
-import AppSidebar from '@/components/AppSidebar'
-import AppTopBar from '@/components/AppTopBar'
+import AppShell from '@/components/AppShell'
 import ProjectHeader from '@/components/ProjectHeader'
 import KanbanColumn from '@/components/KanbanColumn'
 import TaskCard from '@/components/TaskCard'
@@ -47,14 +46,10 @@ const columns = [
 
 export default function ProjectPage() {
   return (
-    <div className="flex h-screen overflow-hidden bg-background">
-      <AppSidebar />
-
-      <div className="flex flex-1 flex-col overflow-hidden">
-        <AppTopBar />
+    <AppShell>
+      <div className="flex h-full flex-col overflow-hidden">
         <ProjectHeader />
-
-        <main className="flex-1 overflow-x-auto overflow-y-hidden p-6">
+        <div className="flex-1 overflow-x-auto overflow-y-hidden p-6">
           <div className="flex h-full gap-4">
             {columns.map((col) => (
               <KanbanColumn key={col.id} title={col.title} color={col.color} count={col.tasks.length}>
@@ -64,8 +59,8 @@ export default function ProjectPage() {
               </KanbanColumn>
             ))}
           </div>
-        </main>
+        </div>
       </div>
-    </div>
+    </AppShell>
   )
 }

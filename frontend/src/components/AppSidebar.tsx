@@ -1,3 +1,4 @@
+import { useRef, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import {
   LayoutDashboard,
@@ -6,9 +7,12 @@ import {
   BarChart2,
   Settings,
   Plus,
+  ChevronsUpDown,
+  Check,
+  X,
 } from 'lucide-react'
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-import { cn } from '@/lib/utils'
+import { useClickOutside } from '@/hooks/useClickOutside'
+import '@/styles/AppSidebar.css'
 
 const slug = 'acme-corp'
 
@@ -20,28 +24,63 @@ const navItems = [
 ]
 
 const projects = [
-  { name: 'Frontend redesign', color: 'bg-rose-500' },
-  { name: 'API v2', color: 'bg-blue-500' },
-  { name: 'Mobile app', color: 'bg-green-500' },
-  { name: 'Marketing site', color: 'bg-orange-500' },
+  { name: 'Frontend redesign', dot: 'var(--tp-cat-1)' },
+  { name: 'API v2', dot: 'var(--tp-cat-3)' },
+  { name: 'Mobile app', dot: 'var(--tp-cat-4)' },
+  { name: 'Marketing site', dot: 'var(--tp-cat-2)' },
 ]
 
-export default function AppSidebar() {
-  const location = useLocation()
+interface AppSidebarProps {
+  mobileOpen: boolean
+  onCloseMobile: () => void
+}
 
-  return (
-    <aside className="flex h-screen w-60 shrink-0 flex-col border-r border-sidebar-border bg-sidebar">
-      <div className="flex h-14 items-center gap-2.5 border-b border-sidebar-border px-4">
-        <div className="flex h-6 w-6 items-center justify-center rounded-md bg-rose-600">
-          <span className="text-[10px] font-bold text-white">T</span>
+export default function AppSidebar({ mobileOpen, onCloseMobile }: AppSidebarProps) {
+  const location = useLocation()
+  const [switcherOpen, setSwitcherOpen] = useState(false)
+  const switcherRef = useRef<HTMLDivElement>(null)
+  useClickOutside(switcherRef, () => setSwitcherOpen(false), switcherOpen)
+
+  const content = (
+    <>
+      <div className="tp-sidebar__header">
+        <div className="tp-dropdown" ref={switcherRef}>
+          <button
+            type="button"
+            className="tp-sidebar__workspace"
+            onClick={() => setSwitcherOpen((open) => !open)}
+            aria-expanded={switcherOpen}
+          >
+            <span className="tp-sidebar__workspace-mark">A</span>
+            <span className="tp-sidebar__workspace-info">
+              <span className="tp-sidebar__workspace-name">Acme Corp</span>
+              <span className="tp-sidebar__workspace-tier">Starter</span>
+            </span>
+            <ChevronsUpDown size={14} />
+          </button>
+
+          {switcherOpen && (
+            <div className="tp-dropdown__panel tp-sidebar__workspace-panel">
+              <p className="tp-menu-label">Workspace</p>
+              <div className="tp-menu-item tp-menu-item--active">
+                <Check size={14} />
+                Acme Corp
+              </div>
+              <div className="tp-menu-divider" />
+              <Link
+                to={`/${slug}/settings`}
+                className="tp-menu-item"
+                onClick={() => setSwitcherOpen(false)}
+              >
+                <Settings size={14} />
+                Workspace settings
+              </Link>
+            </div>
+          )}
         </div>
-        <span className="text-sm font-semibold text-sidebar-foreground tracking-tight">Trackly</span>
-        <span className="ml-auto rounded-md bg-rose-500/15 px-1.5 py-0.5 text-[10px] font-medium text-rose-400">
-          Pro
-        </span>
       </div>
 
-      <nav className="flex flex-col gap-0.5 p-2">
+      <nav className="tp-sidebar__nav">
         {navItems.map((item) => {
           const Icon = item.icon
           const isActive = location.pathname === item.to
@@ -49,61 +88,76 @@ export default function AppSidebar() {
             <Link
               key={item.label}
               to={item.to}
-              className={cn(
-                'flex items-center gap-2.5 rounded-md px-3 py-2 text-sm transition-colors',
-                isActive
-                  ? 'bg-accent text-foreground font-medium'
-                  : 'text-muted-foreground hover:bg-accent/50 hover:text-foreground'
-              )}
+              onClick={onCloseMobile}
+              className={`tp-sidebar__nav-item${isActive ? ' tp-sidebar__nav-item--active' : ''}`}
             >
-              <Icon size={15} />
+              <Icon size={16} />
               {item.label}
             </Link>
           )
         })}
       </nav>
 
-      <div className="mx-2 mt-4 border-t border-sidebar-border pt-4">
-        <div className="mb-1.5 flex items-center justify-between px-3">
-          <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-            Projects
-          </span>
-          <button className="rounded-md p-0.5 text-muted-foreground hover:text-foreground transition-colors">
+      <div className="tp-sidebar__projects">
+        <div className="tp-sidebar__projects-head">
+          <span>Projects</span>
+          <button type="button" className="tp-sidebar__projects-add" aria-label="New project">
             <Plus size={13} />
           </button>
         </div>
-        <div className="flex flex-col gap-0.5">
+        <div className="tp-sidebar__projects-list">
           {projects.map((project) => (
             <Link
               key={project.name}
               to={`/${slug}/projects/1`}
-              className="flex items-center gap-2.5 rounded-md px-3 py-1.5 text-sm text-muted-foreground hover:bg-accent/50 hover:text-foreground transition-colors"
+              onClick={onCloseMobile}
+              className="tp-sidebar__project"
             >
-              <div className={`h-2 w-2 shrink-0 rounded-full ${project.color}`} />
-              <span className="truncate">{project.name}</span>
+              <span className="tp-sidebar__project-dot" style={{ background: project.dot }} />
+              <span className="tp-sidebar__project-name">{project.name}</span>
             </Link>
           ))}
         </div>
       </div>
 
-      <div className="mt-auto border-t border-sidebar-border p-3">
-        <Link
-          to={`/${slug}/settings`}
-          className="flex items-center gap-2 rounded-md px-2 py-1.5 text-sm text-muted-foreground hover:bg-accent/50 hover:text-foreground transition-colors"
-        >
+      <div className="tp-sidebar__footer">
+        <Link to={`/${slug}/settings`} onClick={onCloseMobile} className="tp-sidebar__settings-link">
           <Settings size={14} />
           Settings
         </Link>
-        <div className="mt-2 flex items-center gap-2.5 rounded-md px-2 py-1.5">
-          <Avatar className="h-7 w-7">
-            <AvatarFallback className="bg-rose-500/15 text-xs font-medium text-rose-400">VZ</AvatarFallback>
-          </Avatar>
-          <div className="flex flex-col">
-            <span className="text-xs font-medium text-foreground">Valmir Zogaj</span>
-            <span className="text-[10px] text-muted-foreground">Owner</span>
-          </div>
+        <div className="tp-sidebar__user">
+          <span className="tp-sidebar__user-avatar">VZ</span>
+          <span className="tp-sidebar__user-info">
+            <span className="tp-sidebar__user-name">Valmir Zogaj</span>
+            <span className="tp-sidebar__user-role">Owner</span>
+          </span>
         </div>
       </div>
-    </aside>
+    </>
+  )
+
+  return (
+    <>
+      <aside className="tp-sidebar tp-sidebar--desktop">{content}</aside>
+
+      {mobileOpen && (
+        <div className="tp-sidebar__backdrop" onClick={onCloseMobile}>
+          <aside
+            className="tp-sidebar tp-sidebar--mobile"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <button
+              type="button"
+              className="tp-sidebar__close"
+              onClick={onCloseMobile}
+              aria-label="Close menu"
+            >
+              <X size={18} />
+            </button>
+            {content}
+          </aside>
+        </div>
+      )}
+    </>
   )
 }
