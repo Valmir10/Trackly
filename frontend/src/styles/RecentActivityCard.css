@@ -1,1 +1,62 @@
-/* Styles for RecentActivityCard */
+.tp-activity-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--tp-surface);
+  border: 1px solid var(--tp-border);
+  border-radius: var(--tp-radius-lg);
+  overflow: hidden;
+}
+
+.tp-activity-card__head {
+  padding: var(--tp-space-sm) var(--tp-space-md);
+  border-bottom: 1px solid var(--tp-border);
+}
+
+.tp-activity-card__title {
+  font-size: var(--tp-text-sm);
+  font-weight: 600;
+  color: var(--tp-text);
+}
+
+.tp-activity-card__list {
+  display: flex;
+  flex-direction: column;
+}
+
+.tp-activity-card__row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--tp-space-xs);
+  padding: var(--tp-space-xs) var(--tp-space-md);
+  border-bottom: 1px solid var(--tp-border);
+}
+
+.tp-activity-card__row:last-child {
+  border-bottom: none;
+}
+
+.tp-activity-card__row .tp-avatar {
+  margin-top: 0.125rem;
+}
+
+.tp-activity-card__text {
+  flex: 1;
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
+.tp-activity-card__actor,
+.tp-activity-card__target {
+  font-weight: 500;
+  color: var(--tp-text);
+}
+
+.tp-activity-card__action {
+  color: var(--tp-text-muted);
+}
+
+.tp-activity-card__time {
+  flex-shrink: 0;
+  font-size: 0.6875rem;
+  color: var(--tp-text-muted);
+}

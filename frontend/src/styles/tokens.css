@@ -22,6 +22,8 @@
   --tp-on-accent: oklch(0.99 0 0);
 
   --tp-danger: oklch(0.52 0.16 25);
+  --tp-success: oklch(0.5 0.13 145);
+  --tp-warning: oklch(0.5 0.15 55);
 
   --tp-cat-1: oklch(0.68 0.16 25);
   --tp-cat-2: oklch(0.72 0.14 55);
@@ -87,6 +89,8 @@
   --tp-on-accent: oklch(0.14 0 0);
 
   --tp-danger: oklch(0.68 0.17 25);
+  --tp-success: oklch(0.68 0.15 145);
+  --tp-warning: oklch(0.72 0.14 55);
 }
 
 .tp-shell {
