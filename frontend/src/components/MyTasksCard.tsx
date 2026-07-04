@@ -1,83 +1,90 @@
 import { Link } from 'react-router-dom'
-import { ArrowRight, Circle } from 'lucide-react'
-import { Badge } from '@/components/ui/badge'
+import { ArrowRight, Circle, CheckCircle2 } from 'lucide-react'
+import '@/styles/MyTasksCard.css'
 
 const tasks = [
   {
     title: 'Design dashboard layout',
     project: 'Frontend redesign',
-    projectColor: 'bg-rose-500',
-    priority: 'High',
-    priorityColor: 'text-red-400',
+    projectDot: 'var(--tp-cat-1)',
+    priority: 'high' as const,
     due: 'Today',
-    dueColor: 'text-red-400',
+    dueSoon: true,
     status: 'In Progress',
   },
   {
     title: 'Write API documentation',
     project: 'API v2',
-    projectColor: 'bg-blue-500',
-    priority: 'Medium',
-    priorityColor: 'text-yellow-400',
+    projectDot: 'var(--tp-cat-3)',
+    priority: 'medium' as const,
     due: 'Tomorrow',
-    dueColor: 'text-muted-foreground',
+    dueSoon: false,
     status: 'To Do',
   },
   {
     title: 'Fix authentication bug',
     project: 'API v2',
-    projectColor: 'bg-blue-500',
-    priority: 'High',
-    priorityColor: 'text-red-400',
+    projectDot: 'var(--tp-cat-3)',
+    priority: 'high' as const,
     due: 'Jun 12',
-    dueColor: 'text-muted-foreground',
+    dueSoon: false,
     status: 'In Progress',
   },
   {
     title: 'Update onboarding copy',
     project: 'Marketing site',
-    projectColor: 'bg-orange-500',
-    priority: 'Low',
-    priorityColor: 'text-green-400',
+    projectDot: 'var(--tp-cat-2)',
+    priority: 'low' as const,
     due: 'Jun 15',
-    dueColor: 'text-muted-foreground',
+    dueSoon: false,
     status: 'To Do',
   },
 ]
 
+const priorityLabel = { high: 'High', medium: 'Medium', low: 'Low' }
+
 export default function MyTasksCard() {
   return (
-    <div className="flex flex-col rounded-xl border border-border/60 bg-card">
-      <div className="flex items-center justify-between border-b border-border/40 px-5 py-4">
-        <h2 className="text-sm font-semibold text-foreground">My tasks</h2>
-        <Link
-          to="/acme-corp/projects"
-          className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
-        >
+    <div className="tp-tasks-card">
+      <div className="tp-tasks-card__head">
+        <h2 className="tp-tasks-card__title">My tasks</h2>
+        <Link to="/acme-corp/projects" className="tp-tasks-card__view-all">
           View all
           <ArrowRight size={12} />
         </Link>
       </div>
 
-      <div className="flex flex-col divide-y divide-border/40">
-        {tasks.map((task) => (
-          <div key={task.title} className="flex items-center gap-3 px-5 py-3.5 hover:bg-muted/20 transition-colors">
-            <Circle size={15} className="shrink-0 text-border" />
-            <div className="flex flex-1 flex-col gap-0.5 min-w-0">
-              <span className="truncate text-sm text-foreground">{task.title}</span>
-              <div className="flex items-center gap-2">
-                <div className={`h-1.5 w-1.5 rounded-full ${task.projectColor}`} />
-                <span className="text-xs text-muted-foreground">{task.project}</span>
+      {tasks.length === 0 ? (
+        <div className="tp-tasks-card__empty">
+          <CheckCircle2 size={24} />
+          <p>All caught up</p>
+          <span>New tasks assigned to you will show up here.</span>
+        </div>
+      ) : (
+        <div className="tp-tasks-card__list">
+          {tasks.map((task) => (
+            <div key={task.title} className="tp-tasks-card__row">
+              <Circle size={14} className="tp-tasks-card__checkbox" />
+              <div className="tp-tasks-card__info">
+                <span className="tp-tasks-card__title-text">{task.title}</span>
+                <div className="tp-tasks-card__project">
+                  <span className="tp-tasks-card__project-dot" style={{ background: task.projectDot }} />
+                  {task.project}
+                </div>
+              </div>
+              <div className="tp-tasks-card__meta">
+                <span className={`tp-priority tp-priority--${task.priority}`}>
+                  {priorityLabel[task.priority]}
+                </span>
+                <span className={task.dueSoon ? 'tp-tasks-card__due tp-tasks-card__due--soon' : 'tp-tasks-card__due'}>
+                  {task.due}
+                </span>
+                <span className="tp-tasks-card__status">{task.status}</span>
               </div>
             </div>
-            <div className="flex shrink-0 items-center gap-3">
-              <span className={`text-xs font-medium ${task.priorityColor}`}>{task.priority}</span>
-              <span className={`text-xs ${task.dueColor}`}>{task.due}</span>
-              <Badge variant="outline" className="text-[10px]">{task.status}</Badge>
-            </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   )
 }

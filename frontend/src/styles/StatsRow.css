@@ -1,1 +1,58 @@
-/* Styles for StatsRow */
+.tp-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--tp-space-sm);
+}
+
+.tp-stat-card {
+  padding: var(--tp-space-md);
+  background: var(--tp-surface);
+  border: 1px solid var(--tp-border);
+  border-radius: var(--tp-radius-lg);
+}
+
+.tp-stat-card__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.tp-stat-card__label {
+  font-size: 0.75rem;
+  color: var(--tp-text-muted);
+}
+
+.tp-stat-card__value {
+  margin-top: 0.25rem;
+  font-family: var(--tp-font-mono);
+  font-size: var(--tp-text-xl);
+  font-weight: 500;
+  color: var(--tp-text);
+}
+
+.tp-stat-card__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  background: var(--tp-surface-2);
+  border-radius: var(--tp-radius-md);
+  color: var(--tp-text-secondary);
+}
+
+.tp-stat-card__change {
+  margin-top: var(--tp-space-sm);
+  font-size: 0.75rem;
+  color: var(--tp-text-muted);
+}
+
+.tp-stat-card__change--positive {
+  color: var(--tp-success);
+}
+
+@media (min-width: 1280px) {
+  .tp-stats {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}

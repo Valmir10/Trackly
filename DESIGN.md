@@ -205,6 +205,14 @@ Flat-by-default, dev-tool posture: depth comes from a 1px hairline border and li
 - **Items:** full-width, hairline-free, `surface-2` hover/focus-visible, muted icon that doesn't recolor on hover. An `--active` variant colors text `accent` for the current selection (e.g. current workspace).
 - **Dismissal:** a shared `useClickOutside` hook (`src/hooks/useClickOutside.ts`) closes the panel on outside pointerdown; every dropdown in the app shell uses it rather than a one-off listener.
 
+### Dashboard Cards (Stats, Weekly Summary, Tasks, Activity)
+- **Shape:** `surface` background, hairline border, 16px radius, no drop shadow (Flat-By-Default Rule).
+- **Stat card:** label (muted, 0.75rem) + value (Geist Mono, `--tp-text-xl`, since a raw number is a datum) + a uniform muted icon chip (`surface-2` background, `text-secondary` icon — never a per-stat rainbow of icon colors). Change line uses `success` for positive deltas, `text-muted` otherwise; never a bare color with no label.
+- **Weekly summary card:** deliberately not AI-branded (no Sparkles icon, no "AI" in the title) — per PRODUCT.md, automation is a quiet feature, not the pitch, consistent with the landing page dropping its dedicated AI section. Tags at the bottom use `surface-2` for neutral counts and a `danger` tint only for at-risk counts.
+- **List cards (Tasks, Activity):** header row with hairline bottom border, hairline-separated rows (no dividers *and* borders), `surface-2` row hover. Rows use the shared `tp-avatar` (initials, `accent-wash` background/`accent` text, Geist Mono) and `tp-priority` (colored dot + label, never color-only) primitives so task/activity surfaces stay visually identical wherever they appear next (Kanban cards, My Tasks page, Analytics).
+- **Priority color mapping:** high → `danger`, medium → `warning` (muted orange, theme-split independently of the `--tp-cat-*` decorative dot palette since priority labels are text and need the stricter 4.5:1 text-contrast bar, not the lighter bar decorative dots get), low → `text-muted`.
+- **Empty state:** icon + one-line title + one-line supporting text, centered, generous vertical padding — same shape for "no tasks" as the landing/auth empty states, not a bespoke treatment per card.
+
 ### Signature: Hero Product Preview
 A "browser chrome" strip (a live-pulse indicator + truncated mono URL, no fake traffic-light dots) above a 3-column kanban mock. One card carries two small accent-wash pill badges (calendar + file icons) linking it to a meeting and a contract, the concrete, in-product proof of "one workspace, not four," rather than a claim in copy alone.
 

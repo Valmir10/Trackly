@@ -2,34 +2,25 @@ import AppShell from '@/components/AppShell'
 import StatsRow from '@/components/StatsRow'
 import MyTasksCard from '@/components/MyTasksCard'
 import RecentActivityCard from '@/components/RecentActivityCard'
-import AiSummaryCard from '@/components/AiSummaryCard'
+import WeeklySummaryCard from '@/components/WeeklySummaryCard'
+import '@/styles/DashboardPage.css'
 
 export default function DashboardPage() {
   return (
     <AppShell>
-      <div className="p-6">
-        <div className="mx-auto max-w-6xl flex flex-col gap-6">
+      <div className="tp-dashboard">
+        <div className="tp-page-header">
+          <h1 className="tp-page-header__title">Good morning, Valmir</h1>
+          <p className="tp-page-header__subtitle">Here is what is happening across your workspace today.</p>
+        </div>
 
-          <div>
-            <h1 className="text-xl font-semibold text-foreground">Good morning, Valmir</h1>
-            <p className="mt-0.5 text-sm text-muted-foreground">
-              Here is what is happening across your workspace today.
-            </p>
-          </div>
+        <StatsRow />
 
-          <StatsRow />
+        <WeeklySummaryCard />
 
-          <AiSummaryCard />
-
-          <div className="grid gap-6 xl:grid-cols-5">
-            <div className="xl:col-span-3">
-              <MyTasksCard />
-            </div>
-            <div className="xl:col-span-2">
-              <RecentActivityCard />
-            </div>
-          </div>
-
+        <div className="tp-dashboard__grid">
+          <MyTasksCard />
+          <RecentActivityCard />
         </div>
       </div>
     </AppShell>

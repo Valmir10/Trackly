@@ -1,1 +1,28 @@
-/* Styles for DashboardPage */
+.tp-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tp-space-md);
+  max-width: 72rem;
+  margin-inline: auto;
+  padding: var(--tp-space-md);
+}
+
+.tp-page-header {
+  margin-bottom: 0;
+}
+
+.tp-dashboard__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--tp-space-md);
+}
+
+@media (min-width: 1280px) {
+  .tp-dashboard {
+    padding: var(--tp-space-lg);
+  }
+
+  .tp-dashboard__grid {
+    grid-template-columns: 3fr 2fr;
+  }
+}
