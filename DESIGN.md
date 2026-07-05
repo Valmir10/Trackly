@@ -246,6 +246,16 @@ A `surface-2` track with 2px of padding; the active segment sits on `surface` wi
 - **Time log:** an honest, unpersisted local form — hours + optional note, appended to a list shown above the form. Explicitly not wired to any backend yet; entries reset when the modal closes. Logged hours render in Geist Mono (a datum).
 - **Comments:** deliberately absent from this pass. `<ChatThread scope={{ ticket }}>` is Move 3's job — a placeholder "coming soon" section here would be worse than leaving it out.
 
+### Command Palette (Move 2)
+- **Trigger:** ⌘K / Ctrl+K from anywhere, including while focused inside an input or textarea — the one universal exception to the editable-target guard. Also reachable via the TopBar search affordance (`tp-topbar__search`), a plain button, not a fake input.
+- **Shape:** reuses `tp-modal-overlay` (no separate overlay primitive) with a `tp-palette` panel on `--tp-surface-3` at `--tp-z-modal`, not the lower dropdown z-index tier — a palette is a modal-weight surface, not a popover.
+- **Active row:** background-color change only (`surface-2`), the same `--modifier` BEM convention used elsewhere (`tp-palette__row--active`) — not a side-stripe. A stripe reads as a selection indicator borrowed from list UIs; this is a command target, and Glow-Is-Earned already covers the one legitimate "this is interactive" signal elsewhere, so the active row stays deliberately quiet.
+- **Grouping:** results are grouped by `CommandGroup` (Navigate, Tickets, Actions, Help) with a small label header wherever the group changes, not visually separated tiles — a flat list reads faster for keyboard-driven scanning than boxed sections.
+- **Data type marker:** a ticket's `#127` renders in Geist Mono next to its title (Data-Is-Mono Rule), identical treatment to Kanban card tags and the Ticket Modal's logged hours — the palette borrows existing primitives rather than inventing its own datum style.
+- **Keybinding chips:** shown right-aligned per row (`tp-palette__kbd`) only for commands with a global keybinding — most rows have none, and an empty column would be worse than an inconsistent one.
+- **Multi-step flows ("pages"):** selecting "Change ticket status…" pushes a new page (pick ticket → pick status) rather than parsing arguments out of the query string. A breadcrumb-style crumb (`tp-palette__crumb`) sits to the left of the input showing the current page's title; Backspace on an empty query, or Escape, pops back one level.
+- **Ticket search has no required prefix:** both `#127` and bare `127` resolve the same ticket via the same exact-match scoring path — matching how people actually type when they already know the number, not just when copying a tag verbatim.
+
 ### Signature: Hero Product Preview
 A "browser chrome" strip (a live-pulse indicator + truncated mono URL, no fake traffic-light dots) above a 3-column kanban mock. One card carries two small accent-wash pill badges (calendar + file icons) linking it to a meeting and a contract, the concrete, in-product proof of "one workspace, not four," rather than a claim in copy alone.
 

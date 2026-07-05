@@ -2,6 +2,10 @@ import { useState } from 'react'
 import type { ReactNode } from 'react'
 import AppSidebar from '@/components/AppSidebar'
 import AppTopBar from '@/components/AppTopBar'
+import CommandPalette from '@/components/CommandPalette'
+import { useGlobalCommandKeys } from '@/commands/useGlobalKeys'
+import { useCommandContextGetter } from '@/commands/useCommandContext'
+import { useBuiltinCommands } from '@/commands/builtins'
 import '@/styles/tokens.css'
 import '@/styles/tp-primitives.css'
 import '@/styles/AppShell.css'
@@ -13,6 +17,9 @@ interface AppShellProps {
 export default function AppShell({ children }: AppShellProps) {
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
 
+  useBuiltinCommands()
+  useGlobalCommandKeys(useCommandContextGetter())
+
   return (
     <div className="tp-shell tp-app">
       <div className="tp-dot-grid tp-dot-grid--shell" aria-hidden="true" />
@@ -22,6 +29,8 @@ export default function AppShell({ children }: AppShellProps) {
         <AppTopBar onOpenMobileNav={() => setMobileNavOpen(true)} />
         <main className="tp-app__content">{children}</main>
       </div>
+
+      <CommandPalette />
     </div>
   )
 }
