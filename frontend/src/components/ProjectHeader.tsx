@@ -1,19 +1,15 @@
-import { SlidersHorizontal, LayoutList, Kanban, Plus } from 'lucide-react'
+import { SlidersHorizontal, LayoutList, Kanban, Plus, MessageSquare } from 'lucide-react'
+import { WORKSPACE_MEMBERS } from '@/data/users'
 import '@/styles/ProjectHeader.css'
-
-const members = [
-  { initials: 'VZ' },
-  { initials: 'SK' },
-  { initials: 'JS' },
-  { initials: 'AM' },
-]
 
 interface ProjectHeaderProps {
   name: string
   dotColor: string
+  chatOpen: boolean
+  onToggleChat: () => void
 }
 
-export default function ProjectHeader({ name, dotColor }: ProjectHeaderProps) {
+export default function ProjectHeader({ name, dotColor, chatOpen, onToggleChat }: ProjectHeaderProps) {
   return (
     <div className="tp-project-header">
       <div className="tp-project-header__left">
@@ -25,8 +21,8 @@ export default function ProjectHeader({ name, dotColor }: ProjectHeaderProps) {
         <span className="tp-project-header__divider" />
 
         <div className="tp-project-header__members">
-          {members.map((m) => (
-            <span key={m.initials} className="tp-avatar tp-avatar--stacked">
+          {WORKSPACE_MEMBERS.map((m) => (
+            <span key={m.id} className="tp-avatar tp-avatar--stacked">
               {m.initials}
             </span>
           ))}
@@ -56,6 +52,16 @@ export default function ProjectHeader({ name, dotColor }: ProjectHeaderProps) {
         <button type="button" className="tp-btn tp-btn--primary tp-btn--sm">
           <Plus size={13} />
           Add task
+        </button>
+
+        <button
+          type="button"
+          className={`tp-btn tp-btn--secondary tp-btn--sm${chatOpen ? ' tp-btn--active' : ''}`}
+          onClick={onToggleChat}
+          aria-pressed={chatOpen}
+        >
+          <MessageSquare size={13} />
+          Chat
         </button>
       </div>
     </div>
