@@ -2,6 +2,7 @@ import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Search, Bell, HelpCircle, Menu, Settings, LogOut } from 'lucide-react'
 import { useClickOutside } from '@/hooks/useClickOutside'
+import { useCommandRegistry } from '@/commands/registry'
 import '@/styles/AppTopBar.css'
 
 const slug = 'acme-corp'
@@ -14,6 +15,7 @@ export default function AppTopBar({ onOpenMobileNav }: AppTopBarProps) {
   const [menuOpen, setMenuOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
   useClickOutside(menuRef, () => setMenuOpen(false), menuOpen)
+  const openPalette = useCommandRegistry((s) => s.open)
 
   return (
     <header className="tp-topbar">
@@ -26,7 +28,7 @@ export default function AppTopBar({ onOpenMobileNav }: AppTopBarProps) {
         <Menu size={18} />
       </button>
 
-      <button type="button" className="tp-topbar__search">
+      <button type="button" className="tp-topbar__search" onClick={openPalette}>
         <Search size={14} />
         <span>Search...</span>
         <kbd className="tp-topbar__kbd">⌘K</kbd>

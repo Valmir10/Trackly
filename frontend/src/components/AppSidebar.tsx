@@ -12,6 +12,7 @@ import {
   X,
 } from 'lucide-react'
 import { useClickOutside } from '@/hooks/useClickOutside'
+import { PROJECTS } from '@/data/projects'
 import '@/styles/AppSidebar.css'
 
 const slug = 'acme-corp'
@@ -21,13 +22,6 @@ const navItems = [
   { label: 'Projects', icon: FolderKanban, to: `/${slug}/projects` },
   { label: 'My Tasks', icon: CheckSquare, to: `/${slug}/tasks` },
   { label: 'Analytics', icon: BarChart2, to: `/${slug}/analytics` },
-]
-
-const projects = [
-  { name: 'Frontend redesign', dot: 'var(--tp-cat-1)' },
-  { name: 'API v2', dot: 'var(--tp-cat-3)' },
-  { name: 'Mobile app', dot: 'var(--tp-cat-4)' },
-  { name: 'Marketing site', dot: 'var(--tp-cat-2)' },
 ]
 
 interface AppSidebarProps {
@@ -106,10 +100,10 @@ export default function AppSidebar({ mobileOpen, onCloseMobile }: AppSidebarProp
           </button>
         </div>
         <div className="tp-sidebar__projects-list">
-          {projects.map((project) => (
+          {PROJECTS.map((project) => (
             <Link
               key={project.name}
-              to={`/${slug}/projects/1`}
+              to={`/${slug}/projects/${project.id}`}
               onClick={onCloseMobile}
               className="tp-sidebar__project"
             >
