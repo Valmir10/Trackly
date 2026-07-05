@@ -149,3 +149,18 @@
     flex: 1 1 100%;
   }
 }
+
+.tp-ticket-modal__comments {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tp-space-2xs);
+  padding-top: var(--tp-space-sm);
+  border-top: 1px solid var(--tp-border);
+}
+
+.tp-ticket-modal__comments-thread {
+  height: 16rem;
+  border: 1px solid var(--tp-border);
+  border-radius: var(--tp-radius-md);
+  overflow: hidden;
+}

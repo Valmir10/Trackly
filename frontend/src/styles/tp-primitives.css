@@ -74,6 +74,12 @@
   background: var(--tp-surface);
 }
 
+.tp-btn--active {
+  background: var(--tp-surface-2);
+  border-color: var(--tp-text-muted);
+  color: var(--tp-accent);
+}
+
 .tp-btn--ghost {
   background: transparent;
   color: var(--tp-text-secondary);

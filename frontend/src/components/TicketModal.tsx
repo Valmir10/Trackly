@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { X, Calendar, ChevronsUpDown, Check, Clock } from 'lucide-react'
 import { useClickOutside } from '@/hooks/useClickOutside'
+import ChatThread from '@/components/ChatThread'
 import type { Task } from '@/components/TaskCard'
 import '@/styles/TicketModal.css'
 
@@ -16,11 +17,19 @@ interface TicketModalProps {
   currentStatus: string
   onStatusChange: (status: string) => void
   onClose: () => void
+  onOpenTicket: (ticketId: string) => void
 }
 
 const priorityLabel = { high: 'High', medium: 'Medium', low: 'Low' }
 
-export default function TicketModal({ task, statuses, currentStatus, onStatusChange, onClose }: TicketModalProps) {
+export default function TicketModal({
+  task,
+  statuses,
+  currentStatus,
+  onStatusChange,
+  onClose,
+  onOpenTicket,
+}: TicketModalProps) {
   const [statusMenuOpen, setStatusMenuOpen] = useState(false)
   const statusRef = useRef<HTMLDivElement>(null)
   useClickOutside(statusRef, () => setStatusMenuOpen(false), statusMenuOpen)
@@ -148,6 +157,13 @@ export default function TicketModal({ task, statuses, currentStatus, onStatusCha
                 Log time
               </button>
             </form>
+          </div>
+
+          <div className="tp-ticket-modal__comments">
+            <span className="tp-label">Comments</span>
+            <div className="tp-ticket-modal__comments-thread">
+              <ChatThread scope={{ type: 'ticket', ticketId: task.id }} onOpenTicket={onOpenTicket} />
+            </div>
           </div>
         </div>
       </div>

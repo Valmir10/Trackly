@@ -1,1 +1,46 @@
-/* Styles for ProjectPage */
+.tp-project-page {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.tp-project-page__body {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.tp-project-page__board {
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: var(--tp-space-md);
+}
+
+.tp-project-page__columns {
+  display: flex;
+  height: 100%;
+  gap: var(--tp-space-sm);
+}
+
+.tp-project-page__chat-panel {
+  width: 22rem;
+  flex-shrink: 0;
+  height: 100%;
+  border-left: 1px solid var(--tp-border);
+  background: var(--tp-surface);
+}
+
+@media (max-width: 768px) {
+  .tp-project-page__chat-panel {
+    width: 100%;
+    border-left: none;
+  }
+
+  .tp-project-page__body:has(.tp-project-page__chat-panel) .tp-project-page__board {
+    display: none;
+  }
+}
