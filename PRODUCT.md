@@ -110,6 +110,31 @@ Lives in a `useWorkspaceScope` Zustand store (not `useDashboardContext` — it's
 
 **Explicitly not on the roadmap:** payment processing, video hosting, repo/CI integration, native apps, AI-branded features.
 
+### Identity Pass (design refinement, timing flexible)
+
+Triggered by a cross-model design review (Fable) of DESIGN.md, 2026-07-06: the system is well-executed but risks reading as "a well-executed member of a crowd," not a distinct identity. The Precision Console aesthetic (near-black surfaces, one accent, mono-for-data, dot grid, ⌘K palette) is now a genre, not a signature — it's what AI code generators produce by default when asked for "premium dark SaaS." And Trackly's actual positive visual signatures (Hero Product Preview, Connect Diagram, Auth Card dot-grid) all live on the landing/auth pages — none inside the app shell where people spend their actual working hours. Not urgent, can land whenever frontend work resumes, but must not get lost the way the security/caching checklist nearly did. Sequenced by risk/effort, not by importance:
+
+**Phase 1 — quick wins, near-zero risk:**
+- Retint light-theme surfaces with a whisper of hue-110 warmth (currently pure chroma-0 — `oklch(0.98 0 0)` etc. — while dark mode was deliberately retinted in Move 0 for the exact same reason). A token-value change only; re-verify with the existing OKLCH contrast scripts.
+- Copy voice pass on existing empty states — dry, precise, instrument-manual voice, not generic SaaS cheer. `ChatThread`'s current "No messages yet." is the live example of exactly what to fix first.
+- Tick marks / ruler motif — fine hairline ticks on Analytics chart axes, provenance breadcrumbs (once they exist), and the segmented control's track. CSS-only, reinforces the "precision instrument" metaphor without a new component.
+
+**Phase 2 — moderate effort, contained risk:**
+- Object glyph system: design the *system* now, ship only the `ticket` glyph (the one entity that's real today). Add `decision`/`milestone`/`meeting`/`approval` marks when Moves 7-9 actually introduce those entities — not upfront, which would be speculative work for features that don't exist yet.
+- Chat rhythm pass on the already-built `ChatThread`: consecutive same-author messages within ~3 minutes collapse into one group, hover-reveal mono timestamps in the gutter, hairline day-boundary dividers.
+
+**Phase 3 — dedicated focused passes, don't rush:**
+- Odometer-style rolling digits for stat values, kanban counts, and milestone percentages, plus a status-change "flick" (a 90° pill flip) — one reusable component, deployed everywhere, matching "one gesture, repeated, not many gestures accumulated."
+- Chat gutter spine — a hairline thread visually connecting a ticket chip to the messages that reference it. The most novel, ownable idea from the review, and also the hardest to build well (has to track cross-references across a scrollable, dynamic list) — prototype before committing.
+
+**Scheduled, not now (depends on unbuilt Moves):**
+- Provenance rendered as a designed artifact (glyph + tick-separated breadcrumb, cascading reveal on open) — correct idea, but there's no real provenance data to show until Move 7 exists.
+
+**Deprioritized:**
+- Cursor-reactive dot grid (dots near the cursor lift in opacity) — lowest value, most gimmick risk of anything proposed; kill without mercy if it doesn't earn its place in testing.
+
+**Open decision, not yet made:** whether to swap Geist Sans/Mono for IBM Plex Sans/Mono. Geist is literally Vercel's commissioned typeface — a real brand-collision risk given this project's own target audience is senior engineers likely to recognize it. Switching means re-verifying every already-built screen's layout and contrast, not just a token swap. Berkeley Mono was also raised as a paid (~$75) monospace alternative, but that conflicts with the project's no-paid-services principle unless explicitly chosen.
+
 ### The 90-second demo script
 
 Seed data is written as a screenplay, not filler — every entity exists to make one beat land. Seed workspace: **Northlight Studio**, 9 members, 3 projects:
