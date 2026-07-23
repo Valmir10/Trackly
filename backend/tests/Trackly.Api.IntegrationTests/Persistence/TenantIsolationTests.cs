@@ -1,5 +1,7 @@
 using FluentAssertions;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
+using NSubstitute;
 using Testcontainers.PostgreSql;
 using Trackly.Application.Common.Interfaces;
 using Trackly.Domain.Entities;
@@ -35,7 +37,7 @@ public sealed class TenantIsolationTests : IAsyncLifetime
             .UseNpgsql(_postgres.GetConnectionString())
             .Options;
 
-        return new TracklyDbContext(options, new FakeCurrentTenantService { TenantId = tenantId });
+        return new TracklyDbContext(options, new FakeCurrentTenantService { TenantId = tenantId }, Substitute.For<IPublisher>());
     }
 
     // Tenant is excluded from the query filter, so it's reachable regardless
