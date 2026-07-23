@@ -76,7 +76,7 @@ public sealed class Ticket : AggregateRoot
         CompletedAt = newStatus == TicketStatus.Done ? DateTime.UtcNow : null;
         UpdatedAt = DateTime.UtcNow;
 
-        AddDomainEvent(new TicketStatusChangedEvent(Id, oldStatus, newStatus));
+        AddDomainEvent(new TicketStatusChangedEvent(Id, ProjectId, oldStatus, newStatus));
     }
 
     public void Rename(string title)

@@ -128,6 +128,7 @@ public class TicketTests
         // Assert
         var domainEvent = ticket.DomainEvents.OfType<TicketStatusChangedEvent>().Single();
         domainEvent.TicketId.Should().Be(ticket.Id);
+        domainEvent.ProjectId.Should().Be(ValidProjectId);
         domainEvent.OldStatus.Should().Be(TicketStatus.ToDo);
         domainEvent.NewStatus.Should().Be(TicketStatus.InProgress);
     }
