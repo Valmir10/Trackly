@@ -23,4 +23,9 @@ public sealed class ProjectRepository : IProjectRepository
     {
         return await _context.Projects.FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
     }
+
+    public async Task<IReadOnlyList<Project>> GetAllAsync(CancellationToken cancellationToken)
+    {
+        return await _context.Projects.Where(p => p.ArchivedAt == null).ToListAsync(cancellationToken);
+    }
 }

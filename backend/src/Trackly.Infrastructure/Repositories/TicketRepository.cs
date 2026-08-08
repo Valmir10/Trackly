@@ -23,4 +23,12 @@ public sealed class TicketRepository : ITicketRepository
     {
         return await _context.Tickets.FirstOrDefaultAsync(t => t.Id == id, cancellationToken);
     }
+
+    public async Task<IReadOnlyList<Ticket>> GetByProjectIdAsync(Guid projectId, CancellationToken cancellationToken)
+    {
+        return await _context.Tickets
+            .Where(t => t.ProjectId == projectId)
+            .OrderBy(t => t.Position)
+            .ToListAsync(cancellationToken);
+    }
 }
