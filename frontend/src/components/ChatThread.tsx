@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
-import { Send } from 'lucide-react'
+import { Maximize2, Send } from 'lucide-react'
 import { useChatStore } from '@/store/useChatStore'
-import { useTaskStore, findTask } from '@/store/useTaskStore'
-import { WORKSPACE_MEMBERS, CURRENT_MEMBER } from '@/data/users'
-import { parseMessage } from '@/chat/parseMessage'
+import { useTaskStore } from '@/store/useTaskStore'
+import { WORKSPACE_MEMBERS } from '@/data/users'
+import { resolveUser, resolveTicket } from '@/chat/resolvers'
+import { useChatMessages } from '@/hooks/useChatMessages'
 import { detectMentionTrigger } from '@/chat/mentionTrigger'
 import { scopeKey } from '@/chat/types'
+import InlineTicketCard from '@/components/InlineTicketCard'
 import type { ChatMessage, ChatScope, MessageBlock } from '@/chat/types'
 import type { MentionTrigger } from '@/chat/mentionTrigger'
 import type { Task } from '@/components/TaskCard'
@@ -21,16 +23,6 @@ interface PickerItem {
   label: string
   insertText: string
   mono?: string
-}
-
-function resolveUser(handle: string) {
-  const member = WORKSPACE_MEMBERS.find((m) => m.handle.toLowerCase() === handle.toLowerCase())
-  return member ? { id: member.id, label: member.name } : undefined
-}
-
-function resolveTicket(id: string) {
-  const found = findTask(useTaskStore.getState().columns, id)
-  return found ? { id: found.task.id, label: found.task.title } : undefined
 }
 
 function matchMembers(query: string): PickerItem[] {
@@ -49,7 +41,13 @@ function matchTickets(query: string): PickerItem[] {
     .map((t) => ({ id: t.id, label: t.title, insertText: t.id, mono: `#${t.id}` }))
 }
 
-function renderBlock(block: MessageBlock, key: number, onOpenTicket: (id: string) => void) {
+interface RenderBlockContext {
+  messageId: string
+  onOpenTicket: (id: string) => void
+  onPromoteToCard: (messageId: string, blockIndex: number) => void
+}
+
+function renderBlock(block: MessageBlock, key: number, ctx: RenderBlockContext) {
   switch (block.type) {
     case 'text':
       return <span key={key}>{block.text}</span>
@@ -60,20 +58,33 @@ function renderBlock(block: MessageBlock, key: number, onOpenTicket: (id: string
         </span>
       )
     case 'ticketRef':
-    case 'card':
       return (
-        <button key={key} type="button" className="tp-chat__ticket-chip" onClick={() => onOpenTicket(block.ticketId)}>
-          #{block.ticketId}
-        </button>
+        <span key={key} className="tp-chat__ticket-ref">
+          <button type="button" className="tp-chat__ticket-chip" onClick={() => ctx.onOpenTicket(block.ticketId)}>
+            #{block.ticketId}
+          </button>
+          <button
+            type="button"
+            className="tp-chat__promote"
+            aria-label={`Show #${block.ticketId} as a live card`}
+            onClick={() => ctx.onPromoteToCard(ctx.messageId, key)}
+          >
+            <Maximize2 size={11} />
+          </button>
+        </span>
       )
+    case 'card':
+      return <InlineTicketCard key={key} ticketId={block.ticketId} onOpenTicket={ctx.onOpenTicket} />
   }
 }
 
 const EMPTY_MESSAGES: ChatMessage[] = []
 
 export default function ChatThread({ scope, onOpenTicket }: ChatThreadProps) {
+  useChatMessages(scope)
   const messages = useChatStore((s) => s.messages[scopeKey(scope)] ?? EMPTY_MESSAGES)
   const sendMessage = useChatStore((s) => s.sendMessage)
+  const promoteToCard = useChatStore((s) => s.promoteToCard)
 
   const [value, setValue] = useState('')
   const [trigger, setTrigger] = useState<MentionTrigger | null>(null)
@@ -117,8 +128,7 @@ export default function ChatThread({ scope, onOpenTicket }: ChatThreadProps) {
   function handleSend() {
     const trimmed = value.trim()
     if (!trimmed) return
-    const blocks = parseMessage(trimmed, { resolveUser, resolveTicket })
-    sendMessage(scope, blocks, CURRENT_MEMBER.id, CURRENT_MEMBER.initials)
+    void sendMessage(scope, trimmed)
     setValue('')
     setTrigger(null)
   }
@@ -162,7 +172,13 @@ export default function ChatThread({ scope, onOpenTicket }: ChatThreadProps) {
             <span className="tp-avatar tp-avatar--sm">{message.authorInitials}</span>
             <div className="tp-chat__body">
               <span className="tp-chat__blocks">
-                {message.blocks.map((block, i) => renderBlock(block, i, onOpenTicket))}
+                {message.blocks.map((block, i) =>
+                  renderBlock(block, i, {
+                    messageId: message.id,
+                    onOpenTicket,
+                    onPromoteToCard: (messageId, blockIndex) => promoteToCard(scope, messageId, blockIndex),
+                  })
+                )}
               </span>
             </div>
           </div>
