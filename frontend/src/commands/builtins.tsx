@@ -1,6 +1,7 @@
 import { useRegisterCommands, useRegisterCommandSource } from './registry'
 import { useTaskStore } from '@/store/useTaskStore'
-import { PROJECTS } from '@/data/projects'
+import { useProjects } from '@/hooks/useProjects'
+import type { ProjectDto } from '@/api/types'
 import type { Command, CommandContext, CommandPage } from './types'
 
 const NAV_COMMANDS: Command[] = [
@@ -42,13 +43,8 @@ const NAV_COMMANDS: Command[] = [
   },
 ]
 
-function projectJumpCommands(): Command[] {
-  const seen = new Set<string>()
-  return PROJECTS.filter((p) => {
-    if (seen.has(p.id)) return false
-    seen.add(p.id)
-    return true
-  }).map((project) => ({
+function projectJumpCommands(projects: ProjectDto[]): Command[] {
+  return projects.map((project) => ({
     id: `nav.project.${project.id}`,
     title: `Go to ${project.name}`,
     group: 'navigate' as const,
@@ -72,7 +68,7 @@ function statusPage(taskId: string, taskTitle: string, statuses: string[]): Comm
       title: status,
       group: 'action' as const,
       run: () => {
-        useTaskStore.getState().moveTask(taskId, columnIdForTitle(status))
+        void useTaskStore.getState().moveTask(taskId, columnIdForTitle(status))
       },
     })),
   }
@@ -106,7 +102,12 @@ function changeStatusCommand(): Command {
 }
 
 export function useBuiltinCommands() {
-  useRegisterCommands(() => [...NAV_COMMANDS, ...projectJumpCommands(), changeStatusCommand()], [])
+  const { data: projects = [] } = useProjects()
+
+  useRegisterCommands(
+    () => [...NAV_COMMANDS, ...projectJumpCommands(projects), changeStatusCommand()],
+    [projects]
+  )
 
   useRegisterCommandSource(
     () => ({

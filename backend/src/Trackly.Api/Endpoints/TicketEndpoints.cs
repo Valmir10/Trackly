@@ -1,6 +1,7 @@
 using MediatR;
 using Trackly.Application.Features.Tickets.Commands.ChangeTicketStatus;
 using Trackly.Application.Features.Tickets.Commands.CreateTicket;
+using Trackly.Application.Features.Tickets.Queries.GetProjectTickets;
 using Trackly.Domain.Enums;
 
 namespace Trackly.Api.Endpoints;
@@ -27,6 +28,13 @@ public static class TicketEndpoints
         {
             await sender.Send(new ChangeTicketStatusCommand(ticketId, request.NewStatus, request.Position), cancellationToken);
             return Results.NoContent();
+        }).RequireAuthorization();
+
+        app.MapGet("/api/projects/{projectId:guid}/tickets", async (
+            Guid projectId, ISender sender, CancellationToken cancellationToken) =>
+        {
+            var tickets = await sender.Send(new GetProjectTicketsQuery(projectId), cancellationToken);
+            return Results.Ok(tickets);
         }).RequireAuthorization();
     }
 }

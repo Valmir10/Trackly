@@ -4,10 +4,10 @@ import '@/styles/TaskCard.css'
 export interface Task {
   id: string
   title: string
-  tag: string
+  tag?: string
   priority: 'high' | 'medium' | 'low'
-  assignee: { initials: string }
-  dueDate: string
+  assignee?: { initials: string }
+  dueDate?: string
   dueSoon?: boolean
   commentCount?: number
   attachmentCount?: number
@@ -32,10 +32,10 @@ export default function TaskCard({ task, onOpen }: TaskCardProps) {
         />
       </div>
 
-      <span className="tp-task-card__tag">{task.tag}</span>
+      {task.tag && <span className="tp-task-card__tag">{task.tag}</span>}
 
       <div className="tp-task-card__footer">
-        <span className="tp-avatar tp-avatar--sm">{task.assignee.initials}</span>
+        {task.assignee && <span className="tp-avatar tp-avatar--sm">{task.assignee.initials}</span>}
 
         <div className="tp-task-card__meta">
           {!!task.commentCount && (
@@ -50,10 +50,12 @@ export default function TaskCard({ task, onOpen }: TaskCardProps) {
               {task.attachmentCount}
             </span>
           )}
-          <span className={`tp-task-card__meta-item${task.dueSoon ? ' tp-task-card__meta-item--due' : ''}`}>
-            <Calendar size={10} />
-            {task.dueDate}
-          </span>
+          {task.dueDate && (
+            <span className={`tp-task-card__meta-item${task.dueSoon ? ' tp-task-card__meta-item--due' : ''}`}>
+              <Calendar size={10} />
+              {task.dueDate}
+            </span>
+          )}
         </div>
       </div>
     </button>

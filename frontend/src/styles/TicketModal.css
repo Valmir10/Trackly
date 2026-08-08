@@ -57,6 +57,10 @@
   color: var(--tp-text);
 }
 
+.tp-ticket-modal__unassigned {
+  color: var(--tp-text-muted);
+}
+
 .tp-ticket-modal__status-trigger {
   display: flex;
   align-items: center;

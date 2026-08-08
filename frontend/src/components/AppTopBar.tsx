@@ -1,21 +1,28 @@
 import { useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { Search, Bell, HelpCircle, Menu, Settings, LogOut } from 'lucide-react'
 import { useClickOutside } from '@/hooks/useClickOutside'
 import { useCommandRegistry } from '@/commands/registry'
+import { useAuthStore } from '@/store/useAuthStore'
 import '@/styles/AppTopBar.css'
-
-const slug = 'acme-corp'
 
 interface AppTopBarProps {
   onOpenMobileNav: () => void
 }
 
 export default function AppTopBar({ onOpenMobileNav }: AppTopBarProps) {
+  const { slug = '' } = useParams()
+  const navigate = useNavigate()
+  const clearSession = useAuthStore((s) => s.clearSession)
   const [menuOpen, setMenuOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
   useClickOutside(menuRef, () => setMenuOpen(false), menuOpen)
   const openPalette = useCommandRegistry((s) => s.open)
+
+  function handleSignOut() {
+    clearSession()
+    navigate('/login')
+  }
 
   return (
     <header className="tp-topbar">
@@ -62,10 +69,17 @@ export default function AppTopBar({ onOpenMobileNav }: AppTopBarProps) {
                 Settings
               </Link>
               <div className="tp-menu-divider" />
-              <Link to="/login" className="tp-menu-item" onClick={() => setMenuOpen(false)}>
+              <button
+                type="button"
+                className="tp-menu-item"
+                onClick={() => {
+                  setMenuOpen(false)
+                  handleSignOut()
+                }}
+              >
                 <LogOut size={14} />
                 Sign out
-              </Link>
+              </button>
             </div>
           )}
         </div>

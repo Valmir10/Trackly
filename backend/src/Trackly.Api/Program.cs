@@ -23,6 +23,11 @@ builder.Host.UseSerilog((context, services, configuration) => configuration
 
 builder.Services.AddOpenApi();
 
+// Enums serialize as their name ("InReview"), not the underlying int — a
+// bare 2 in a JSON response is an opaque, fragile contract for any client.
+builder.Services.ConfigureHttpJsonOptions(options =>
+    options.SerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter()));
+
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication();
 
@@ -66,6 +71,19 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddAuthorization();
 
+// AllowCredentials + a specific origin (not AllowAnyOrigin — browsers refuse
+// that combination) so the HttpOnly refresh-token cookie and the SignalR
+// connection both work across the frontend's separate origin.
+const string FrontendCorsPolicy = "Frontend";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(FrontendCorsPolicy, policy => policy
+        .WithOrigins("http://localhost:5173")
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowCredentials());
+});
+
 var signalRBuilder = builder.Services.AddSignalR();
 var redisConnectionString = builder.Configuration.GetSection("Redis")["ConnectionString"];
 if (!string.IsNullOrEmpty(redisConnectionString))
@@ -84,6 +102,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors(FrontendCorsPolicy);
 
 app.UseAuthentication();
 app.UseAuthorization();

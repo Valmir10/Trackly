@@ -19,8 +19,13 @@ export interface ChatMessage {
 }
 
 // A project-scoped stream and a per-ticket comment thread are the same
-// component, scoped differently — not two systems that look similar.
-export type ChatScope = { type: 'project'; projectId: string } | { type: 'ticket'; ticketId: string }
+// component, scoped differently — not two systems that look similar. The
+// ticket variant still carries projectId (a ticket always belongs to
+// exactly one project) because the real API's message list is scoped by
+// project first.
+export type ChatScope =
+  | { type: 'project'; projectId: string }
+  | { type: 'ticket'; projectId: string; ticketId: string }
 
 export function scopeKey(scope: ChatScope): string {
   return scope.type === 'project' ? `project:${scope.projectId}` : `ticket:${scope.ticketId}`

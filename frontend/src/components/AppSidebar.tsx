@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useParams } from 'react-router-dom'
 import {
   LayoutDashboard,
   FolderKanban,
@@ -12,17 +12,8 @@ import {
   X,
 } from 'lucide-react'
 import { useClickOutside } from '@/hooks/useClickOutside'
-import { PROJECTS } from '@/data/projects'
+import { useProjects } from '@/hooks/useProjects'
 import '@/styles/AppSidebar.css'
-
-const slug = 'acme-corp'
-
-const navItems = [
-  { label: 'Dashboard', icon: LayoutDashboard, to: `/${slug}/dashboard` },
-  { label: 'Projects', icon: FolderKanban, to: `/${slug}/projects` },
-  { label: 'My Tasks', icon: CheckSquare, to: `/${slug}/tasks` },
-  { label: 'Analytics', icon: BarChart2, to: `/${slug}/analytics` },
-]
 
 interface AppSidebarProps {
   mobileOpen: boolean
@@ -30,10 +21,19 @@ interface AppSidebarProps {
 }
 
 export default function AppSidebar({ mobileOpen, onCloseMobile }: AppSidebarProps) {
+  const { slug = '' } = useParams()
   const location = useLocation()
   const [switcherOpen, setSwitcherOpen] = useState(false)
   const switcherRef = useRef<HTMLDivElement>(null)
   useClickOutside(switcherRef, () => setSwitcherOpen(false), switcherOpen)
+  const { data: projects = [] } = useProjects()
+
+  const navItems = [
+    { label: 'Dashboard', icon: LayoutDashboard, to: `/${slug}/dashboard` },
+    { label: 'Projects', icon: FolderKanban, to: `/${slug}/projects` },
+    { label: 'My Tasks', icon: CheckSquare, to: `/${slug}/tasks` },
+    { label: 'Analytics', icon: BarChart2, to: `/${slug}/analytics` },
+  ]
 
   const content = (
     <>
@@ -100,14 +100,14 @@ export default function AppSidebar({ mobileOpen, onCloseMobile }: AppSidebarProp
           </button>
         </div>
         <div className="tp-sidebar__projects-list">
-          {PROJECTS.map((project) => (
+          {projects.map((project) => (
             <Link
-              key={project.name}
+              key={project.id}
               to={`/${slug}/projects/${project.id}`}
               onClick={onCloseMobile}
               className="tp-sidebar__project"
             >
-              <span className="tp-sidebar__project-dot" style={{ background: project.dot }} />
+              <span className="tp-sidebar__project-dot" style={{ background: project.color }} />
               <span className="tp-sidebar__project-name">{project.name}</span>
             </Link>
           ))}

@@ -13,6 +13,7 @@ interface TimeEntry {
 
 interface TicketModalProps {
   task: Task
+  projectId: string
   statuses: string[]
   currentStatus: string
   onStatusChange: (status: string) => void
@@ -24,6 +25,7 @@ const priorityLabel = { high: 'High', medium: 'Medium', low: 'Low' }
 
 export default function TicketModal({
   task,
+  projectId,
   statuses,
   currentStatus,
   onStatusChange,
@@ -70,11 +72,13 @@ export default function TicketModal({
         <div className="tp-modal__body">
           <div className="tp-ticket-modal__meta">
             <span className={`tp-priority tp-priority--${task.priority}`}>{priorityLabel[task.priority]}</span>
-            <span className="tp-ticket-modal__tag">{task.tag}</span>
-            <span className={`tp-ticket-modal__due${task.dueSoon ? ' tp-ticket-modal__due--soon' : ''}`}>
-              <Calendar size={12} />
-              {task.dueDate}
-            </span>
+            {task.tag && <span className="tp-ticket-modal__tag">{task.tag}</span>}
+            {task.dueDate && (
+              <span className={`tp-ticket-modal__due${task.dueSoon ? ' tp-ticket-modal__due--soon' : ''}`}>
+                <Calendar size={12} />
+                {task.dueDate}
+              </span>
+            )}
           </div>
 
           {task.description && <p className="tp-ticket-modal__description">{task.description}</p>}
@@ -82,8 +86,14 @@ export default function TicketModal({
           <div className="tp-ticket-modal__row">
             <span className="tp-label">Assignee</span>
             <div className="tp-ticket-modal__assignee">
-              <span className="tp-avatar tp-avatar--sm">{task.assignee.initials}</span>
-              {task.assignee.initials}
+              {task.assignee ? (
+                <>
+                  <span className="tp-avatar tp-avatar--sm">{task.assignee.initials}</span>
+                  {task.assignee.initials}
+                </>
+              ) : (
+                <span className="tp-ticket-modal__unassigned">Unassigned</span>
+              )}
             </div>
           </div>
 
@@ -162,7 +172,7 @@ export default function TicketModal({
           <div className="tp-ticket-modal__comments">
             <span className="tp-label">Comments</span>
             <div className="tp-ticket-modal__comments-thread">
-              <ChatThread scope={{ type: 'ticket', ticketId: task.id }} onOpenTicket={onOpenTicket} />
+              <ChatThread scope={{ type: 'ticket', projectId, ticketId: task.id }} onOpenTicket={onOpenTicket} />
             </div>
           </div>
         </div>

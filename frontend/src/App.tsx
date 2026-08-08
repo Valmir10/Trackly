@@ -13,6 +13,7 @@ import MyTasksPage from '@/pages/MyTasksPage'
 import AnalyticsPage from '@/pages/AnalyticsPage'
 import SettingsPage from '@/pages/SettingsPage'
 import NotFoundPage from '@/pages/NotFoundPage'
+import RequireAuth from '@/components/RequireAuth'
 
 export default function App() {
   return (
@@ -25,12 +26,12 @@ export default function App() {
         <Route path="/verify-email" element={<EmailVerificationPage />} />
         <Route path="/invite/:token" element={<InvitationPage />} />
         <Route path="/onboarding" element={<OnboardingPage />} />
-        <Route path="/:slug/dashboard" element={<DashboardPage />} />
-        <Route path="/:slug/projects" element={<ProjectsPage />} />
-        <Route path="/:slug/projects/:projectId" element={<ProjectPage />} />
-        <Route path="/:slug/tasks" element={<MyTasksPage />} />
-        <Route path="/:slug/analytics" element={<AnalyticsPage />} />
-        <Route path="/:slug/settings" element={<SettingsPage />} />
+        <Route path="/:slug/dashboard" element={<RequireAuth><DashboardPage /></RequireAuth>} />
+        <Route path="/:slug/projects" element={<RequireAuth><ProjectsPage /></RequireAuth>} />
+        <Route path="/:slug/projects/:projectId" element={<RequireAuth><ProjectPage /></RequireAuth>} />
+        <Route path="/:slug/tasks" element={<RequireAuth><MyTasksPage /></RequireAuth>} />
+        <Route path="/:slug/analytics" element={<RequireAuth><AnalyticsPage /></RequireAuth>} />
+        <Route path="/:slug/settings" element={<RequireAuth><SettingsPage /></RequireAuth>} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>

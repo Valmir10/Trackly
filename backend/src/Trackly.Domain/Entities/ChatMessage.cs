@@ -38,7 +38,7 @@ public sealed class ChatMessage : AggregateRoot
             CreatedAt = DateTime.UtcNow
         };
 
-        message.AddDomainEvent(new ChatMessageSentEvent(message.Id, projectId, ticketId, authorId));
+        message.AddDomainEvent(new ChatMessageSentEvent(message.Id, projectId, ticketId, authorId, message.Content, message.CreatedAt));
         return message;
     }
 }

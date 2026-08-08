@@ -1,5 +1,6 @@
 using MediatR;
 using Trackly.Application.Features.Projects.Commands.CreateProject;
+using Trackly.Application.Features.Projects.Queries.GetProjects;
 
 namespace Trackly.Api.Endpoints;
 
@@ -13,6 +14,12 @@ public static class ProjectEndpoints
         {
             var projectId = await sender.Send(command, cancellationToken);
             return Results.Created($"/api/projects/{projectId}", new { Id = projectId });
+        });
+
+        group.MapGet("/", async (ISender sender, CancellationToken cancellationToken) =>
+        {
+            var projects = await sender.Send(new GetProjectsQuery(), cancellationToken);
+            return Results.Ok(projects);
         });
     }
 }
