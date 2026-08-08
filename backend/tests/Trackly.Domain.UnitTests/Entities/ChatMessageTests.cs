@@ -65,6 +65,8 @@ public class ChatMessageTests
         domainEvent.ProjectId.Should().Be(ValidProjectId);
         domainEvent.TicketId.Should().Be(ticketId);
         domainEvent.AuthorId.Should().Be(ValidAuthorId);
+        domainEvent.Content.Should().Be("Storybook config is in.");
+        domainEvent.CreatedAt.Should().Be(message.CreatedAt);
     }
 
     // -------------------------------------------------------
