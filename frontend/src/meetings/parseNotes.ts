@@ -18,9 +18,33 @@ interface ParseContext {
 const TOKEN_RE = /([@#>+])([a-zA-Z0-9_-]+)/g
 
 // Phase A: inline tokens only. agendaItem blocks are machine-inserted (via
-// the Suggested Agenda panel, Phase B) as a separate line-level format, not
-// parsed by this regex.
+// the Suggested Agenda panel) as a separate line-level format, not parsed
+// by this regex — see the pre-pass below.
+const AGENDA_LINE_RE = /^~([a-zA-Z0-9_-]+)\|(.*)$/
+
 export function parseNotes(raw: string, ctx: ParseContext): MessageBlock[] {
+  const lines = raw.split('\n')
+  const blocks: MessageBlock[] = []
+
+  lines.forEach((line, i) => {
+    const agendaMatch = AGENDA_LINE_RE.exec(line)
+    if (agendaMatch) {
+      const [, ticketId, reason] = agendaMatch
+      blocks.push({ type: 'agendaItem', ticketId, reason })
+    } else {
+      blocks.push(...parseInline(line, ctx))
+    }
+    if (i < lines.length - 1) blocks.push({ type: 'text', text: '\n' })
+  })
+
+  return blocks
+}
+
+// # resolves against tickets first, decisions second — the same trigger
+// surfaces both entity types (PRODUCT.md: "Decisions indexed inside the #
+// picker framework alongside tickets"), and GUID collision between the two
+// tables is not a real concern.
+function parseInline(raw: string, ctx: ParseContext): MessageBlock[] {
   const blocks: MessageBlock[] = []
   let lastIndex = 0
   let match: RegExpExecArray | null
@@ -28,36 +52,39 @@ export function parseNotes(raw: string, ctx: ParseContext): MessageBlock[] {
   TOKEN_RE.lastIndex = 0
   while ((match = TOKEN_RE.exec(raw))) {
     const [full, marker, token] = match
-    const resolved =
-      marker === '@'
-        ? ctx.resolveUser(token)
-        : marker === '#'
-          ? ctx.resolveTicket(token)
-          : marker === '>'
-            ? ctx.resolveDecision(token)
-            : ctx.resolveTicket(token)
-    if (!resolved) continue
+    let block: MessageBlock | undefined
+
+    if (marker === '@') {
+      const user = ctx.resolveUser(token)
+      if (user) block = { type: 'mention', userId: user.id, label: user.label }
+    } else if (marker === '#') {
+      const ticket = ctx.resolveTicket(token)
+      if (ticket) {
+        block = { type: 'ticketRef', ticketId: ticket.id, label: ticket.label }
+      } else {
+        const decision = ctx.resolveDecision(token)
+        if (decision) block = { type: 'decisionRef', decisionId: decision.id, label: decision.label }
+      }
+    } else if (marker === '>') {
+      const decision = ctx.resolveDecision(token)
+      if (decision) block = { type: 'decisionRef', decisionId: decision.id, label: decision.label }
+    } else {
+      const ticket = ctx.resolveTicket(token)
+      if (ticket) block = { type: 'actionItem', ticketId: ticket.id }
+    }
+
+    if (!block) continue
 
     if (match.index > lastIndex) {
       blocks.push({ type: 'text', text: raw.slice(lastIndex, match.index) })
     }
-
-    if (marker === '@') {
-      blocks.push({ type: 'mention', userId: resolved.id, label: resolved.label })
-    } else if (marker === '#') {
-      blocks.push({ type: 'ticketRef', ticketId: resolved.id, label: resolved.label })
-    } else if (marker === '>') {
-      blocks.push({ type: 'decisionRef', decisionId: resolved.id, label: resolved.label })
-    } else {
-      blocks.push({ type: 'actionItem', ticketId: resolved.id })
-    }
-
+    blocks.push(block)
     lastIndex = match.index + full.length
   }
 
-  if (lastIndex < raw.length) {
+  if (lastIndex < raw.length || blocks.length === 0) {
     blocks.push({ type: 'text', text: raw.slice(lastIndex) })
   }
 
-  return blocks.length > 0 ? blocks : [{ type: 'text', text: raw }]
+  return blocks
 }

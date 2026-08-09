@@ -1,0 +1,16 @@
+.tp-new-meeting-modal {
+  max-width: 24rem;
+}
+
+.tp-new-meeting-modal__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tp-space-sm);
+}
+
+.tp-new-meeting-modal__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--tp-space-2xs);
+  margin-top: var(--tp-space-xs);
+}

@@ -24,6 +24,7 @@ export interface TicketDto {
   position: number
   createdAt: string
   completedAt: string | null
+  updatedAt: string
 }
 
 export interface ChatMessageDto {
@@ -52,5 +53,15 @@ export interface DecisionDto {
   projectId: string
   text: string
   createdById: string
+  createdAt: string
+}
+
+// Excludes `notes` — a meetings list shouldn't ship every meeting's full
+// notes payload, mirroring the backend's MeetingSummaryDto.
+export interface MeetingSummaryDto {
+  id: string
+  projectId: string
+  title: string
+  scheduledAt: string
   createdAt: string
 }

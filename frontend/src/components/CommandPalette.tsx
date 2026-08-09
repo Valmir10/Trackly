@@ -9,6 +9,7 @@ import '@/styles/CommandPalette.css'
 const GROUP_LABELS: Record<CommandGroup, string> = {
   navigate: 'Navigate',
   ticket: 'Tickets',
+  meeting: 'Meetings',
   action: 'Actions',
   help: 'Help',
 }

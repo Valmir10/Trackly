@@ -6,6 +6,7 @@ import type { NavigateFunction } from 'react-router-dom'
 export type CommandGroup =
   | 'navigate'
   | 'ticket'
+  | 'meeting'
   | 'action'
   | 'help'
 
@@ -17,6 +18,7 @@ export interface CommandContext {
   navigate: NavigateFunction
   slug: string
   openTicket: (ticketId: string) => void
+  openMeeting: (meetingId: string) => void
   close: () => void
   push: (page: CommandPage) => void
 }

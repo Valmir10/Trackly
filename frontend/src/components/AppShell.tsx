@@ -6,6 +6,7 @@ import CommandPalette from '@/components/CommandPalette'
 import { useGlobalCommandKeys } from '@/commands/useGlobalKeys'
 import { useCommandContextGetter } from '@/commands/useCommandContext'
 import { useBuiltinCommands } from '@/commands/builtins'
+import { useBuiltinMeetingCommands } from '@/commands/meetingCommands'
 import '@/styles/tokens.css'
 import '@/styles/tp-primitives.css'
 import '@/styles/AppShell.css'
@@ -18,6 +19,7 @@ export default function AppShell({ children }: AppShellProps) {
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
 
   useBuiltinCommands()
+  useBuiltinMeetingCommands()
   useGlobalCommandKeys(useCommandContextGetter())
 
   return (
