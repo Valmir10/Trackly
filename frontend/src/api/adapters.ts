@@ -19,6 +19,15 @@ export const COLUMN_ID_TO_STATUS: Record<string, BackendTicketStatus> = {
   done: 'Done',
 }
 
+// Same label/color pairing as the board's Kanban columns (useTaskStore's
+// BASE_COLUMNS), so a status means the same color everywhere it appears.
+export const STATUS_META: Record<BackendTicketStatus, { label: string; color: string }> = {
+  ToDo: { label: 'To Do', color: 'var(--tp-text-muted)' },
+  InProgress: { label: 'In Progress', color: 'var(--tp-cat-3)' },
+  InReview: { label: 'In Review', color: 'var(--tp-warning)' },
+  Done: { label: 'Done', color: 'var(--tp-success)' },
+}
+
 const PRIORITY_TO_FRONTEND: Record<BackendTicketPriority, Task['priority']> = {
   Low: 'low',
   Medium: 'medium',

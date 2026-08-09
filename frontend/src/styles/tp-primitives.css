@@ -259,6 +259,14 @@
   color: var(--tp-text-secondary);
 }
 
+.tp-page-header--row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--tp-space-md);
+  flex-wrap: wrap;
+}
+
 .tp-avatar {
   display: inline-flex;
   align-items: center;
