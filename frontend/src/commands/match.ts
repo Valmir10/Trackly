@@ -52,15 +52,20 @@ function fuzzy(query: string, target: string): number {
 }
 
 export function scoreCommand(rawQuery: string, command: Command): number {
-  const query = normalize(rawQuery)
+  // "#" is a trigger marker, never literal searchable content — stripped
+  // once, up front, so a partial-id or text search through the "#" trigger
+  // (not just an exact full-id hit) can still reach title/fuzzy scoring
+  // below. Previously only the monoExact branch stripped it, which meant
+  // "#127" matched only an exact id and nothing else — a real, silent gap.
+  const query = stripHash(normalize(rawQuery))
   if (query.length === 0) return 1
 
   const title = normalize(command.title)
-  const mono = command.mono ? normalize(command.mono) : null
+  const mono = command.mono ? stripHash(normalize(command.mono)) : null
 
-  // Datum fast path: "#127" and "127" are equivalent on both sides,
-  // regardless of whether the command's mono field carries the "#" or not.
-  if (mono && stripHash(mono) === stripHash(query)) {
+  // Datum fast path: "#127" and "127" are equivalent, regardless of
+  // whether the command's mono field carries the "#" or not.
+  if (mono && mono === query) {
     return SCORE.monoExact
   }
 
