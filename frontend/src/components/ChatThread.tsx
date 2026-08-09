@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Maximize2, Send } from 'lucide-react'
+import { Send } from 'lucide-react'
 import { useChatStore } from '@/store/useChatStore'
 import { useTaskStore } from '@/store/useTaskStore'
 import { WORKSPACE_MEMBERS } from '@/data/users'
@@ -7,8 +7,8 @@ import { resolveUser, resolveTicket } from '@/chat/resolvers'
 import { useChatMessages } from '@/hooks/useChatMessages'
 import { detectMentionTrigger } from '@/chat/mentionTrigger'
 import { scopeKey } from '@/chat/types'
-import InlineTicketCard from '@/components/InlineTicketCard'
-import type { ChatMessage, ChatScope, MessageBlock } from '@/chat/types'
+import { renderBlock } from '@/blocks/renderBlock'
+import type { ChatMessage, ChatScope } from '@/chat/types'
 import type { MentionTrigger } from '@/chat/mentionTrigger'
 import type { Task } from '@/components/TaskCard'
 import '@/styles/ChatThread.css'
@@ -39,43 +39,6 @@ function matchTickets(query: string): PickerItem[] {
     .filter((t) => t.id.startsWith(query) || t.title.toLowerCase().includes(q))
     .slice(0, 6)
     .map((t) => ({ id: t.id, label: t.title, insertText: t.id, mono: `#${t.id}` }))
-}
-
-interface RenderBlockContext {
-  messageId: string
-  onOpenTicket: (id: string) => void
-  onPromoteToCard: (messageId: string, blockIndex: number) => void
-}
-
-function renderBlock(block: MessageBlock, key: number, ctx: RenderBlockContext) {
-  switch (block.type) {
-    case 'text':
-      return <span key={key}>{block.text}</span>
-    case 'mention':
-      return (
-        <span key={key} className="tp-chat__mention">
-          @{block.label}
-        </span>
-      )
-    case 'ticketRef':
-      return (
-        <span key={key} className="tp-chat__ticket-ref">
-          <button type="button" className="tp-chat__ticket-chip" onClick={() => ctx.onOpenTicket(block.ticketId)}>
-            #{block.ticketId}
-          </button>
-          <button
-            type="button"
-            className="tp-chat__promote"
-            aria-label={`Show #${block.ticketId} as a live card`}
-            onClick={() => ctx.onPromoteToCard(ctx.messageId, key)}
-          >
-            <Maximize2 size={11} />
-          </button>
-        </span>
-      )
-    case 'card':
-      return <InlineTicketCard key={key} ticketId={block.ticketId} onOpenTicket={ctx.onOpenTicket} />
-  }
 }
 
 const EMPTY_MESSAGES: ChatMessage[] = []
