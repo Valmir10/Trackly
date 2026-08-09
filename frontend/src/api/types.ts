@@ -13,6 +13,7 @@ export type BackendTicketPriority = 'Low' | 'Medium' | 'High'
 
 export interface TicketDto {
   id: string
+  projectId: string
   title: string
   description: string | null
   status: BackendTicketStatus
@@ -21,6 +22,8 @@ export interface TicketDto {
   assignedToInitials: string | null
   dueDate: string | null
   position: number
+  createdAt: string
+  completedAt: string | null
 }
 
 export interface ChatMessageDto {

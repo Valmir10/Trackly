@@ -4,6 +4,7 @@ namespace Trackly.Application.Features.Tickets.Queries.GetProjectTickets;
 
 public sealed record TicketDto(
     Guid Id,
+    Guid ProjectId,
     string Title,
     string? Description,
     TicketStatus Status,
@@ -11,4 +12,6 @@ public sealed record TicketDto(
     Guid? AssignedToId,
     string? AssignedToInitials,
     DateTime? DueDate,
-    int Position);
+    int Position,
+    DateTime CreatedAt,
+    DateTime? CompletedAt);

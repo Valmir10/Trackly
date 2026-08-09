@@ -3,48 +3,37 @@ import {
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend,
 } from 'recharts'
 import AppShell from '@/components/AppShell'
-
-const weeklyData = [
-  { week: 'Apr 14', completed: 3, created: 5 },
-  { week: 'Apr 21', completed: 5, created: 4 },
-  { week: 'Apr 28', completed: 4, created: 7 },
-  { week: 'May 5', completed: 7, created: 6 },
-  { week: 'May 12', completed: 6, created: 8 },
-  { week: 'May 19', completed: 9, created: 7 },
-  { week: 'May 26', completed: 8, created: 5 },
-  { week: 'Jun 2', completed: 11, created: 9 },
-]
-
-const projectData = [
-  { name: 'Frontend redesign', open: 7, done: 11 },
-  { name: 'API v2', open: 15, done: 9 },
-  { name: 'Mobile app', open: 27, done: 4 },
-  { name: 'Marketing site', open: 0, done: 12 },
-]
-
-const statusData = [
-  { name: 'Done', value: 36, color: '#22c55e' },
-  { name: 'In Progress', value: 14, color: '#f59e0b' },
-  { name: 'In Review', value: 8, color: '#3b82f6' },
-  { name: 'To Do', value: 27, color: '#6b7280' },
-]
-
-const stats = [
-  { label: 'Tasks completed', value: '36', sub: '+11 this week' },
-  { label: 'Completion rate', value: '72%', sub: '+8% vs last month' },
-  { label: 'Avg. time to complete', value: '3.2d', sub: 'Per task' },
-  { label: 'Overdue tasks', value: '4', sub: '2 high priority' },
-]
+import ScopeSwitcher from '@/components/ScopeSwitcher'
+import { useProjects } from '@/hooks/useProjects'
+import { useWorkspaceTickets } from '@/hooks/useWorkspaceTickets'
+import { useWorkspaceScope } from '@/store/useWorkspaceScope'
+import { filterProjectsByScope, filterTicketsByScope } from '@/utils/scope'
+import { computeProjectBreakdown, computeStats, computeStatusBreakdown, computeWeeklyTrend } from '@/utils/analytics'
 
 export default function AnalyticsPage() {
+  const { data: allProjects = [] } = useProjects()
+  const { data: allTickets = [] } = useWorkspaceTickets()
+  const scope = useWorkspaceScope((s) => s.scope)
+
+  const projects = filterProjectsByScope(allProjects, scope)
+  const tickets = filterTicketsByScope(allTickets, scope)
+
+  const stats = computeStats(tickets)
+  const statusData = computeStatusBreakdown(tickets)
+  const projectData = computeProjectBreakdown(tickets, projects)
+  const weeklyData = computeWeeklyTrend(tickets)
+
   return (
     <AppShell>
       <div className="p-6">
         <div className="mx-auto max-w-6xl flex flex-col gap-6">
 
-            <div>
-              <h1 className="text-xl font-semibold text-foreground">Analytics</h1>
-              <p className="mt-0.5 text-sm text-muted-foreground">Workspace performance overview</p>
+            <div className="flex items-start justify-between gap-4 flex-wrap">
+              <div>
+                <h1 className="text-xl font-semibold text-foreground">Analytics</h1>
+                <p className="mt-0.5 text-sm text-muted-foreground">Workspace performance overview</p>
+              </div>
+              <ScopeSwitcher />
             </div>
 
             <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">
