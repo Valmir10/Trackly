@@ -37,6 +37,7 @@ public class GetProjectTicketsQueryHandlerTests
         // Assert
         result.Should().ContainSingle();
         result[0].AssignedToInitials.Should().Be("SK");
+        result[0].ProjectId.Should().Be(projectId);
     }
 
     [Fact]

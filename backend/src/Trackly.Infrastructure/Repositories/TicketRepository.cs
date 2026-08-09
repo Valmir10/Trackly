@@ -31,4 +31,9 @@ public sealed class TicketRepository : ITicketRepository
             .OrderBy(t => t.Position)
             .ToListAsync(cancellationToken);
     }
+
+    public async Task<IReadOnlyList<Ticket>> GetAllAsync(CancellationToken cancellationToken)
+    {
+        return await _context.Tickets.ToListAsync(cancellationToken);
+    }
 }

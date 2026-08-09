@@ -1,27 +1,24 @@
 using MediatR;
 using Trackly.Application.Common.Interfaces;
+using Trackly.Application.Features.Tickets.Queries.GetProjectTickets;
 
-namespace Trackly.Application.Features.Tickets.Queries.GetProjectTickets;
+namespace Trackly.Application.Features.Tickets.Queries.GetWorkspaceTickets;
 
-public sealed class GetProjectTicketsQueryHandler : IRequestHandler<GetProjectTicketsQuery, IReadOnlyList<TicketDto>>
+public sealed class GetWorkspaceTicketsQueryHandler : IRequestHandler<GetWorkspaceTicketsQuery, IReadOnlyList<TicketDto>>
 {
     private readonly ITicketRepository _ticketRepository;
     private readonly IUserRepository _userRepository;
 
-    public GetProjectTicketsQueryHandler(ITicketRepository ticketRepository, IUserRepository userRepository)
+    public GetWorkspaceTicketsQueryHandler(ITicketRepository ticketRepository, IUserRepository userRepository)
     {
         _ticketRepository = ticketRepository;
         _userRepository = userRepository;
     }
 
-    public async Task<IReadOnlyList<TicketDto>> Handle(GetProjectTicketsQuery request, CancellationToken cancellationToken)
+    public async Task<IReadOnlyList<TicketDto>> Handle(GetWorkspaceTicketsQuery request, CancellationToken cancellationToken)
     {
-        var tickets = await _ticketRepository.GetByProjectIdAsync(request.ProjectId, cancellationToken);
+        var tickets = await _ticketRepository.GetAllAsync(cancellationToken);
 
-        // Small, deliberate N+1: at this project's realistic ticket-count
-        // scale, a batch-lookup repository method would be premature —
-        // revisit if a real project ever has enough assignees for it to
-        // matter.
         var initialsByUserId = new Dictionary<Guid, string?>();
         var results = new List<TicketDto>(tickets.Count);
 
