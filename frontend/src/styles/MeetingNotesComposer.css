@@ -1,0 +1,53 @@
+.tp-meeting-notes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tp-space-md);
+  height: 100%;
+  min-height: 0;
+}
+
+.tp-meeting-notes__editor {
+  position: relative;
+  flex: 1;
+  min-height: 12rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.tp-meeting-notes__textarea {
+  flex: 1;
+  min-height: 12rem;
+  resize: vertical;
+  font-family: var(--tp-font-sans);
+  line-height: 1.6;
+  padding: var(--tp-space-sm);
+}
+
+.tp-meeting-notes__hint {
+  position: absolute;
+  bottom: var(--tp-space-xs);
+  right: var(--tp-space-xs);
+  padding: 0.1875rem 0.5rem;
+  background: var(--tp-accent-wash);
+  color: var(--tp-accent);
+  border-radius: var(--tp-radius-full);
+  font-size: 0.6875rem;
+  font-weight: 500;
+}
+
+.tp-meeting-notes__preview {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tp-space-2xs);
+  padding: var(--tp-space-sm);
+  background: var(--tp-surface);
+  border: 1px solid var(--tp-border);
+  border-radius: var(--tp-radius-lg);
+}
+
+.tp-meeting-notes__preview-body {
+  font-size: var(--tp-text-sm);
+  line-height: 1.7;
+  color: var(--tp-text-secondary);
+  white-space: pre-wrap;
+}

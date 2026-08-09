@@ -34,3 +34,23 @@ export interface ChatMessageDto {
   ticketId: string | null
   createdAt: string
 }
+
+export interface MeetingDto {
+  id: string
+  projectId: string
+  title: string
+  scheduledAt: string
+  notes: string
+  createdById: string
+  createdAt: string
+  updatedAt: string
+}
+
+export interface DecisionDto {
+  id: string
+  meetingId: string
+  projectId: string
+  text: string
+  createdById: string
+  createdAt: string
+}

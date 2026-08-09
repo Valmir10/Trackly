@@ -4,6 +4,7 @@ import { API_BASE_URL } from '@/lib/apiClient'
 import { useAuthStore } from '@/store/useAuthStore'
 import { useTaskStore } from '@/store/useTaskStore'
 import { useChatStore } from '@/store/useChatStore'
+import { useDecisionStore } from '@/store/useDecisionStore'
 import { mapChatMessageDtoToChatMessage } from '@/chat/adapters'
 import type { BackendTicketStatus, ChatMessageDto } from '@/api/types'
 import type { ChatScope } from '@/chat/types'
@@ -13,12 +14,28 @@ interface TicketStatusChangedPayload {
   status: BackendTicketStatus
 }
 
+interface TicketCreatedPayload {
+  ticketId: string
+  projectId: string
+  title: string
+  status: BackendTicketStatus
+}
+
 interface ChatMessageSentPayload {
   messageId: string
   ticketId: string | null
   authorId: string
   authorInitials: string
   content: string
+  createdAt: string
+}
+
+interface DecisionCreatedPayload {
+  decisionId: string
+  meetingId: string
+  projectId: string
+  text: string
+  createdById: string
   createdAt: string
 }
 
@@ -40,6 +57,21 @@ export function useProjectHub(projectId: string | undefined) {
 
     connection.on('TicketStatusChanged', (payload: TicketStatusChangedPayload) => {
       useTaskStore.getState().applyRemoteStatusChange(payload.ticketId, payload.status)
+    })
+
+    connection.on('TicketCreated', (payload: TicketCreatedPayload) => {
+      useTaskStore.getState().applyRemoteNewTicket({ id: payload.ticketId, title: payload.title })
+    })
+
+    connection.on('DecisionCreated', (payload: DecisionCreatedPayload) => {
+      useDecisionStore.getState().applyRemoteDecision({
+        id: payload.decisionId,
+        meetingId: payload.meetingId,
+        projectId: payload.projectId,
+        text: payload.text,
+        createdById: payload.createdById,
+        createdAt: payload.createdAt,
+      })
     })
 
     connection.on('ChatMessageSent', (payload: ChatMessageSentPayload) => {

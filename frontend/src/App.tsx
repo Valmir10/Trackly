@@ -9,6 +9,7 @@ import OnboardingPage from '@/pages/OnboardingPage'
 import DashboardPage from '@/pages/DashboardPage'
 import ProjectsPage from '@/pages/ProjectsPage'
 import ProjectPage from '@/pages/ProjectPage'
+import MeetingPage from '@/pages/MeetingPage'
 import MyTasksPage from '@/pages/MyTasksPage'
 import AnalyticsPage from '@/pages/AnalyticsPage'
 import SettingsPage from '@/pages/SettingsPage'
@@ -29,6 +30,7 @@ export default function App() {
         <Route path="/:slug/dashboard" element={<RequireAuth><DashboardPage /></RequireAuth>} />
         <Route path="/:slug/projects" element={<RequireAuth><ProjectsPage /></RequireAuth>} />
         <Route path="/:slug/projects/:projectId" element={<RequireAuth><ProjectPage /></RequireAuth>} />
+        <Route path="/:slug/meetings/:meetingId" element={<RequireAuth><MeetingPage /></RequireAuth>} />
         <Route path="/:slug/tasks" element={<RequireAuth><MyTasksPage /></RequireAuth>} />
         <Route path="/:slug/analytics" element={<RequireAuth><AnalyticsPage /></RequireAuth>} />
         <Route path="/:slug/settings" element={<RequireAuth><SettingsPage /></RequireAuth>} />
