@@ -1,0 +1,103 @@
+.tp-meetings-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tp-space-md);
+  max-width: 56rem;
+  margin-inline: auto;
+  padding: var(--tp-space-md);
+}
+
+.tp-meetings-page__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--tp-space-xs);
+}
+
+.tp-meetings-page__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--tp-space-2xs);
+  padding: var(--tp-space-xl) var(--tp-space-md);
+  text-align: center;
+  color: var(--tp-text-muted);
+  background: var(--tp-surface);
+  border: 1px solid var(--tp-border);
+  border-radius: var(--tp-radius-lg);
+}
+
+.tp-meetings-page__empty p {
+  font-size: var(--tp-text-sm);
+  font-weight: 500;
+  color: var(--tp-text-secondary);
+}
+
+.tp-meetings-page__empty span {
+  font-size: var(--tp-text-xs);
+}
+
+.tp-meetings-page__list {
+  display: flex;
+  flex-direction: column;
+  background: var(--tp-surface);
+  border: 1px solid var(--tp-border);
+  border-radius: var(--tp-radius-lg);
+  overflow: hidden;
+}
+
+.tp-meeting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--tp-space-sm);
+  padding: var(--tp-space-sm) var(--tp-space-md);
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--tp-border);
+  font-family: var(--tp-font-sans);
+  text-align: left;
+  cursor: pointer;
+  transition: background-color var(--tp-duration-fast) var(--tp-ease-out-quart);
+}
+
+.tp-meeting-row:last-child {
+  border-bottom: none;
+}
+
+.tp-meeting-row:hover {
+  background: var(--tp-surface-2);
+}
+
+.tp-meeting-row__title {
+  font-size: var(--tp-text-sm);
+  font-weight: 500;
+  color: var(--tp-text);
+}
+
+.tp-meeting-row__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--tp-space-sm);
+  flex-shrink: 0;
+}
+
+.tp-meeting-row__project {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3125rem;
+  font-size: var(--tp-text-xs);
+  color: var(--tp-text-secondary);
+}
+
+.tp-meeting-row__project-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.tp-meeting-row__date {
+  font-family: var(--tp-font-mono);
+  font-size: 0.75rem;
+  color: var(--tp-text-muted);
+}

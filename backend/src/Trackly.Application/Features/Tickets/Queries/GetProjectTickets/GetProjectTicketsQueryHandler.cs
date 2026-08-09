@@ -50,7 +50,8 @@ public sealed class GetProjectTicketsQueryHandler : IRequestHandler<GetProjectTi
                 ticket.DueDate,
                 ticket.Position,
                 ticket.CreatedAt,
-                ticket.CompletedAt));
+                ticket.CompletedAt,
+                ticket.UpdatedAt));
         }
 
         return results;

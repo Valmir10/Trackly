@@ -20,9 +20,16 @@
   min-width: 0;
 }
 
-.tp-meeting-page__decisions {
+.tp-meeting-page__sidebar {
   width: 18rem;
   flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--tp-space-md);
+  overflow-y: auto;
+}
+
+.tp-meeting-page__decisions {
   display: flex;
   flex-direction: column;
   gap: var(--tp-space-xs);
@@ -53,7 +60,7 @@
     flex-direction: column;
   }
 
-  .tp-meeting-page__decisions {
+  .tp-meeting-page__sidebar {
     width: 100%;
   }
 }

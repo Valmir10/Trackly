@@ -1,6 +1,7 @@
 using MediatR;
 using Trackly.Application.Features.Decisions.Commands.CreateDecision;
 using Trackly.Application.Features.Decisions.Queries.GetMeetingDecisions;
+using Trackly.Application.Features.Decisions.Queries.GetWorkspaceDecisions;
 
 namespace Trackly.Api.Endpoints;
 
@@ -22,6 +23,12 @@ public static class DecisionEndpoints
             Guid meetingId, ISender sender, CancellationToken cancellationToken) =>
         {
             var decisions = await sender.Send(new GetMeetingDecisionsQuery(meetingId), cancellationToken);
+            return Results.Ok(decisions);
+        }).RequireAuthorization();
+
+        app.MapGet("/api/decisions", async (ISender sender, CancellationToken cancellationToken) =>
+        {
+            var decisions = await sender.Send(new GetWorkspaceDecisionsQuery(), cancellationToken);
             return Results.Ok(decisions);
         }).RequireAuthorization();
     }

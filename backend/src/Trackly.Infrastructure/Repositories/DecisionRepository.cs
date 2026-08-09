@@ -26,4 +26,9 @@ public sealed class DecisionRepository : IDecisionRepository
             .OrderBy(d => d.CreatedAt)
             .ToListAsync(cancellationToken);
     }
+
+    public async Task<IReadOnlyList<Decision>> GetAllAsync(CancellationToken cancellationToken)
+    {
+        return await _context.Decisions.OrderBy(d => d.CreatedAt).ToListAsync(cancellationToken);
+    }
 }

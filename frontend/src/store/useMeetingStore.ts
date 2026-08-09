@@ -1,15 +1,20 @@
 import { create } from 'zustand'
-import type { MeetingDto } from '@/api/types'
+import type { MeetingDto, MeetingSummaryDto } from '@/api/types'
 
-// Phase A only ever shows one meeting at a time (no list page yet), so this
-// is a single-meeting slice rather than a keyed collection.
 interface MeetingStoreState {
+  // Single-meeting detail slice — the notes editor only ever shows one
+  // meeting at a time.
   meetingId: string | null
   projectId: string | null
   title: string
   notes: string
   setMeetingFromApi: (meeting: MeetingDto) => void
   setNotes: (notes: string) => void
+
+  // Flat, keyed by id — the meetings list page's data, independent of the
+  // single-meeting slice above.
+  meetings: Record<string, MeetingSummaryDto>
+  setMeetingsFromApi: (meetings: MeetingSummaryDto[]) => void
 }
 
 export const useMeetingStore = create<MeetingStoreState>((set) => ({
@@ -24,5 +29,13 @@ export const useMeetingStore = create<MeetingStoreState>((set) => ({
 
   setNotes: (notes) => {
     set({ notes })
+  },
+
+  meetings: {},
+
+  setMeetingsFromApi: (meetings) => {
+    set((state) => ({
+      meetings: { ...state.meetings, ...Object.fromEntries(meetings.map((m) => [m.id, m])) },
+    }))
   },
 }))

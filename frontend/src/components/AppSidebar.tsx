@@ -3,6 +3,7 @@ import { Link, useLocation, useParams } from 'react-router-dom'
 import {
   LayoutDashboard,
   FolderKanban,
+  CalendarDays,
   CheckSquare,
   BarChart2,
   Settings,
@@ -31,6 +32,7 @@ export default function AppSidebar({ mobileOpen, onCloseMobile }: AppSidebarProp
   const navItems = [
     { label: 'Dashboard', icon: LayoutDashboard, to: `/${slug}/dashboard` },
     { label: 'Projects', icon: FolderKanban, to: `/${slug}/projects` },
+    { label: 'Meetings', icon: CalendarDays, to: `/${slug}/meetings` },
     { label: 'My Tasks', icon: CheckSquare, to: `/${slug}/tasks` },
     { label: 'Analytics', icon: BarChart2, to: `/${slug}/analytics` },
   ]

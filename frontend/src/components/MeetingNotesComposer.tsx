@@ -1,20 +1,34 @@
-import { useEffect, useRef, useState } from 'react'
+import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { apiClient } from '@/lib/apiClient'
 import { useAuthStore } from '@/store/useAuthStore'
 import { useMeetingStore } from '@/store/useMeetingStore'
 import { useDecisionStore } from '@/store/useDecisionStore'
 import { useTaskStore } from '@/store/useTaskStore'
+import { WORKSPACE_MEMBERS } from '@/data/users'
+import { detectMentionTrigger } from '@/chat/mentionTrigger'
 import { detectAuthoringTrigger } from '@/meetings/authoringTrigger'
 import { parseNotes } from '@/meetings/parseNotes'
 import { resolveUser, resolveTicket, resolveDecision } from '@/meetings/resolvers'
 import { renderBlock } from '@/blocks/renderBlock'
+import type { MentionTrigger } from '@/chat/mentionTrigger'
 import type { AuthoringTrigger } from '@/meetings/authoringTrigger'
 import '@/styles/MeetingNotesComposer.css'
 
 interface MeetingNotesComposerProps {
   meetingId: string
   projectId: string
+}
+
+export interface MeetingNotesComposerHandle {
+  appendLine: (line: string) => void
+}
+
+interface PickerItem {
+  id: string
+  label: string
+  insertText: string
+  mono?: string
 }
 
 const SAVE_DEBOUNCE_MS = 800
@@ -24,7 +38,32 @@ const HINT_TEXT: Record<AuthoringTrigger['marker'], string> = {
   '+': 'Press Enter to create this ticket',
 }
 
-export default function MeetingNotesComposer({ meetingId, projectId }: MeetingNotesComposerProps) {
+function matchMembers(query: string): PickerItem[] {
+  const q = query.toLowerCase()
+  return WORKSPACE_MEMBERS.filter((m) => m.handle.toLowerCase().startsWith(q) || m.name.toLowerCase().includes(q))
+    .slice(0, 6)
+    .map((m) => ({ id: m.id, label: m.name, insertText: m.handle }))
+}
+
+// # surfaces both tickets and decisions — same trigger, two entity types,
+// matching parseNotes' own #-resolves-ticket-then-decision dispatch.
+function matchTicketsAndDecisions(query: string): PickerItem[] {
+  const q = query.toLowerCase()
+  const tickets = useTaskStore
+    .getState()
+    .columns.flatMap((c) => c.tasks)
+    .filter((t) => t.id.startsWith(query) || t.title.toLowerCase().includes(q))
+    .map((t) => ({ id: t.id, label: t.title, insertText: t.id, mono: `#${t.id}` }))
+  const decisions = Object.values(useDecisionStore.getState().decisions)
+    .filter((d) => d.id.startsWith(query) || d.text.toLowerCase().includes(q))
+    .map((d) => ({ id: d.id, label: d.text, insertText: d.id, mono: `#${d.id}` }))
+  return [...tickets, ...decisions].slice(0, 6)
+}
+
+const MeetingNotesComposer = forwardRef<MeetingNotesComposerHandle, MeetingNotesComposerProps>(function MeetingNotesComposer(
+  { meetingId, projectId },
+  ref
+) {
   const { slug = '' } = useParams()
   const navigate = useNavigate()
   const storedNotes = useMeetingStore((s) => s.notes)
@@ -32,6 +71,8 @@ export default function MeetingNotesComposer({ meetingId, projectId }: MeetingNo
 
   const [value, setValue] = useState(storedNotes)
   const [armed, setArmed] = useState<AuthoringTrigger | null>(null)
+  const [trigger, setTrigger] = useState<MentionTrigger | null>(null)
+  const [pickerIndex, setPickerIndex] = useState(0)
   const [submitting, setSubmitting] = useState(false)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const saveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -48,6 +89,15 @@ export default function MeetingNotesComposer({ meetingId, projectId }: MeetingNo
     }
   }, [meetingId, storedNotes])
 
+  // Lets SuggestedAgendaPanel (a sibling, not a parent) append an
+  // agendaItem line without lifting all of this component's composer state
+  // up to MeetingPage.
+  useImperativeHandle(ref, () => ({
+    appendLine: (line: string) => {
+      setValue((prev) => (prev.length > 0 && !prev.endsWith('\n') ? `${prev}\n${line}\n` : `${prev}${line}\n`))
+    },
+  }))
+
   useEffect(() => {
     if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current)
     saveTimeoutRef.current = setTimeout(() => {
@@ -61,11 +111,34 @@ export default function MeetingNotesComposer({ meetingId, projectId }: MeetingNo
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value, meetingId])
 
+  const pickerItems: PickerItem[] = trigger
+    ? trigger.marker === '@'
+      ? matchMembers(trigger.query)
+      : matchTicketsAndDecisions(trigger.query)
+    : []
+
   function handleChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
     const nextValue = e.target.value
     const caret = e.target.selectionStart ?? nextValue.length
     setValue(nextValue)
     setArmed(detectAuthoringTrigger(nextValue, caret, armed))
+    setTrigger(detectMentionTrigger(nextValue, caret))
+    setPickerIndex(0)
+  }
+
+  function applyPickerItem(item: PickerItem) {
+    if (!trigger) return
+    const before = value.slice(0, trigger.start)
+    const after = value.slice(trigger.start + trigger.marker.length + trigger.query.length)
+    const inserted = `${trigger.marker}${item.insertText} `
+    const nextValue = before + inserted + after
+    const caret = (before + inserted).length
+    setValue(nextValue)
+    setTrigger(null)
+    requestAnimationFrame(() => {
+      textareaRef.current?.focus()
+      textareaRef.current?.setSelectionRange(caret, caret)
+    })
   }
 
   async function submitArmedBlock() {
@@ -124,6 +197,31 @@ export default function MeetingNotesComposer({ meetingId, projectId }: MeetingNo
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
+    if (trigger && pickerItems.length > 0) {
+      if (e.key === 'ArrowDown') {
+        e.preventDefault()
+        setPickerIndex((i) => Math.min(i + 1, pickerItems.length - 1))
+        return
+      }
+      if (e.key === 'ArrowUp') {
+        e.preventDefault()
+        setPickerIndex((i) => Math.max(i - 1, 0))
+        return
+      }
+      const alreadyResolved =
+        trigger.marker === '@' ? resolveUser(trigger.query) : (resolveTicket(trigger.query) ?? resolveDecision(trigger.query))
+      if ((e.key === 'Enter' || e.key === 'Tab') && !alreadyResolved) {
+        e.preventDefault()
+        applyPickerItem(pickerItems[pickerIndex])
+        return
+      }
+      if (e.key === 'Escape') {
+        e.preventDefault()
+        setTrigger(null)
+        return
+      }
+    }
+
     if (!armed) return
 
     if (e.key === 'Enter') {
@@ -146,7 +244,7 @@ export default function MeetingNotesComposer({ meetingId, projectId }: MeetingNo
         <textarea
           ref={textareaRef}
           className="tp-input tp-meeting-notes__textarea"
-          placeholder="Type meeting notes... > for a decision, + for an action item"
+          placeholder="Type meeting notes... @ to mention, # for a ticket or decision, > for a new decision, + for a new ticket"
           value={value}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
@@ -154,6 +252,23 @@ export default function MeetingNotesComposer({ meetingId, projectId }: MeetingNo
           disabled={submitting}
         />
         {armed && <div className="tp-meeting-notes__hint">{HINT_TEXT[armed.marker]}</div>}
+
+        {trigger && pickerItems.length > 0 && (
+          <div className="tp-meeting-notes__picker">
+            {pickerItems.map((item, i) => (
+              <button
+                key={item.id}
+                type="button"
+                className={`tp-meeting-notes__picker-item${i === pickerIndex ? ' tp-meeting-notes__picker-item--active' : ''}`}
+                onMouseEnter={() => setPickerIndex(i)}
+                onClick={() => applyPickerItem(item)}
+              >
+                <span className="tp-meeting-notes__picker-label">{item.label}</span>
+                {item.mono && <span className="tp-meeting-notes__picker-mono">{item.mono}</span>}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       <div className="tp-meeting-notes__preview">
@@ -173,4 +288,6 @@ export default function MeetingNotesComposer({ meetingId, projectId }: MeetingNo
       </div>
     </div>
   )
-}
+})
+
+export default MeetingNotesComposer

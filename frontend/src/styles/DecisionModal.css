@@ -1,0 +1,24 @@
+.tp-decision-modal {
+  max-width: 28rem;
+}
+
+.tp-decision-modal__id {
+  display: block;
+  font-family: var(--tp-font-mono);
+  font-size: 0.75rem;
+  color: var(--tp-cat-5);
+  margin-bottom: 0.125rem;
+}
+
+.tp-decision-modal__text {
+  font-size: var(--tp-text-base);
+  line-height: 1.6;
+  color: var(--tp-text);
+}
+
+.tp-decision-modal__meta {
+  display: block;
+  margin-top: var(--tp-space-sm);
+  font-size: var(--tp-text-xs);
+  color: var(--tp-text-muted);
+}
