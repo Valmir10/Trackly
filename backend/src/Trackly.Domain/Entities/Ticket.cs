@@ -19,6 +19,7 @@ public sealed class Ticket : AggregateRoot
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
     public DateTime? CompletedAt { get; private set; }
+    public Guid? OriginMeetingId { get; private set; }
 
     private Ticket() { }
 
@@ -31,7 +32,8 @@ public sealed class Ticket : AggregateRoot
         Guid? assignedToId = null,
         DateTime? dueDate = null,
         string? description = null,
-        int position = 0)
+        int position = 0,
+        Guid? originMeetingId = null)
     {
         if (tenantId == Guid.Empty)
             throw new ArgumentException("TenantId cannot be empty.", nameof(tenantId));
@@ -59,7 +61,8 @@ public sealed class Ticket : AggregateRoot
             DueDate = dueDate,
             Position = position,
             CreatedAt = now,
-            UpdatedAt = now
+            UpdatedAt = now,
+            OriginMeetingId = originMeetingId
         };
 
         ticket.AddDomainEvent(new TicketCreatedEvent(ticket.Id, projectId, ticket.Title));

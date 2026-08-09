@@ -1,14 +1,8 @@
-// Block-model messages: message content is MessageBlock[], not a plain
-// string. This is what lets a meeting's notes (Move 7) reuse the same
-// renderer at document scale later — a document is a Block[] with a
-// different container, not a different rendering system.
-export type MessageBlock =
-  | { type: 'text'; text: string }
-  | { type: 'mention'; userId: string; label: string }
-  | { type: 'ticketRef'; ticketId: string; label: string }
-  // Typed now, not rendered yet — Move 5's live inline ticket card lands in
-  // this same block slot once it exists.
-  | { type: 'card'; ticketId: string }
+// The block union now lives in blocks/types.ts (it's shared with meeting
+// notes, not chat-only) — re-exported here under the same name so existing
+// chat imports don't need to change.
+import type { MessageBlock } from '@/blocks/types'
+export type { MessageBlock } from '@/blocks/types'
 
 export interface ChatMessage {
   id: string

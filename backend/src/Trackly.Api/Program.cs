@@ -112,6 +112,8 @@ app.MapAuthEndpoints();
 app.MapProjectEndpoints();
 app.MapTicketEndpoints();
 app.MapChatEndpoints();
+app.MapMeetingEndpoints();
+app.MapDecisionEndpoints();
 
 app.MapHub<ProjectHub>("/hubs/project");
 

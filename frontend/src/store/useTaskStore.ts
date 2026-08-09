@@ -15,11 +15,17 @@ export interface TaskColumn {
   tasks: Task[]
 }
 
+interface RemoteNewTicket {
+  id: string
+  title: string
+}
+
 interface TaskStoreState {
   columns: TaskColumn[]
   setTicketsFromApi: (tickets: TicketDto[]) => void
   moveTask: (taskId: string, targetColumnId: string) => Promise<void>
   applyRemoteStatusChange: (taskId: string, status: BackendTicketStatus) => void
+  applyRemoteNewTicket: (ticket: RemoteNewTicket) => void
 }
 
 const BASE_COLUMNS: Omit<TaskColumn, 'tasks'>[] = [
@@ -85,6 +91,25 @@ export const useTaskStore = create<TaskStoreState>((set, get) => ({
   applyRemoteStatusChange: (taskId, status) => {
     const targetColumnId = STATUS_TO_COLUMN_ID[status]
     set((state) => ({ columns: moveTaskInColumns(state.columns, taskId, targetColumnId) }))
+  },
+
+  // A ticket created elsewhere (the board's own "Add task", or an
+  // actionItem block in meeting notes) always starts in To Do — this makes
+  // it appear live without a refetch. The broadcast is thin (id/title
+  // only), so the placeholder card fills in with real priority/assignee on
+  // the next normal refetch; guarded against double-insert since the
+  // creator's own tab also receives its own broadcast.
+  applyRemoteNewTicket: (ticket) => {
+    set((state) => {
+      if (findTask(state.columns, ticket.id)) return state
+      return {
+        columns: state.columns.map((col) =>
+          col.id === 'todo'
+            ? { ...col, tasks: [...col.tasks, { id: ticket.id, title: ticket.title, priority: 'medium' as const }] }
+            : col
+        ),
+      }
+    })
   },
 }))
 

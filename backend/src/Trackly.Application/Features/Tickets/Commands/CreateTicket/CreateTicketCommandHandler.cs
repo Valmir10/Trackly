@@ -40,7 +40,8 @@ public sealed class CreateTicketCommandHandler : IRequestHandler<CreateTicketCom
             request.Priority,
             request.AssignedToId,
             request.DueDate,
-            request.Description);
+            request.Description,
+            originMeetingId: request.OriginMeetingId);
 
         await _ticketRepository.AddAsync(ticket, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);

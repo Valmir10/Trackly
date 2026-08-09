@@ -25,6 +25,8 @@ public sealed class TracklyDbContext : DbContext
     public DbSet<Ticket> Tickets => Set<Ticket>();
     public DbSet<ChatMessage> ChatMessages => Set<ChatMessage>();
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
+    public DbSet<Meeting> Meetings => Set<Meeting>();
+    public DbSet<Decision> Decisions => Set<Decision>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -36,6 +38,8 @@ public sealed class TracklyDbContext : DbContext
         modelBuilder.Entity<Project>().HasQueryFilter(p => p.TenantId == _currentTenantService.TenantId);
         modelBuilder.Entity<Ticket>().HasQueryFilter(t => t.TenantId == _currentTenantService.TenantId);
         modelBuilder.Entity<ChatMessage>().HasQueryFilter(m => m.TenantId == _currentTenantService.TenantId);
+        modelBuilder.Entity<Meeting>().HasQueryFilter(m => m.TenantId == _currentTenantService.TenantId);
+        modelBuilder.Entity<Decision>().HasQueryFilter(d => d.TenantId == _currentTenantService.TenantId);
 
         base.OnModelCreating(modelBuilder);
     }

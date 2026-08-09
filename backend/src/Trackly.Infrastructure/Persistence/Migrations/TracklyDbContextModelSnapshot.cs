@@ -56,6 +56,84 @@ namespace Trackly.Infrastructure.Persistence.Migrations
                     b.ToTable("ChatMessages");
                 });
 
+            modelBuilder.Entity("Trackly.Domain.Entities.Decision", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedById")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("MeetingId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ProjectId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MeetingId");
+
+                    b.HasIndex("ProjectId");
+
+                    b.HasIndex("TenantId");
+
+                    b.ToTable("Decisions");
+                });
+
+            modelBuilder.Entity("Trackly.Domain.Entities.Meeting", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedById")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Notes")
+                        .IsRequired()
+                        .HasMaxLength(20000)
+                        .HasColumnType("character varying(20000)");
+
+                    b.Property<Guid>("ProjectId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("ScheduledAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TenantId");
+
+                    b.HasIndex("ProjectId", "ScheduledAt");
+
+                    b.ToTable("Meetings");
+                });
+
             modelBuilder.Entity("Trackly.Domain.Entities.Project", b =>
                 {
                     b.Property<Guid>("Id")
@@ -188,6 +266,9 @@ namespace Trackly.Infrastructure.Persistence.Migrations
                     b.Property<DateTime?>("DueDate")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<Guid?>("OriginMeetingId")
+                        .HasColumnType("uuid");
+
                     b.Property<int>("Position")
                         .HasColumnType("integer");
 
@@ -216,6 +297,8 @@ namespace Trackly.Infrastructure.Persistence.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("OriginMeetingId");
 
                     b.HasIndex("TenantId");
 
@@ -301,6 +384,30 @@ namespace Trackly.Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
+            modelBuilder.Entity("Trackly.Domain.Entities.Decision", b =>
+                {
+                    b.HasOne("Trackly.Domain.Entities.Meeting", null)
+                        .WithMany()
+                        .HasForeignKey("MeetingId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Trackly.Domain.Entities.Project", null)
+                        .WithMany()
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Trackly.Domain.Entities.Meeting", b =>
+                {
+                    b.HasOne("Trackly.Domain.Entities.Project", null)
+                        .WithMany()
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Trackly.Domain.Entities.Project", b =>
                 {
                     b.HasOne("Trackly.Domain.Entities.Tenant", null)
@@ -321,6 +428,11 @@ namespace Trackly.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Trackly.Domain.Entities.Ticket", b =>
                 {
+                    b.HasOne("Trackly.Domain.Entities.Meeting", null)
+                        .WithMany()
+                        .HasForeignKey("OriginMeetingId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("Trackly.Domain.Entities.Project", null)
                         .WithMany()
                         .HasForeignKey("ProjectId")
