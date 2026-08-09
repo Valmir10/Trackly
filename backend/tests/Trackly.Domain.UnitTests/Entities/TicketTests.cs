@@ -33,6 +33,20 @@ public class TicketTests
         ticket.CompletedAt.Should().BeNull();
         ticket.CreatedAt.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(5));
         ticket.UpdatedAt.Should().Be(ticket.CreatedAt);
+        ticket.OriginMeetingId.Should().BeNull();
+    }
+
+    [Fact]
+    public void Create_WithOriginMeetingId_PersistsItOnTheTicket()
+    {
+        // Arrange
+        var meetingId = Guid.NewGuid();
+
+        // Act
+        var ticket = Ticket.Create(ValidTenantId, ValidProjectId, "Fix the flaky test", ValidCreatedById, originMeetingId: meetingId);
+
+        // Assert
+        ticket.OriginMeetingId.Should().Be(meetingId);
     }
 
     [Fact]

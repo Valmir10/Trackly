@@ -22,5 +22,6 @@ public sealed class TicketConfiguration : IEntityTypeConfiguration<Ticket>
         builder.HasIndex(t => new { t.ProjectId, t.Status });
 
         builder.HasOne<Project>().WithMany().HasForeignKey(t => t.ProjectId).OnDelete(DeleteBehavior.Restrict);
+        builder.HasOne<Meeting>().WithMany().HasForeignKey(t => t.OriginMeetingId).OnDelete(DeleteBehavior.Restrict);
     }
 }

@@ -65,6 +65,47 @@ public class CreateTicketCommandHandlerTests
         await _unitOfWork.Received(1).SaveChangesAsync(Arg.Any<CancellationToken>());
     }
 
+    [Fact]
+    public async Task Handle_WithOriginMeetingId_PersistsItOnTheTicket()
+    {
+        // Arrange
+        var project = ExistingProject();
+        var meetingId = Guid.NewGuid();
+        _projectRepository.GetByIdAsync(project.Id, Arg.Any<CancellationToken>()).Returns(project);
+        _currentTenant.TenantId.Returns(Guid.NewGuid());
+        _currentUser.UserId.Returns(Guid.NewGuid());
+        var handler = CreateHandler();
+        var command = new CreateTicketCommand(project.Id, "Fix the flaky test", null, TicketPriority.Medium, null, null, meetingId);
+
+        // Act
+        await handler.Handle(command, CancellationToken.None);
+
+        // Assert
+        await _ticketRepository.Received(1).AddAsync(
+            Arg.Is<Ticket>(t => t.OriginMeetingId == meetingId),
+            Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task Handle_WithoutOriginMeetingId_LeavesItNull()
+    {
+        // Arrange
+        var project = ExistingProject();
+        _projectRepository.GetByIdAsync(project.Id, Arg.Any<CancellationToken>()).Returns(project);
+        _currentTenant.TenantId.Returns(Guid.NewGuid());
+        _currentUser.UserId.Returns(Guid.NewGuid());
+        var handler = CreateHandler();
+        var command = new CreateTicketCommand(project.Id, "Set up Storybook", null, TicketPriority.Medium, null, null);
+
+        // Act
+        await handler.Handle(command, CancellationToken.None);
+
+        // Assert
+        await _ticketRepository.Received(1).AddAsync(
+            Arg.Is<Ticket>(t => t.OriginMeetingId == null),
+            Arg.Any<CancellationToken>());
+    }
+
     // -------------------------------------------------------
     // Handle — missing project
     // -------------------------------------------------------

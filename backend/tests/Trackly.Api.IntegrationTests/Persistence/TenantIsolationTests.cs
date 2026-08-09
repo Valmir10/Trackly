@@ -79,6 +79,35 @@ public sealed class TenantIsolationTests : IAsyncLifetime
         visibleProjects.Should().BeEmpty();
     }
 
+    [Fact]
+    public async Task Meeting_CreatedUnderOneTenant_IsInvisibleToAnotherTenant()
+    {
+        // Arrange — guards the HasQueryFilter line for Meeting added by hand
+        // in TracklyDbContext.OnModelCreating; unlike EF configurations,
+        // that line isn't auto-discovered, so a missed one would only ever
+        // surface here, not in a unit test.
+        var tenantAId = await SeedTenantAsync();
+        var tenantBId = await SeedTenantAsync();
+
+        await using (var seedContext = CreateContext(tenantAId))
+        {
+            var project = Project.Create(tenantAId, "Frontend redesign", "var(--tp-cat-1)", Guid.NewGuid());
+            await seedContext.Projects.AddAsync(project);
+            await seedContext.SaveChangesAsync();
+
+            var meeting = Meeting.Create(tenantAId, project.Id, "Sprint Planning 14", DateTime.UtcNow.AddDays(1), Guid.NewGuid());
+            await seedContext.Meetings.AddAsync(meeting);
+            await seedContext.SaveChangesAsync();
+        }
+
+        // Act
+        await using var tenantBContext = CreateContext(tenantBId);
+        var visibleMeetings = await tenantBContext.Meetings.ToListAsync();
+
+        // Assert
+        visibleMeetings.Should().BeEmpty();
+    }
+
     // -------------------------------------------------------
     // Same-tenant access still works
     // -------------------------------------------------------

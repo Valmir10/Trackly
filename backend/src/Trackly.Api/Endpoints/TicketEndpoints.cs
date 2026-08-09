@@ -7,7 +7,13 @@ using Trackly.Domain.Enums;
 
 namespace Trackly.Api.Endpoints;
 
-public sealed record CreateTicketRequest(string Title, string? Description, TicketPriority Priority, Guid? AssignedToId, DateTime? DueDate);
+public sealed record CreateTicketRequest(
+    string Title,
+    string? Description,
+    TicketPriority Priority,
+    Guid? AssignedToId,
+    DateTime? DueDate,
+    Guid? OriginMeetingId = null);
 
 public sealed record ChangeTicketStatusRequest(TicketStatus NewStatus, int Position);
 
@@ -19,7 +25,8 @@ public static class TicketEndpoints
             Guid projectId, CreateTicketRequest request, ISender sender, CancellationToken cancellationToken) =>
         {
             var command = new CreateTicketCommand(
-                projectId, request.Title, request.Description, request.Priority, request.AssignedToId, request.DueDate);
+                projectId, request.Title, request.Description, request.Priority, request.AssignedToId, request.DueDate,
+                request.OriginMeetingId);
             var ticketId = await sender.Send(command, cancellationToken);
             return Results.Created($"/api/tickets/{ticketId}", new { Id = ticketId });
         }).RequireAuthorization();

@@ -9,4 +9,5 @@ public sealed record CreateTicketCommand(
     string? Description,
     TicketPriority Priority,
     Guid? AssignedToId,
-    DateTime? DueDate) : IRequest<Guid>;
+    DateTime? DueDate,
+    Guid? OriginMeetingId = null) : IRequest<Guid>;
