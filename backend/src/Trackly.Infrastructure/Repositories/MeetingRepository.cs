@@ -23,4 +23,17 @@ public sealed class MeetingRepository : IMeetingRepository
     {
         return await _context.Meetings.FirstOrDefaultAsync(m => m.Id == id, cancellationToken);
     }
+
+    public async Task<IReadOnlyList<Meeting>> GetByProjectIdAsync(Guid projectId, CancellationToken cancellationToken)
+    {
+        return await _context.Meetings
+            .Where(m => m.ProjectId == projectId)
+            .OrderBy(m => m.ScheduledAt)
+            .ToListAsync(cancellationToken);
+    }
+
+    public async Task<IReadOnlyList<Meeting>> GetAllAsync(CancellationToken cancellationToken)
+    {
+        return await _context.Meetings.OrderBy(m => m.ScheduledAt).ToListAsync(cancellationToken);
+    }
 }

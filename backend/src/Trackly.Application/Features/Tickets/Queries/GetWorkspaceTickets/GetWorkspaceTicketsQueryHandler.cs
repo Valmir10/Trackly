@@ -47,7 +47,8 @@ public sealed class GetWorkspaceTicketsQueryHandler : IRequestHandler<GetWorkspa
                 ticket.DueDate,
                 ticket.Position,
                 ticket.CreatedAt,
-                ticket.CompletedAt));
+                ticket.CompletedAt,
+                ticket.UpdatedAt));
         }
 
         return results;

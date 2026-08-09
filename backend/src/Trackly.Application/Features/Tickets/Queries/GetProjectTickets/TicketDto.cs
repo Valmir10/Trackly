@@ -14,4 +14,5 @@ public sealed record TicketDto(
     DateTime? DueDate,
     int Position,
     DateTime CreatedAt,
-    DateTime? CompletedAt);
+    DateTime? CompletedAt,
+    DateTime UpdatedAt);
