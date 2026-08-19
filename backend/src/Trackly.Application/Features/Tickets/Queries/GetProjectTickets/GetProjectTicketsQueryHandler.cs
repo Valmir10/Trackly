@@ -54,7 +54,8 @@ public sealed class GetProjectTicketsQueryHandler : IRequestHandler<GetProjectTi
                 ticket.UpdatedAt,
                 ticket.MilestoneId,
                 ticket.BlockedByTicketId,
-                ticket.BlockedByMilestoneId));
+                ticket.BlockedByMilestoneId,
+                ticket.OriginMeetingId));
         }
 
         return results;

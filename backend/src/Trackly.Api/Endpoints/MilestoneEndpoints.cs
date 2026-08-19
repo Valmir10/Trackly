@@ -1,6 +1,7 @@
 using MediatR;
 using Trackly.Application.Features.Milestones.Commands.CreateMilestone;
 using Trackly.Application.Features.Milestones.Queries.GetProjectMilestones;
+using Trackly.Application.Features.Milestones.Queries.GetWorkspaceMilestones;
 
 namespace Trackly.Api.Endpoints;
 
@@ -22,6 +23,12 @@ public static class MilestoneEndpoints
             Guid projectId, ISender sender, CancellationToken cancellationToken) =>
         {
             var milestones = await sender.Send(new GetProjectMilestonesQuery(projectId), cancellationToken);
+            return Results.Ok(milestones);
+        }).RequireAuthorization();
+
+        app.MapGet("/api/milestones", async (ISender sender, CancellationToken cancellationToken) =>
+        {
+            var milestones = await sender.Send(new GetWorkspaceMilestonesQuery(), cancellationToken);
             return Results.Ok(milestones);
         }).RequireAuthorization();
     }

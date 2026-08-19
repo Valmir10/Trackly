@@ -44,4 +44,9 @@ public sealed class MilestoneRepository : IMilestoneRepository
             .OrderBy(m => m.CreatedAt)
             .ToListAsync(cancellationToken);
     }
+
+    public async Task<IReadOnlyList<Milestone>> GetAllAsync(CancellationToken cancellationToken)
+    {
+        return await _context.Milestones.OrderBy(m => m.CreatedAt).ToListAsync(cancellationToken);
+    }
 }

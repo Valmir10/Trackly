@@ -1,16 +1,21 @@
 using MediatR;
 using Trackly.Application.Common.Interfaces;
+using Trackly.Application.Features.Milestones.Queries.GetProjectMilestones;
 using Trackly.Domain.Enums;
 
-namespace Trackly.Application.Features.Milestones.Queries.GetProjectMilestones;
+namespace Trackly.Application.Features.Milestones.Queries.GetWorkspaceMilestones;
 
-public sealed class GetProjectMilestonesQueryHandler : IRequestHandler<GetProjectMilestonesQuery, IReadOnlyList<MilestoneDto>>
+// Feeds the #-picker's milestone search — mirrors GetWorkspaceDecisionsQuery
+// (all decisions across every meeting) so milestones are findable from
+// anywhere, not just while their project's Contracts page happens to be
+// loaded.
+public sealed class GetWorkspaceMilestonesQueryHandler : IRequestHandler<GetWorkspaceMilestonesQuery, IReadOnlyList<MilestoneDto>>
 {
     private readonly IMilestoneRepository _milestoneRepository;
     private readonly ITicketRepository _ticketRepository;
     private readonly IApprovalRepository _approvalRepository;
 
-    public GetProjectMilestonesQueryHandler(
+    public GetWorkspaceMilestonesQueryHandler(
         IMilestoneRepository milestoneRepository,
         ITicketRepository ticketRepository,
         IApprovalRepository approvalRepository)
@@ -20,9 +25,9 @@ public sealed class GetProjectMilestonesQueryHandler : IRequestHandler<GetProjec
         _approvalRepository = approvalRepository;
     }
 
-    public async Task<IReadOnlyList<MilestoneDto>> Handle(GetProjectMilestonesQuery request, CancellationToken cancellationToken)
+    public async Task<IReadOnlyList<MilestoneDto>> Handle(GetWorkspaceMilestonesQuery request, CancellationToken cancellationToken)
     {
-        var milestones = await _milestoneRepository.GetByProjectIdAsync(request.ProjectId, cancellationToken);
+        var milestones = await _milestoneRepository.GetAllAsync(cancellationToken);
         var results = new List<MilestoneDto>(milestones.Count);
 
         foreach (var milestone in milestones)
