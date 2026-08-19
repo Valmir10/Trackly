@@ -122,7 +122,7 @@ export function useBuiltinCommands() {
             group: 'ticket' as const,
             mono: `#${task.id}`,
             recencyKey: 'open-ticket',
-            run: (ctx: CommandContext) => ctx.openTicket(task.id),
+            run: (ctx: CommandContext) => ctx.openTicket(task.id, task.projectId ?? ''),
           }))
         )
       },

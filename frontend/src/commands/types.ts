@@ -7,6 +7,7 @@ export type CommandGroup =
   | 'navigate'
   | 'ticket'
   | 'meeting'
+  | 'milestone'
   | 'action'
   | 'help'
 
@@ -17,7 +18,7 @@ export type CommandGroup =
 export interface CommandContext {
   navigate: NavigateFunction
   slug: string
-  openTicket: (ticketId: string) => void
+  openTicket: (ticketId: string, projectId: string) => void
   openMeeting: (meetingId: string) => void
   close: () => void
   push: (page: CommandPage) => void

@@ -28,6 +28,7 @@ export interface TicketDto {
   milestoneId: string | null
   blockedByTicketId: string | null
   blockedByMilestoneId: string | null
+  originMeetingId: string | null
 }
 
 export interface ChatMessageDto {
@@ -78,6 +79,7 @@ export interface ContractDto {
 
 export interface MilestoneDto {
   id: string
+  projectId: string
   contractId: string
   title: string
   ticketsTotal: number

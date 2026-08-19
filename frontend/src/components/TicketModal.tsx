@@ -1,13 +1,16 @@
 import { useEffect, useRef, useState } from 'react'
-import { X, Calendar, ChevronsUpDown, Check, Clock } from 'lucide-react'
+import { Link, useParams } from 'react-router-dom'
+import { X, Calendar, ChevronsUpDown, Check, Clock, ArrowRight } from 'lucide-react'
 import { useClickOutside } from '@/hooks/useClickOutside'
 import ChatThread from '@/components/ChatThread'
 import type { Task } from '@/components/TaskCard'
 import { useProjectMilestones } from '@/hooks/useProjectMilestones'
+import { useProjectContracts } from '@/hooks/useProjectContracts'
 import { useAssignTicketToMilestone } from '@/hooks/useAssignTicketToMilestone'
 import { useSetTicketBlockedByTicket } from '@/hooks/useSetTicketBlockedByTicket'
 import { useSetTicketBlockedByMilestone } from '@/hooks/useSetTicketBlockedByMilestone'
 import { useTaskStore } from '@/store/useTaskStore'
+import { useMeetingStore } from '@/store/useMeetingStore'
 import '@/styles/TicketModal.css'
 
 interface TimeEntry {
@@ -41,12 +44,19 @@ export default function TicketModal({
   const statusRef = useRef<HTMLDivElement>(null)
   useClickOutside(statusRef, () => setStatusMenuOpen(false), statusMenuOpen)
 
+  const { slug = '' } = useParams()
   const { data: milestones = [] } = useProjectMilestones(projectId)
+  const { data: contracts = [] } = useProjectContracts(projectId)
   const columns = useTaskStore((s) => s.columns)
   const otherTickets = columns.flatMap((c) => c.tasks).filter((t) => t.id !== task.id)
   const assignMilestone = useAssignTicketToMilestone(projectId)
   const setBlockedByTicket = useSetTicketBlockedByTicket(projectId)
   const setBlockedByMilestone = useSetTicketBlockedByMilestone(projectId)
+
+  const originMeeting = useMeetingStore((s) => (task.originMeetingId ? s.meetings[task.originMeetingId] : undefined))
+  const currentMilestone = task.milestoneId ? milestones.find((m) => m.id === task.milestoneId) : undefined
+  const currentContract = currentMilestone ? contracts.find((c) => c.id === currentMilestone.contractId) : undefined
+  const hasProvenance = !!originMeeting || !!currentMilestone
 
   const [entries, setEntries] = useState<TimeEntry[]>([])
   const [hours, setHours] = useState('')
@@ -94,6 +104,45 @@ export default function TicketModal({
           </div>
 
           {task.description && <p className="tp-ticket-modal__description">{task.description}</p>}
+
+          {hasProvenance && (
+            <div className="tp-ticket-modal__provenance">
+              <span className="tp-label">Provenance</span>
+              <div className="tp-ticket-modal__provenance-chain">
+                {originMeeting && (
+                  <>
+                    <Link to={`/${slug}/meetings/${originMeeting.id}`} className="tp-ticket-modal__provenance-link">
+                      {originMeeting.title}
+                    </Link>
+                    <ArrowRight size={12} className="tp-ticket-modal__provenance-arrow" />
+                  </>
+                )}
+                <span className="tp-ticket-modal__provenance-self">#{task.id}</span>
+                {currentMilestone && (
+                  <>
+                    <ArrowRight size={12} className="tp-ticket-modal__provenance-arrow" />
+                    <Link
+                      to={`/${slug}/projects/${projectId}/contracts?milestone=${currentMilestone.id}`}
+                      className="tp-ticket-modal__provenance-link"
+                    >
+                      {currentMilestone.title}
+                    </Link>
+                    {currentContract && (
+                      <>
+                        <ArrowRight size={12} className="tp-ticket-modal__provenance-arrow" />
+                        <Link
+                          to={`/${slug}/projects/${projectId}/contracts`}
+                          className="tp-ticket-modal__provenance-link"
+                        >
+                          {currentContract.title}
+                        </Link>
+                      </>
+                    )}
+                  </>
+                )}
+              </div>
+            </div>
+          )}
 
           <div className="tp-ticket-modal__row">
             <span className="tp-label">Assignee</span>

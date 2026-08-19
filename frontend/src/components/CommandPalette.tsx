@@ -10,6 +10,7 @@ const GROUP_LABELS: Record<CommandGroup, string> = {
   navigate: 'Navigate',
   ticket: 'Tickets',
   meeting: 'Meetings',
+  milestone: 'Milestones',
   action: 'Actions',
   help: 'Help',
 }

@@ -39,6 +39,44 @@
   color: var(--tp-text-secondary);
 }
 
+.tp-ticket-modal__provenance {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tp-space-2xs);
+  padding: var(--tp-space-xs);
+  background: var(--tp-surface);
+  border: 1px solid var(--tp-border);
+  border-radius: var(--tp-radius-md);
+}
+
+.tp-ticket-modal__provenance-chain {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--tp-space-3xs);
+  font-size: var(--tp-text-xs);
+}
+
+.tp-ticket-modal__provenance-link {
+  color: var(--tp-accent);
+  text-decoration: none;
+}
+
+.tp-ticket-modal__provenance-link:hover {
+  text-decoration: underline;
+}
+
+.tp-ticket-modal__provenance-self {
+  font-family: var(--tp-font-mono);
+  color: var(--tp-text);
+  font-weight: 500;
+}
+
+.tp-ticket-modal__provenance-arrow {
+  color: var(--tp-text-muted);
+  flex-shrink: 0;
+}
+
 .tp-ticket-modal__row {
   display: flex;
   align-items: center;
