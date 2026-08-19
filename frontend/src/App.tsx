@@ -14,8 +14,11 @@ import MeetingPage from '@/pages/MeetingPage'
 import MyTasksPage from '@/pages/MyTasksPage'
 import AnalyticsPage from '@/pages/AnalyticsPage'
 import SettingsPage from '@/pages/SettingsPage'
+import ContractsPage from '@/pages/ContractsPage'
+import ClientRoomPage from '@/pages/ClientRoomPage'
 import NotFoundPage from '@/pages/NotFoundPage'
 import RequireAuth from '@/components/RequireAuth'
+import RequireClientRoomAccess from '@/components/RequireClientRoomAccess'
 
 export default function App() {
   return (
@@ -28,9 +31,18 @@ export default function App() {
         <Route path="/verify-email" element={<EmailVerificationPage />} />
         <Route path="/invite/:token" element={<InvitationPage />} />
         <Route path="/onboarding" element={<OnboardingPage />} />
+        <Route
+          path="/client-room/:token"
+          element={
+            <RequireClientRoomAccess>
+              <ClientRoomPage />
+            </RequireClientRoomAccess>
+          }
+        />
         <Route path="/:slug/dashboard" element={<RequireAuth><DashboardPage /></RequireAuth>} />
         <Route path="/:slug/projects" element={<RequireAuth><ProjectsPage /></RequireAuth>} />
         <Route path="/:slug/projects/:projectId" element={<RequireAuth><ProjectPage /></RequireAuth>} />
+        <Route path="/:slug/projects/:projectId/contracts" element={<RequireAuth><ContractsPage /></RequireAuth>} />
         <Route path="/:slug/meetings" element={<RequireAuth><MeetingsPage /></RequireAuth>} />
         <Route path="/:slug/meetings/:meetingId" element={<RequireAuth><MeetingPage /></RequireAuth>} />
         <Route path="/:slug/tasks" element={<RequireAuth><MyTasksPage /></RequireAuth>} />

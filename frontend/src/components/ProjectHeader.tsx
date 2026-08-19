@@ -1,15 +1,22 @@
-import { SlidersHorizontal, LayoutList, Kanban, Plus, MessageSquare } from 'lucide-react'
+import { useState } from 'react'
+import { Link } from 'react-router-dom'
+import { SlidersHorizontal, LayoutList, Kanban, Plus, MessageSquare, Share2, FileText } from 'lucide-react'
 import { WORKSPACE_MEMBERS } from '@/data/users'
+import ShareClientRoomModal from '@/components/ShareClientRoomModal'
 import '@/styles/ProjectHeader.css'
 
 interface ProjectHeaderProps {
+  projectId: string
+  slug: string
   name: string
   dotColor: string
   chatOpen: boolean
   onToggleChat: () => void
 }
 
-export default function ProjectHeader({ name, dotColor, chatOpen, onToggleChat }: ProjectHeaderProps) {
+export default function ProjectHeader({ projectId, slug, name, dotColor, chatOpen, onToggleChat }: ProjectHeaderProps) {
+  const [shareOpen, setShareOpen] = useState(false)
+
   return (
     <div className="tp-project-header">
       <div className="tp-project-header__left">
@@ -63,7 +70,19 @@ export default function ProjectHeader({ name, dotColor, chatOpen, onToggleChat }
           <MessageSquare size={13} />
           Chat
         </button>
+
+        <Link to={`/${slug}/projects/${projectId}/contracts`} className="tp-btn tp-btn--secondary tp-btn--sm">
+          <FileText size={13} />
+          Contracts
+        </Link>
+
+        <button type="button" className="tp-btn tp-btn--secondary tp-btn--sm" onClick={() => setShareOpen(true)}>
+          <Share2 size={13} />
+          Share with client
+        </button>
       </div>
+
+      {shareOpen && <ShareClientRoomModal projectId={projectId} onClose={() => setShareOpen(false)} />}
     </div>
   )
 }

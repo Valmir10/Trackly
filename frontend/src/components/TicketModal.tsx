@@ -3,6 +3,11 @@ import { X, Calendar, ChevronsUpDown, Check, Clock } from 'lucide-react'
 import { useClickOutside } from '@/hooks/useClickOutside'
 import ChatThread from '@/components/ChatThread'
 import type { Task } from '@/components/TaskCard'
+import { useProjectMilestones } from '@/hooks/useProjectMilestones'
+import { useAssignTicketToMilestone } from '@/hooks/useAssignTicketToMilestone'
+import { useSetTicketBlockedByTicket } from '@/hooks/useSetTicketBlockedByTicket'
+import { useSetTicketBlockedByMilestone } from '@/hooks/useSetTicketBlockedByMilestone'
+import { useTaskStore } from '@/store/useTaskStore'
 import '@/styles/TicketModal.css'
 
 interface TimeEntry {
@@ -35,6 +40,13 @@ export default function TicketModal({
   const [statusMenuOpen, setStatusMenuOpen] = useState(false)
   const statusRef = useRef<HTMLDivElement>(null)
   useClickOutside(statusRef, () => setStatusMenuOpen(false), statusMenuOpen)
+
+  const { data: milestones = [] } = useProjectMilestones(projectId)
+  const columns = useTaskStore((s) => s.columns)
+  const otherTickets = columns.flatMap((c) => c.tasks).filter((t) => t.id !== task.id)
+  const assignMilestone = useAssignTicketToMilestone(projectId)
+  const setBlockedByTicket = useSetTicketBlockedByTicket(projectId)
+  const setBlockedByMilestone = useSetTicketBlockedByMilestone(projectId)
 
   const [entries, setEntries] = useState<TimeEntry[]>([])
   const [hours, setHours] = useState('')
@@ -128,6 +140,60 @@ export default function TicketModal({
                 </div>
               )}
             </div>
+          </div>
+
+          <div className="tp-ticket-modal__row">
+            <span className="tp-label">Milestone</span>
+            <select
+              className="tp-input"
+              value={task.milestoneId ?? ''}
+              onChange={(e) =>
+                assignMilestone.mutate({ ticketId: task.id, milestoneId: e.target.value || null })
+              }
+            >
+              <option value="">None</option>
+              {milestones.map((milestone) => (
+                <option key={milestone.id} value={milestone.id}>
+                  {milestone.title}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="tp-ticket-modal__row">
+            <span className="tp-label">Blocked by ticket</span>
+            <select
+              className="tp-input"
+              value={task.blockedByTicketId ?? ''}
+              onChange={(e) =>
+                setBlockedByTicket.mutate({ ticketId: task.id, blockingTicketId: e.target.value || null })
+              }
+            >
+              <option value="">None</option>
+              {otherTickets.map((t) => (
+                <option key={t.id} value={t.id}>
+                  {t.title}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="tp-ticket-modal__row">
+            <span className="tp-label">Blocked by milestone</span>
+            <select
+              className="tp-input"
+              value={task.blockedByMilestoneId ?? ''}
+              onChange={(e) =>
+                setBlockedByMilestone.mutate({ ticketId: task.id, milestoneId: e.target.value || null })
+              }
+            >
+              <option value="">None</option>
+              {milestones.map((milestone) => (
+                <option key={milestone.id} value={milestone.id}>
+                  {milestone.title}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div className="tp-ticket-modal__timelog">

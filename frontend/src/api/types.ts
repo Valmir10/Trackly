@@ -25,6 +25,9 @@ export interface TicketDto {
   createdAt: string
   completedAt: string | null
   updatedAt: string
+  milestoneId: string | null
+  blockedByTicketId: string | null
+  blockedByMilestoneId: string | null
 }
 
 export interface ChatMessageDto {
@@ -64,4 +67,63 @@ export interface MeetingSummaryDto {
   title: string
   scheduledAt: string
   createdAt: string
+}
+
+export interface ContractDto {
+  id: string
+  projectId: string
+  title: string
+  createdAt: string
+}
+
+export interface MilestoneDto {
+  id: string
+  contractId: string
+  title: string
+  ticketsTotal: number
+  ticketsDone: number
+  progressPercentage: number
+  isApproved: boolean
+  approvedAt: string | null
+}
+
+// Never includes the raw token or its hash — a management list, not a way
+// to retrieve/re-derive a usable credential.
+export interface ClientRoomAccessDto {
+  id: string
+  expiresAt: string
+  createdAt: string
+  revokedAt: string | null
+  isActive: boolean
+}
+
+// Present only in the response of the create call — never retrievable
+// again after that.
+export interface CreateClientRoomAccessResult {
+  accessId: string
+  rawToken: string
+}
+
+// Aggregate-only — no individual ticket titles/assignees/statuses, matching
+// what the backend's client-room-scoped DTO exposes.
+export interface ClientRoomSummaryDto {
+  projectName: string
+  projectColor: string
+  contracts: ClientRoomContractDto[]
+}
+
+export interface ClientRoomContractDto {
+  id: string
+  title: string
+  milestones: ClientRoomMilestoneDto[]
+}
+
+export interface ClientRoomMilestoneDto {
+  id: string
+  title: string
+  ticketsTotal: number
+  ticketsDone: number
+  progressPercentage: number
+  isApproved: boolean
+  approvedAt: string | null
 }

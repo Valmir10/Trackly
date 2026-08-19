@@ -54,5 +54,8 @@ export function mapTicketDtoToTask(dto: TicketDto): Task {
     dueDate: formatDueDate(dto.dueDate),
     dueSoon: isDueSoon(dto.dueDate),
     description: dto.description ?? undefined,
+    milestoneId: dto.milestoneId ?? undefined,
+    blockedByTicketId: dto.blockedByTicketId ?? undefined,
+    blockedByMilestoneId: dto.blockedByMilestoneId ?? undefined,
   }
 }

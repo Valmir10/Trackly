@@ -13,7 +13,7 @@ import { useProjectHub } from '@/hooks/useProjectHub'
 import '@/styles/ProjectPage.css'
 
 export default function ProjectPage() {
-  const { projectId = '' } = useParams()
+  const { projectId = '', slug = '' } = useParams()
   const columns = useTaskStore((s) => s.columns)
   const moveTask = useTaskStore((s) => s.moveTask)
   const { data: projects = [] } = useProjects()
@@ -47,6 +47,8 @@ export default function ProjectPage() {
     <AppShell>
       <div className="tp-project-page">
         <ProjectHeader
+          projectId={projectId}
+          slug={slug}
           name={project?.name ?? ''}
           dotColor={project?.color ?? 'var(--tp-cat-1)'}
           chatOpen={chatOpen}
