@@ -1,6 +1,9 @@
 using MediatR;
+using Trackly.Application.Features.Tickets.Commands.AssignTicketToMilestone;
 using Trackly.Application.Features.Tickets.Commands.ChangeTicketStatus;
 using Trackly.Application.Features.Tickets.Commands.CreateTicket;
+using Trackly.Application.Features.Tickets.Commands.SetTicketBlockedByMilestone;
+using Trackly.Application.Features.Tickets.Commands.SetTicketBlockedByTicket;
 using Trackly.Application.Features.Tickets.Queries.GetProjectTickets;
 using Trackly.Application.Features.Tickets.Queries.GetWorkspaceTickets;
 using Trackly.Domain.Enums;
@@ -16,6 +19,12 @@ public sealed record CreateTicketRequest(
     Guid? OriginMeetingId = null);
 
 public sealed record ChangeTicketStatusRequest(TicketStatus NewStatus, int Position);
+
+public sealed record AssignTicketToMilestoneRequest(Guid? MilestoneId);
+
+public sealed record SetTicketBlockedByTicketRequest(Guid? BlockingTicketId);
+
+public sealed record SetTicketBlockedByMilestoneRequest(Guid? MilestoneId);
 
 public static class TicketEndpoints
 {
@@ -35,6 +44,27 @@ public static class TicketEndpoints
             Guid ticketId, ChangeTicketStatusRequest request, ISender sender, CancellationToken cancellationToken) =>
         {
             await sender.Send(new ChangeTicketStatusCommand(ticketId, request.NewStatus, request.Position), cancellationToken);
+            return Results.NoContent();
+        }).RequireAuthorization();
+
+        app.MapPatch("/api/tickets/{ticketId:guid}/milestone", async (
+            Guid ticketId, AssignTicketToMilestoneRequest request, ISender sender, CancellationToken cancellationToken) =>
+        {
+            await sender.Send(new AssignTicketToMilestoneCommand(ticketId, request.MilestoneId), cancellationToken);
+            return Results.NoContent();
+        }).RequireAuthorization();
+
+        app.MapPatch("/api/tickets/{ticketId:guid}/blocked-by-ticket", async (
+            Guid ticketId, SetTicketBlockedByTicketRequest request, ISender sender, CancellationToken cancellationToken) =>
+        {
+            await sender.Send(new SetTicketBlockedByTicketCommand(ticketId, request.BlockingTicketId), cancellationToken);
+            return Results.NoContent();
+        }).RequireAuthorization();
+
+        app.MapPatch("/api/tickets/{ticketId:guid}/blocked-by-milestone", async (
+            Guid ticketId, SetTicketBlockedByMilestoneRequest request, ISender sender, CancellationToken cancellationToken) =>
+        {
+            await sender.Send(new SetTicketBlockedByMilestoneCommand(ticketId, request.MilestoneId), cancellationToken);
             return Results.NoContent();
         }).RequireAuthorization();
 
