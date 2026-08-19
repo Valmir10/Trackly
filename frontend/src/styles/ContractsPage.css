@@ -59,6 +59,12 @@
   border-radius: var(--tp-radius-sm);
   background: var(--tp-surface);
   font-size: var(--tp-text-sm);
+  transition: background var(--tp-duration-base) var(--tp-ease-out-quart), box-shadow var(--tp-duration-base) var(--tp-ease-out-quart);
+}
+
+.tp-contracts-page__milestone--highlighted {
+  background: var(--tp-accent-wash);
+  box-shadow: 0 0 0 1px var(--tp-accent);
 }
 
 .tp-contracts-page__milestone-title {

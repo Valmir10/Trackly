@@ -48,6 +48,7 @@ function isDueSoon(iso: string | null): boolean {
 export function mapTicketDtoToTask(dto: TicketDto): Task {
   return {
     id: dto.id,
+    projectId: dto.projectId,
     title: dto.title,
     priority: PRIORITY_TO_FRONTEND[dto.priority],
     assignee: dto.assignedToInitials ? { initials: dto.assignedToInitials } : undefined,
@@ -57,5 +58,6 @@ export function mapTicketDtoToTask(dto: TicketDto): Task {
     milestoneId: dto.milestoneId ?? undefined,
     blockedByTicketId: dto.blockedByTicketId ?? undefined,
     blockedByMilestoneId: dto.blockedByMilestoneId ?? undefined,
+    originMeetingId: dto.originMeetingId ?? undefined,
   }
 }

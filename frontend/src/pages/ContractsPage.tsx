@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { useParams, useSearchParams } from 'react-router-dom'
 import { Plus, FileText, Check } from 'lucide-react'
 import AppShell from '@/components/AppShell'
 import { useProjects } from '@/hooks/useProjects'
@@ -11,6 +11,8 @@ import '@/styles/ContractsPage.css'
 
 export default function ContractsPage() {
   const { projectId = '' } = useParams()
+  const [searchParams] = useSearchParams()
+  const highlightedMilestoneId = searchParams.get('milestone')
   const { data: projects = [] } = useProjects()
   const { data: contracts = [] } = useProjectContracts(projectId)
   const { data: milestones = [] } = useProjectMilestones(projectId)
@@ -18,6 +20,13 @@ export default function ContractsPage() {
   const createMilestone = useCreateMilestone(projectId)
 
   const project = projects.find((p) => p.id === projectId)
+
+  // Deep-linked from the ⌘K milestone source (?milestone=<id>) — scroll it
+  // into view once its data has actually rendered, not on every render.
+  useEffect(() => {
+    if (!highlightedMilestoneId) return
+    document.getElementById(`milestone-${highlightedMilestoneId}`)?.scrollIntoView({ block: 'center', behavior: 'smooth' })
+  }, [highlightedMilestoneId, milestones])
 
   const [newContractTitle, setNewContractTitle] = useState('')
   const [newMilestoneTitleByContract, setNewMilestoneTitleByContract] = useState<Record<string, string>>({})
@@ -75,7 +84,13 @@ export default function ContractsPage() {
                   {contractMilestones.length > 0 && (
                     <ul className="tp-contracts-page__milestones">
                       {contractMilestones.map((milestone) => (
-                        <li key={milestone.id} className="tp-contracts-page__milestone">
+                        <li
+                          key={milestone.id}
+                          id={`milestone-${milestone.id}`}
+                          className={`tp-contracts-page__milestone${
+                            milestone.id === highlightedMilestoneId ? ' tp-contracts-page__milestone--highlighted' : ''
+                          }`}
+                        >
                           <span className="tp-contracts-page__milestone-title">{milestone.title}</span>
                           <span className="tp-contracts-page__milestone-progress">
                             {milestone.ticketsDone}/{milestone.ticketsTotal} tickets ({milestone.progressPercentage}%)

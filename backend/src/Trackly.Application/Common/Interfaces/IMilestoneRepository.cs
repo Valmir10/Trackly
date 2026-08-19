@@ -14,4 +14,5 @@ public interface IMilestoneRepository
 
     Task<IReadOnlyList<Milestone>> GetByContractIdAsync(Guid contractId, CancellationToken cancellationToken);
     Task<IReadOnlyList<Milestone>> GetByProjectIdAsync(Guid projectId, CancellationToken cancellationToken);
+    Task<IReadOnlyList<Milestone>> GetAllAsync(CancellationToken cancellationToken);
 }

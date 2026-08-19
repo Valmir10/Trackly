@@ -18,4 +18,5 @@ public sealed record TicketDto(
     DateTime UpdatedAt,
     Guid? MilestoneId,
     Guid? BlockedByTicketId,
-    Guid? BlockedByMilestoneId);
+    Guid? BlockedByMilestoneId,
+    Guid? OriginMeetingId);

@@ -7,6 +7,7 @@ import { useGlobalCommandKeys } from '@/commands/useGlobalKeys'
 import { useCommandContextGetter } from '@/commands/useCommandContext'
 import { useBuiltinCommands } from '@/commands/builtins'
 import { useBuiltinMeetingCommands } from '@/commands/meetingCommands'
+import { useBuiltinMilestoneCommands } from '@/commands/milestoneCommands'
 import '@/styles/tokens.css'
 import '@/styles/tp-primitives.css'
 import '@/styles/AppShell.css'
@@ -20,6 +21,7 @@ export default function AppShell({ children }: AppShellProps) {
 
   useBuiltinCommands()
   useBuiltinMeetingCommands()
+  useBuiltinMilestoneCommands()
   useGlobalCommandKeys(useCommandContextGetter())
 
   return (

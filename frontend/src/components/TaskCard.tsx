@@ -3,6 +3,7 @@ import '@/styles/TaskCard.css'
 
 export interface Task {
   id: string
+  projectId?: string
   title: string
   tag?: string
   priority: 'high' | 'medium' | 'low'
@@ -15,6 +16,7 @@ export interface Task {
   milestoneId?: string
   blockedByTicketId?: string
   blockedByMilestoneId?: string
+  originMeetingId?: string
 }
 
 interface TaskCardProps {
