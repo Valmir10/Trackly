@@ -27,6 +27,10 @@ public sealed class TracklyDbContext : DbContext
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
     public DbSet<Meeting> Meetings => Set<Meeting>();
     public DbSet<Decision> Decisions => Set<Decision>();
+    public DbSet<Contract> Contracts => Set<Contract>();
+    public DbSet<Milestone> Milestones => Set<Milestone>();
+    public DbSet<Approval> Approvals => Set<Approval>();
+    public DbSet<ClientRoomAccess> ClientRoomAccesses => Set<ClientRoomAccess>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -40,6 +44,12 @@ public sealed class TracklyDbContext : DbContext
         modelBuilder.Entity<ChatMessage>().HasQueryFilter(m => m.TenantId == _currentTenantService.TenantId);
         modelBuilder.Entity<Meeting>().HasQueryFilter(m => m.TenantId == _currentTenantService.TenantId);
         modelBuilder.Entity<Decision>().HasQueryFilter(d => d.TenantId == _currentTenantService.TenantId);
+        modelBuilder.Entity<Contract>().HasQueryFilter(c => c.TenantId == _currentTenantService.TenantId);
+        modelBuilder.Entity<Milestone>().HasQueryFilter(m => m.TenantId == _currentTenantService.TenantId);
+        modelBuilder.Entity<Approval>().HasQueryFilter(a => a.TenantId == _currentTenantService.TenantId);
+        // ClientRoomAccess deliberately has NO tenant filter — it's looked
+        // up by hash before any tenant context exists, matching the
+        // RefreshToken/User precedent.
 
         base.OnModelCreating(modelBuilder);
     }
