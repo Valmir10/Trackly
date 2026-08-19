@@ -23,5 +23,11 @@ public sealed class TicketConfiguration : IEntityTypeConfiguration<Ticket>
 
         builder.HasOne<Project>().WithMany().HasForeignKey(t => t.ProjectId).OnDelete(DeleteBehavior.Restrict);
         builder.HasOne<Meeting>().WithMany().HasForeignKey(t => t.OriginMeetingId).OnDelete(DeleteBehavior.Restrict);
+        builder.HasOne<Milestone>().WithMany().HasForeignKey(t => t.MilestoneId).OnDelete(DeleteBehavior.Restrict);
+
+        // Two independent self-referencing gates — Restrict (not Cascade)
+        // on both to avoid multi-path cascade-delete conflicts.
+        builder.HasOne<Ticket>().WithMany().HasForeignKey(t => t.BlockedByTicketId).OnDelete(DeleteBehavior.Restrict);
+        builder.HasOne<Milestone>().WithMany().HasForeignKey(t => t.BlockedByMilestoneId).OnDelete(DeleteBehavior.Restrict);
     }
 }

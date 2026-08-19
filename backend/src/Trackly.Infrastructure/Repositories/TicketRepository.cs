@@ -36,4 +36,19 @@ public sealed class TicketRepository : ITicketRepository
     {
         return await _context.Tickets.ToListAsync(cancellationToken);
     }
+
+    public async Task<IReadOnlyList<Ticket>> GetBlockedByTicketAsync(Guid ticketId, CancellationToken cancellationToken)
+    {
+        return await _context.Tickets.Where(t => t.BlockedByTicketId == ticketId).ToListAsync(cancellationToken);
+    }
+
+    public async Task<IReadOnlyList<Ticket>> GetBlockedByMilestoneAsync(Guid milestoneId, CancellationToken cancellationToken)
+    {
+        return await _context.Tickets.Where(t => t.BlockedByMilestoneId == milestoneId).ToListAsync(cancellationToken);
+    }
+
+    public async Task<IReadOnlyList<Ticket>> GetByMilestoneIdAsync(Guid milestoneId, CancellationToken cancellationToken)
+    {
+        return await _context.Tickets.Where(t => t.MilestoneId == milestoneId).ToListAsync(cancellationToken);
+    }
 }

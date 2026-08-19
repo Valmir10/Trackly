@@ -33,10 +33,18 @@
 }
 
 .tp-task-card__title {
+  flex: 1;
+  min-width: 0;
   font-size: var(--tp-text-xs);
   font-weight: 500;
   line-height: 1.4;
   color: var(--tp-text);
+}
+
+.tp-task-card__blocked-icon {
+  flex-shrink: 0;
+  margin-top: 0.125rem;
+  color: var(--tp-text-muted);
 }
 
 .tp-task-card__priority-dot {

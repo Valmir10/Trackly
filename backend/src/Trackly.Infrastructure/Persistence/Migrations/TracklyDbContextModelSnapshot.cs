@@ -22,6 +22,40 @@ namespace Trackly.Infrastructure.Persistence.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("Trackly.Domain.Entities.Approval", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("ApprovedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("ClientRoomAccessId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("MilestoneId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ProjectId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientRoomAccessId");
+
+                    b.HasIndex("MilestoneId")
+                        .IsUnique();
+
+                    b.HasIndex("ProjectId");
+
+                    b.HasIndex("TenantId");
+
+                    b.ToTable("Approvals");
+                });
+
             modelBuilder.Entity("Trackly.Domain.Entities.ChatMessage", b =>
                 {
                     b.Property<Guid>("Id")
@@ -54,6 +88,79 @@ namespace Trackly.Infrastructure.Persistence.Migrations
                     b.HasIndex("ProjectId", "TicketId", "CreatedAt");
 
                     b.ToTable("ChatMessages");
+                });
+
+            modelBuilder.Entity("Trackly.Domain.Entities.ClientRoomAccess", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedById")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("ProjectId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("RevokedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("TokenHash")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
+
+                    b.HasIndex("TokenHash")
+                        .IsUnique();
+
+                    b.ToTable("ClientRoomAccesses");
+                });
+
+            modelBuilder.Entity("Trackly.Domain.Entities.Contract", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedById")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("PdfObjectKey")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<Guid>("ProjectId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
+
+                    b.HasIndex("TenantId");
+
+                    b.ToTable("Contracts");
                 });
 
             modelBuilder.Entity("Trackly.Domain.Entities.Decision", b =>
@@ -132,6 +239,42 @@ namespace Trackly.Infrastructure.Persistence.Migrations
                     b.HasIndex("ProjectId", "ScheduledAt");
 
                     b.ToTable("Meetings");
+                });
+
+            modelBuilder.Entity("Trackly.Domain.Entities.Milestone", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ContractId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedById")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ProjectId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ContractId");
+
+                    b.HasIndex("ProjectId");
+
+                    b.HasIndex("TenantId");
+
+                    b.ToTable("Milestones");
                 });
 
             modelBuilder.Entity("Trackly.Domain.Entities.Project", b =>
@@ -250,6 +393,12 @@ namespace Trackly.Infrastructure.Persistence.Migrations
                     b.Property<Guid?>("AssignedToId")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid?>("BlockedByMilestoneId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("BlockedByTicketId")
+                        .HasColumnType("uuid");
+
                     b.Property<DateTime?>("CompletedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -265,6 +414,9 @@ namespace Trackly.Infrastructure.Persistence.Migrations
 
                     b.Property<DateTime?>("DueDate")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("MilestoneId")
+                        .HasColumnType("uuid");
 
                     b.Property<Guid?>("OriginMeetingId")
                         .HasColumnType("uuid");
@@ -297,6 +449,12 @@ namespace Trackly.Infrastructure.Persistence.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BlockedByMilestoneId");
+
+                    b.HasIndex("BlockedByTicketId");
+
+                    b.HasIndex("MilestoneId");
 
                     b.HasIndex("OriginMeetingId");
 
@@ -370,6 +528,27 @@ namespace Trackly.Infrastructure.Persistence.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("Trackly.Domain.Entities.Approval", b =>
+                {
+                    b.HasOne("Trackly.Domain.Entities.ClientRoomAccess", null)
+                        .WithMany()
+                        .HasForeignKey("ClientRoomAccessId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Trackly.Domain.Entities.Milestone", null)
+                        .WithMany()
+                        .HasForeignKey("MilestoneId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Trackly.Domain.Entities.Project", null)
+                        .WithMany()
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Trackly.Domain.Entities.ChatMessage", b =>
                 {
                     b.HasOne("Trackly.Domain.Entities.Project", null)
@@ -382,6 +561,24 @@ namespace Trackly.Infrastructure.Persistence.Migrations
                         .WithMany()
                         .HasForeignKey("TicketId")
                         .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("Trackly.Domain.Entities.ClientRoomAccess", b =>
+                {
+                    b.HasOne("Trackly.Domain.Entities.Project", null)
+                        .WithMany()
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Trackly.Domain.Entities.Contract", b =>
+                {
+                    b.HasOne("Trackly.Domain.Entities.Project", null)
+                        .WithMany()
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Trackly.Domain.Entities.Decision", b =>
@@ -401,6 +598,21 @@ namespace Trackly.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Trackly.Domain.Entities.Meeting", b =>
                 {
+                    b.HasOne("Trackly.Domain.Entities.Project", null)
+                        .WithMany()
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Trackly.Domain.Entities.Milestone", b =>
+                {
+                    b.HasOne("Trackly.Domain.Entities.Contract", null)
+                        .WithMany()
+                        .HasForeignKey("ContractId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("Trackly.Domain.Entities.Project", null)
                         .WithMany()
                         .HasForeignKey("ProjectId")
@@ -428,6 +640,21 @@ namespace Trackly.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Trackly.Domain.Entities.Ticket", b =>
                 {
+                    b.HasOne("Trackly.Domain.Entities.Milestone", null)
+                        .WithMany()
+                        .HasForeignKey("BlockedByMilestoneId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Trackly.Domain.Entities.Ticket", null)
+                        .WithMany()
+                        .HasForeignKey("BlockedByTicketId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Trackly.Domain.Entities.Milestone", null)
+                        .WithMany()
+                        .HasForeignKey("MilestoneId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("Trackly.Domain.Entities.Meeting", null)
                         .WithMany()
                         .HasForeignKey("OriginMeetingId")

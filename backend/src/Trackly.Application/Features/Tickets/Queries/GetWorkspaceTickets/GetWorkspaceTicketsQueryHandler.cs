@@ -48,7 +48,10 @@ public sealed class GetWorkspaceTicketsQueryHandler : IRequestHandler<GetWorkspa
                 ticket.Position,
                 ticket.CreatedAt,
                 ticket.CompletedAt,
-                ticket.UpdatedAt));
+                ticket.UpdatedAt,
+                ticket.MilestoneId,
+                ticket.BlockedByTicketId,
+                ticket.BlockedByMilestoneId));
         }
 
         return results;

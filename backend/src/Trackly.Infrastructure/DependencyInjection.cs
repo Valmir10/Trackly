@@ -18,6 +18,7 @@ public static class DependencyInjection
         services.Configure<JwtSettings>(configuration.GetSection("Jwt"));
         services.AddScoped<IPasswordHasher, PasswordHasher>();
         services.AddScoped<IJwtTokenService, JwtTokenService>();
+        services.AddScoped<IClientRoomTokenService, ClientRoomTokenService>();
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<ITenantRepository, TenantRepository>();
@@ -28,6 +29,10 @@ public static class DependencyInjection
         services.AddScoped<IChatMessageRepository, ChatMessageRepository>();
         services.AddScoped<IMeetingRepository, MeetingRepository>();
         services.AddScoped<IDecisionRepository, DecisionRepository>();
+        services.AddScoped<IContractRepository, ContractRepository>();
+        services.AddScoped<IMilestoneRepository, MilestoneRepository>();
+        services.AddScoped<IApprovalRepository, ApprovalRepository>();
+        services.AddScoped<IClientRoomAccessRepository, ClientRoomAccessRepository>();
 
         return services;
     }

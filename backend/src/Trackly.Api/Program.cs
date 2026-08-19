@@ -1,6 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using MediatR;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
@@ -41,6 +42,7 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Progr
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentTenantService, CurrentTenantService>();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+builder.Services.AddScoped<ICurrentClientRoomService, CurrentClientRoomService>();
 
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
@@ -67,9 +69,32 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Secret)),
         };
-    });
 
-builder.Services.AddAuthorization();
+        // SignalR sends the access token as an "access_token" query-string
+        // param for WebSocket transport, not an Authorization header — this
+        // is required now that the hub below carries .RequireAuthorization().
+        options.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = context =>
+            {
+                var accessToken = context.Request.Query["access_token"];
+                if (!string.IsNullOrEmpty(accessToken) && context.HttpContext.Request.Path.StartsWithSegments("/hubs/project"))
+                {
+                    context.Token = accessToken;
+                }
+
+                return Task.CompletedTask;
+            }
+        };
+    })
+    .AddScheme<AuthenticationSchemeOptions, ClientRoomAuthenticationHandler>(ClientRoomAuthDefaults.Scheme, _ => { });
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy(ClientRoomAuthDefaults.Scheme, policy => policy
+        .AddAuthenticationSchemes(ClientRoomAuthDefaults.Scheme)
+        .RequireAuthenticatedUser());
+});
 
 // AllowCredentials + a specific origin (not AllowAnyOrigin — browsers refuse
 // that combination) so the HttpOnly refresh-token cookie and the SignalR
@@ -114,7 +139,11 @@ app.MapTicketEndpoints();
 app.MapChatEndpoints();
 app.MapMeetingEndpoints();
 app.MapDecisionEndpoints();
+app.MapContractEndpoints();
+app.MapMilestoneEndpoints();
+app.MapClientRoomAccessEndpoints();
+app.MapClientRoomEndpoints();
 
-app.MapHub<ProjectHub>("/hubs/project");
+app.MapHub<ProjectHub>("/hubs/project").RequireAuthorization();
 
 app.Run();

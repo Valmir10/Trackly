@@ -1,0 +1,90 @@
+.tp-contracts-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tp-space-md);
+  max-width: 48rem;
+  margin-inline: auto;
+  padding: var(--tp-space-md);
+}
+
+.tp-contracts-page__new-contract {
+  display: flex;
+  gap: var(--tp-space-2xs);
+}
+
+.tp-contracts-page__new-contract .tp-input {
+  flex: 1;
+}
+
+.tp-contracts-page__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--tp-space-2xs);
+  padding: var(--tp-space-2xl) 0;
+  color: var(--tp-text-muted);
+}
+
+.tp-contracts-page__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tp-space-md);
+}
+
+.tp-contracts-page__contract {
+  border: 1px solid var(--tp-border);
+  border-radius: var(--tp-radius-md);
+  padding: var(--tp-space-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--tp-space-xs);
+}
+
+.tp-contracts-page__contract-title {
+  font-size: var(--tp-text-base);
+  font-weight: 600;
+}
+
+.tp-contracts-page__milestones {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tp-space-3xs);
+}
+
+.tp-contracts-page__milestone {
+  display: flex;
+  align-items: center;
+  gap: var(--tp-space-xs);
+  padding: var(--tp-space-2xs) var(--tp-space-xs);
+  border-radius: var(--tp-radius-sm);
+  background: var(--tp-surface);
+  font-size: var(--tp-text-sm);
+}
+
+.tp-contracts-page__milestone-title {
+  font-weight: 500;
+  flex: 1;
+}
+
+.tp-contracts-page__milestone-progress {
+  color: var(--tp-text-muted);
+  font-size: var(--tp-text-xs);
+}
+
+.tp-contracts-page__milestone-approved {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--tp-space-3xs);
+  color: var(--tp-success);
+  font-size: var(--tp-text-xs);
+  font-weight: 500;
+}
+
+.tp-contracts-page__new-milestone {
+  display: flex;
+  gap: var(--tp-space-2xs);
+}
+
+.tp-contracts-page__new-milestone .tp-input {
+  flex: 1;
+}

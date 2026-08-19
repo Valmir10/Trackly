@@ -254,4 +254,113 @@ public class TicketTests
         // Assert
         ticket.DueDate.Should().BeNull();
     }
+
+    // -------------------------------------------------------
+    // AssignToMilestone / RemoveFromMilestone
+    // -------------------------------------------------------
+
+    [Fact]
+    public void AssignToMilestone_SetsMilestoneId()
+    {
+        // Arrange
+        var ticket = Ticket.Create(ValidTenantId, ValidProjectId, "Set up Storybook", ValidCreatedById);
+        var milestoneId = Guid.NewGuid();
+
+        // Act
+        ticket.AssignToMilestone(milestoneId);
+
+        // Assert
+        ticket.MilestoneId.Should().Be(milestoneId);
+    }
+
+    [Fact]
+    public void RemoveFromMilestone_ClearsMilestoneId()
+    {
+        // Arrange
+        var ticket = Ticket.Create(ValidTenantId, ValidProjectId, "Set up Storybook", ValidCreatedById);
+        ticket.AssignToMilestone(Guid.NewGuid());
+
+        // Act
+        ticket.RemoveFromMilestone();
+
+        // Assert
+        ticket.MilestoneId.Should().BeNull();
+    }
+
+    // -------------------------------------------------------
+    // SetBlockedByTicket / ClearTicketBlock
+    // -------------------------------------------------------
+
+    [Fact]
+    public void SetBlockedByTicket_SetsBlockedByTicketId()
+    {
+        // Arrange
+        var ticket = Ticket.Create(ValidTenantId, ValidProjectId, "Set up Storybook", ValidCreatedById);
+        var blockingTicketId = Guid.NewGuid();
+
+        // Act
+        ticket.SetBlockedByTicket(blockingTicketId);
+
+        // Assert
+        ticket.BlockedByTicketId.Should().Be(blockingTicketId);
+    }
+
+    [Fact]
+    public void SetBlockedByTicket_WithItself_ThrowsArgumentException()
+    {
+        // Arrange
+        var ticket = Ticket.Create(ValidTenantId, ValidProjectId, "Set up Storybook", ValidCreatedById);
+
+        // Act
+        var act = () => ticket.SetBlockedByTicket(ticket.Id);
+
+        // Assert
+        act.Should().Throw<ArgumentException>();
+    }
+
+    [Fact]
+    public void ClearTicketBlock_ClearsBlockedByTicketId()
+    {
+        // Arrange
+        var ticket = Ticket.Create(ValidTenantId, ValidProjectId, "Set up Storybook", ValidCreatedById);
+        ticket.SetBlockedByTicket(Guid.NewGuid());
+
+        // Act
+        ticket.ClearTicketBlock();
+
+        // Assert
+        ticket.BlockedByTicketId.Should().BeNull();
+    }
+
+    // -------------------------------------------------------
+    // SetBlockedByMilestone / ClearMilestoneBlock
+    // -------------------------------------------------------
+
+    [Fact]
+    public void SetBlockedByMilestone_SetsBlockedByMilestoneId()
+    {
+        // Arrange
+        var ticket = Ticket.Create(ValidTenantId, ValidProjectId, "Set up Storybook", ValidCreatedById);
+        var milestoneId = Guid.NewGuid();
+
+        // Act
+        ticket.SetBlockedByMilestone(milestoneId);
+
+        // Assert
+        ticket.BlockedByMilestoneId.Should().Be(milestoneId);
+    }
+
+    [Fact]
+    public void ClearMilestoneBlock_ClearsBlockedByMilestoneId()
+    {
+        // Arrange
+        var ticket = Ticket.Create(ValidTenantId, ValidProjectId, "Set up Storybook", ValidCreatedById);
+        ticket.SetBlockedByMilestone(Guid.NewGuid());
+
+        // Act
+        ticket.ClearMilestoneBlock();
+
+        // Assert
+        ticket.BlockedByMilestoneId.Should().BeNull();
+    }
 }

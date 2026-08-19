@@ -1,4 +1,4 @@
-import { Calendar, MessageSquare, Paperclip } from 'lucide-react'
+import { Calendar, MessageSquare, Paperclip, Lock } from 'lucide-react'
 import '@/styles/TaskCard.css'
 
 export interface Task {
@@ -12,6 +12,9 @@ export interface Task {
   commentCount?: number
   attachmentCount?: number
   description?: string
+  milestoneId?: string
+  blockedByTicketId?: string
+  blockedByMilestoneId?: string
 }
 
 interface TaskCardProps {
@@ -26,6 +29,9 @@ export default function TaskCard({ task, onOpen }: TaskCardProps) {
     <button type="button" className="tp-task-card" onClick={() => onOpen(task.id)}>
       <div className="tp-task-card__head">
         <p className="tp-task-card__title">{task.title}</p>
+        {(task.blockedByTicketId || task.blockedByMilestoneId) && (
+          <Lock size={12} className="tp-task-card__blocked-icon" aria-label="Blocked" />
+        )}
         <span
           className={`tp-task-card__priority-dot tp-priority--${task.priority}`}
           aria-label={`${priorityLabel[task.priority]} priority`}
