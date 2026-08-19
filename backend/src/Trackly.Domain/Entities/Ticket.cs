@@ -20,6 +20,9 @@ public sealed class Ticket : AggregateRoot
     public DateTime UpdatedAt { get; private set; }
     public DateTime? CompletedAt { get; private set; }
     public Guid? OriginMeetingId { get; private set; }
+    public Guid? MilestoneId { get; private set; }
+    public Guid? BlockedByTicketId { get; private set; }
+    public Guid? BlockedByMilestoneId { get; private set; }
 
     private Ticket() { }
 
@@ -127,6 +130,59 @@ public sealed class Ticket : AggregateRoot
     public void ClearDueDate()
     {
         DueDate = null;
+        UpdatedAt = DateTime.UtcNow;
+    }
+
+    public void AssignToMilestone(Guid milestoneId)
+    {
+        if (milestoneId == Guid.Empty)
+            throw new ArgumentException("MilestoneId cannot be empty.", nameof(milestoneId));
+
+        MilestoneId = milestoneId;
+        UpdatedAt = DateTime.UtcNow;
+    }
+
+    public void RemoveFromMilestone()
+    {
+        MilestoneId = null;
+        UpdatedAt = DateTime.UtcNow;
+    }
+
+    public void SetBlockedByTicket(Guid blockingTicketId)
+    {
+        if (blockingTicketId == Guid.Empty)
+            throw new ArgumentException("BlockingTicketId cannot be empty.", nameof(blockingTicketId));
+
+        if (blockingTicketId == Id)
+            throw new ArgumentException("A ticket cannot block itself.", nameof(blockingTicketId));
+
+        BlockedByTicketId = blockingTicketId;
+        UpdatedAt = DateTime.UtcNow;
+    }
+
+    // Cleared when the blocking ticket reaches Done — see
+    // ChangeTicketStatusCommandHandler. Deliberately one-directional: moving
+    // the blocking ticket back out of Done does not re-block this one.
+    public void ClearTicketBlock()
+    {
+        BlockedByTicketId = null;
+        UpdatedAt = DateTime.UtcNow;
+    }
+
+    public void SetBlockedByMilestone(Guid milestoneId)
+    {
+        if (milestoneId == Guid.Empty)
+            throw new ArgumentException("MilestoneId cannot be empty.", nameof(milestoneId));
+
+        BlockedByMilestoneId = milestoneId;
+        UpdatedAt = DateTime.UtcNow;
+    }
+
+    // Cleared when the milestone is approved — see
+    // ApproveMilestoneCommandHandler. One-directional, same as ClearTicketBlock.
+    public void ClearMilestoneBlock()
+    {
+        BlockedByMilestoneId = null;
         UpdatedAt = DateTime.UtcNow;
     }
 }
