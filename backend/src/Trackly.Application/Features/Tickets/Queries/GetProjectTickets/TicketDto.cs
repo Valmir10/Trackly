@@ -15,4 +15,7 @@ public sealed record TicketDto(
     int Position,
     DateTime CreatedAt,
     DateTime? CompletedAt,
-    DateTime UpdatedAt);
+    DateTime UpdatedAt,
+    Guid? MilestoneId,
+    Guid? BlockedByTicketId,
+    Guid? BlockedByMilestoneId);

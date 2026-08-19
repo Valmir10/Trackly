@@ -74,4 +74,46 @@ public class ChangeTicketStatusCommandHandlerTests
         // Assert
         await act.Should().ThrowAsync<NotFoundException>();
     }
+
+    // -------------------------------------------------------
+    // Handle — cascade unblock (Move 8)
+    // -------------------------------------------------------
+
+    [Fact]
+    public async Task Handle_WhenMovedToDone_ClearsBlockedByTicketIdOnDownstreamTickets()
+    {
+        // Arrange
+        var ticket = ExistingTicket();
+        var blockedTicket = ExistingTicket();
+        blockedTicket.SetBlockedByTicket(ticket.Id);
+        _ticketRepository.GetByIdAsync(ticket.Id, Arg.Any<CancellationToken>()).Returns(ticket);
+        _ticketRepository.GetBlockedByTicketAsync(ticket.Id, Arg.Any<CancellationToken>()).Returns(new List<Ticket> { blockedTicket });
+        var handler = CreateHandler();
+        var command = new ChangeTicketStatusCommand(ticket.Id, TicketStatus.Done, 0);
+
+        // Act
+        await handler.Handle(command, CancellationToken.None);
+
+        // Assert
+        blockedTicket.BlockedByTicketId.Should().BeNull();
+        await _unitOfWork.Received(1).SaveChangesAsync(Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task Handle_WhenMovedOutOfDone_DoesNotQueryOrReblockDownstreamTickets()
+    {
+        // Arrange — one-directional: moving out of Done must not re-block
+        // tickets that were already cleared by an earlier approval/completion.
+        var ticket = ExistingTicket();
+        ticket.ChangeStatus(TicketStatus.Done, 0);
+        _ticketRepository.GetByIdAsync(ticket.Id, Arg.Any<CancellationToken>()).Returns(ticket);
+        var handler = CreateHandler();
+        var command = new ChangeTicketStatusCommand(ticket.Id, TicketStatus.InProgress, 0);
+
+        // Act
+        await handler.Handle(command, CancellationToken.None);
+
+        // Assert
+        await _ticketRepository.DidNotReceive().GetBlockedByTicketAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>());
+    }
 }
